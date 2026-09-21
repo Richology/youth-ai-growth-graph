@@ -34,6 +34,138 @@
       "status": "draft",
       "version": "0.1.0",
       "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0004",
+      "source_id": "AI-COL-001",
+      "target_id": "AI-BND-001",
+      "type": "requires",
+      "rationale": "组织人机协作需要先判断哪些环节适合交给 AI，以及哪些判断和责任必须由人保留。",
+      "contexts": ["内容创作", "研究学习", "项目开发"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0005",
+      "source_id": "AI-JUD-001",
+      "target_id": "AI-BND-001",
+      "type": "requires",
+      "rationale": "安排核验重点与强度通常需要先理解 AI 的不可靠环节、任务风险和人的责任边界。",
+      "contexts": ["信息检索", "内容创作", "辅助决策"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0006",
+      "source_id": "AI-JUD-001",
+      "target_id": "AI-COL-001",
+      "type": "supports",
+      "rationale": "对中间输出进行核验和纠正，有助于学习者调整提示、上下文和人机分工，使协作持续改进。",
+      "contexts": ["人机迭代", "研究学习", "产品开发"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology framework hypothesis"]
+    },
+    {
+      "id": "REL-0007",
+      "source_id": "BIZ-PRO-001",
+      "target_id": "BIZ-NED-001",
+      "type": "requires",
+      "rationale": "构建可测试解决方案通常需要以对具体对象、情境和问题的初步理解作为设计起点。",
+      "contexts": ["产品设计", "社会创新", "创业实践"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0008",
+      "source_id": "BIZ-VAL-001",
+      "target_id": "BIZ-PRO-001",
+      "type": "requires",
+      "rationale": "验证价值需要一个目标对象可以理解或体验的方案，才能观察真实或近真实的使用行为与反馈。",
+      "contexts": ["原型测试", "市场验证", "课程项目"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0009",
+      "source_id": "BIZ-VAL-001",
+      "target_id": "BIZ-NED-001",
+      "type": "supports",
+      "rationale": "真实使用与反馈会暴露原问题描述中的偏差或遗漏，从而支持对需求判断进行修订。",
+      "contexts": ["用户研究", "产品迭代", "创业实践"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology framework hypothesis"]
+    },
+    {
+      "id": "REL-0010",
+      "source_id": "PRO-PJM-001",
+      "target_id": "BIZ-PRO-001",
+      "type": "supports",
+      "rationale": "明确交付物、任务依赖和时间节点，有助于控制原型范围并按验证目标完成可测试方案。",
+      "contexts": ["项目式学习", "产品开发", "团队创作"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0011",
+      "source_id": "PRO-COM-001",
+      "target_id": "SOC-COL-001",
+      "type": "supports",
+      "rationale": "准确表达、倾听和确认共识，有助于团队协调依赖、处理分歧并维持共同工作。",
+      "contexts": ["团队项目", "同伴学习", "跨角色协作"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0012",
+      "source_id": "PRO-SEL-001",
+      "target_id": "PRO-PJM-001",
+      "type": "supports",
+      "rationale": "个人能够监测行动、识别阻碍并根据复盘调整，有助于项目计划保持与实际进展一致。",
+      "contexts": ["长期项目", "自主学习", "个人创作"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0013",
+      "source_id": "SOC-COL-001",
+      "target_id": "BIZ-VAL-001",
+      "type": "supports",
+      "rationale": "协调团队角色与信息共享，有助于在测试中一致地接触使用者、记录反馈并共同解释结果。",
+      "contexts": ["团队验证", "用户测试", "创业实践"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology framework hypothesis"]
+    },
+    {
+      "id": "REL-0014",
+      "source_id": "SOC-RUL-001",
+      "target_id": "AI-BND-001",
+      "type": "supports",
+      "rationale": "理解隐私、版权、安全与责任规则，有助于判断 AI 不应独立承担的任务及必要的人类监督。",
+      "contexts": ["AI 内容创作", "数据使用", "公开发布"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology framework hypothesis"]
+    },
+    {
+      "id": "REL-0015",
+      "source_id": "SOC-RUL-001",
+      "target_id": "BIZ-VAL-001",
+      "type": "supports",
+      "rationale": "对同意、隐私与平台规则的理解，有助于以保护参与者的方式开展真实或近真实验证。",
+      "contexts": ["用户访谈", "原型测试", "市场验证"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology practice observation"]
     }
   ]
 }

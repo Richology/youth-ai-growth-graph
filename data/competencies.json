@@ -73,6 +73,146 @@
       ]
     },
     {
+      "id": "AI-COL-001",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "组织人机协作",
+        "en": "Organize Human-AI Collaboration"
+      },
+      "domain_id": "AI",
+      "subdomain_id": "AI.COL",
+      "definition": {
+        "zh": "能够把目标、背景、约束和完成标准清楚交给 AI，并通过分工、追问与迭代，使人的判断和 AI 的能力共同服务于任务结果。",
+        "en": "Communicate goals, context, constraints, and success criteria to AI, then use division of work, follow-up, and iteration to combine human judgment with AI capabilities."
+      },
+      "boundaries": [
+        "不等同于记忆一套固定提示词公式。",
+        "不以对话轮数或提示词长度判断协作质量。",
+        "侧重协作流程，与核验输出的事实和逻辑质量相区分。"
+      ],
+      "observable_behaviors": [
+        "在开始任务时向 AI 提供必要背景、约束和可检查的完成标准。",
+        "根据中间结果补充信息、调整提问或重新划分人与 AI 的工作。",
+        "能够说明关键选择由谁作出，以及为什么保留、修改或拒绝 AI 建议。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例帮助下，能表达一个明确目标，并对 AI 的结果作简单追问。",
+        "E2": "借助模板，能提供背景和约束，通过多轮交流完成结构清晰的任务。",
+        "E3": "能在熟悉任务中独立设计人机分工，依据中间结果调整协作方式并说明选择。",
+        "E4": "能在新的复杂任务中组合多种协作方式，管理上下文、分支与冲突，并沉淀可复用流程。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含初始任务说明、中间结果、关键追问、人工选择和最终调整的完整记录。",
+          "同一目标下比较不同人机分工方案并解释取舍。"
+        ],
+        "weak": [
+          "只提交一个看起来专业的提示词。",
+          "直接采用 AI 的首轮输出但无法说明人的贡献。"
+        ],
+        "cautions": [
+          "高质量结果可能主要来自模型能力或现成模板，应检查学习者是否真正组织了协作过程。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "有效的人机协作可能提升创造和交付价值的效率与质量。"
+        },
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "清楚记录人与 AI 的贡献边界可能帮助团队建立透明协作。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创作与项目课程实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
+    },
+    {
+      "id": "AI-JUD-001",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "核验并纠正 AI 输出",
+        "en": "Verify and Correct AI Outputs"
+      },
+      "domain_id": "AI",
+      "subdomain_id": "AI.JUD",
+      "definition": {
+        "zh": "能够依据任务目标和风险，检查 AI 输出中的事实、推理、偏差与适用性，使用合适来源进行核验并对问题作出纠正。",
+        "en": "Evaluate AI outputs for factual accuracy, reasoning, bias, and fitness for purpose, verify important claims with suitable sources, and correct identified problems."
+      },
+      "boundaries": [
+        "不要求对所有输出进行同等强度的核验。",
+        "不等同于凭直觉表示赞同或怀疑。",
+        "与判断是否应使用 AI 的边界能力相关，但侧重对具体输出的检查与纠正。"
+      ],
+      "observable_behaviors": [
+        "根据错误后果标出最需要核验的事实、推理步骤或遗漏。",
+        "使用可追溯且与问题匹配的来源交叉检查关键主张。",
+        "发现问题后修正结果，并记录修正依据和仍然存在的不确定性。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在提示下，能发现一处明显矛盾，并尝试寻找另一信息来源。",
+        "E2": "借助检查清单，能核验关键事实并区分已确认、存疑和错误内容。",
+        "E3": "能在熟悉任务中按风险安排核验，检查事实与推理并形成有依据的修订。",
+        "E4": "能在陌生复杂情境中设计多源核验策略，识别隐含偏差并清楚表达残余不确定性。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "带有原始输出、核验来源、问题标注、修订版本和不确定性说明的记录。",
+          "能够解释为何选择某一核验强度和信息来源。"
+        ],
+        "weak": [
+          "只让另一个 AI 判断原输出是否正确。",
+          "结果恰好正确，但没有可检查的核验过程。"
+        ],
+        "cautions": [
+          "引用来源数量不能替代来源质量、相关性和独立性的判断。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠核验可能减少学习、创作和商业实践中的错误决策成本。"
+        },
+        {
+          "account": "health",
+          "relation": "may_contribute_to",
+          "rationale": "对高风险健康信息保持核验习惯可能降低误用建议的风险。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 信息素养课程实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
+    },
+    {
       "id": "BIZ-NED-001",
       "version": "0.1.0",
       "status": "draft",
@@ -132,6 +272,146 @@
         {
           "type": "practice",
           "citation": "Richology 青少年创业与 AI 项目课程实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
+    },
+    {
+      "id": "BIZ-PRO-001",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "构建可测试解决方案",
+        "en": "Build Testable Solutions"
+      },
+      "domain_id": "BIZ",
+      "subdomain_id": "BIZ.PRO",
+      "definition": {
+        "zh": "能够围绕已识别的问题选择关键假设，以适当成本制作可体验、可沟通、可获取反馈的解决方案，并明确本轮要学习什么。",
+        "en": "Select key assumptions about an identified problem and build a suitably scoped solution that people can experience, understand, and respond to, with a clear learning goal."
+      },
+      "boundaries": [
+        "不要求一开始就制作功能完整或视觉精美的成品。",
+        "不等同于机械执行一个预先给定的制作步骤。",
+        "侧重把问题转化为可测试方案，与判断市场反馈相区分。"
+      ],
+      "observable_behaviors": [
+        "说明方案服务的对象、问题以及本轮优先检验的关键假设。",
+        "根据验证目的选择原型范围、表现形式和投入程度。",
+        "让目标使用者能够实际理解或体验方案，并记录设计取舍。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在范例帮助下，能把一个想法制作成可展示的简单草图或模型。",
+        "E2": "借助模板或协作，能围绕明确问题制作包含核心流程的可体验方案。",
+        "E3": "能在熟悉主题中独立选择关键假设和原型范围，以合理成本形成可测试方案。",
+        "E4": "能在新的复杂情境中比较多种方案，处理限制与取舍，并设计连续递进的测试版本。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "问题、关键假设、原型范围、版本变化和设计取舍之间可以相互对应。",
+          "目标使用者能够完成具体体验，且方案产生了与学习目标相关的反馈。"
+        ],
+        "weak": [
+          "只有精美成品，没有说明要解决的问题或检验的假设。",
+          "完全照搬模板或 AI 生成方案，无法解释关键选择。"
+        ],
+        "cautions": [
+          "制作技能和视觉质量会影响呈现，但不能替代对原型目的与范围的判断。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "以较低成本把需求转化为可测试方案可能支持持续价值创造。"
+        },
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "让相关者尽早体验方案可能减少误解并促进共同改进。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年产品原型与项目课程实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
+    },
+    {
+      "id": "BIZ-VAL-001",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "用真实反馈验证价值",
+        "en": "Validate Value with Real Feedback"
+      },
+      "domain_id": "BIZ",
+      "subdomain_id": "BIZ.VAL",
+      "definition": {
+        "zh": "能够把关于使用意愿、效果或交换可能的判断转化为可检验假设，在真实或近真实情境中收集行为与反馈，并据此更新判断。",
+        "en": "Turn assumptions about use, outcomes, or exchange into testable hypotheses, gather behavioral evidence and feedback in real or realistic settings, and update conclusions accordingly."
+      },
+      "boundaries": [
+        "不等同于只询问他人是否喜欢一个想法。",
+        "不把一次购买、点赞或正面评价视为稳定价值的证明。",
+        "不要求青少年承担超出其年龄、法律或经济责任范围的真实交易。"
+      ],
+      "observable_behaviors": [
+        "在测试前写出可被支持或否定的价值假设和观察指标。",
+        "选择接近目标人群与真实使用情境的测试方式。",
+        "区分口头意见和实际行为，并根据证据保留、修改或放弃原判断。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在提示下，能向潜在使用者展示方案并记录具体反馈。",
+        "E2": "借助测试模板，能提出一个价值假设并收集意见或行为线索。",
+        "E3": "能在熟悉项目中独立设计近真实测试，比较预期与结果并更新判断。",
+        "E4": "能在新的复杂情境中组合多种证据，识别样本与情境限制，规划下一轮验证。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含测试前假设、对象选择、行为记录、原始反馈、结论变化和后续行动。",
+          "能够说明反对证据、测试局限以及哪些结论尚不能成立。"
+        ],
+        "weak": [
+          "只展示点赞数、朋友称赞或由 AI 模拟的用户反馈。",
+          "测试结束后才补写与结果一致的假设。"
+        ],
+        "cautions": [
+          "样本接触机会受家庭与环境资源影响，不应把测试规模直接解释为能力高低。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "依据真实反馈判断价值可能减少无效投入并改善价值交换。"
+        },
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "认真回应使用者反馈可能帮助建立尊重、信任和长期合作。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年市场验证与项目课程实践总结"
         }
       ],
       "change_log": [
@@ -213,6 +493,146 @@
       ]
     },
     {
+      "id": "PRO-COM-001",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "推进专业沟通",
+        "en": "Communicate to Advance Work"
+      },
+      "domain_id": "PRO",
+      "subdomain_id": "PRO.COM",
+      "definition": {
+        "zh": "能够根据对象和目的准确表达信息，主动倾听与确认理解，记录关键共识、分歧和下一步行动，使沟通推动工作而非停留在信息传递。",
+        "en": "Adapt communication to audience and purpose, listen and confirm understanding, and document agreements, disagreements, and next actions so communication advances shared work."
+      },
+      "boundaries": [
+        "不等同于语言华丽、性格外向或在公开场合表现自信。",
+        "不要求消除所有分歧或让所有人同意自己。",
+        "侧重工作情境中的理解与推进，与一般表达技巧相区分。"
+      ],
+      "observable_behaviors": [
+        "根据沟通对象和目的选择必要信息、表达方式与详细程度。",
+        "通过复述、追问或书面确认检查双方是否形成相同理解。",
+        "在沟通结束时明确共识、未决问题、负责人和下一步。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在范例帮助下，能清楚表达一个请求，并复述对方的主要回应。",
+        "E2": "借助结构或模板，能面向具体对象组织信息、回应问题并确认下一步。",
+        "E3": "能在熟悉项目中独立选择沟通方式，处理误解或分歧并推动形成行动共识。",
+        "E4": "能在新的复杂协作中整合多方信息，调整表达与节奏，并维护可追溯的决策过程。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "沟通材料、反馈、确认记录和后续行动能够形成连续证据链。",
+          "出现误解或分歧后，学习者调整表达并促成可检查的进展。"
+        ],
+        "weak": [
+          "只提交一份排版精美的演示文稿。",
+          "由他人主导沟通，学习者只完成朗读或转发。"
+        ],
+        "cautions": [
+          "语言流利度、社交风格和无障碍需求会影响表现形式，应评价沟通行动而非人格。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "准确倾听、确认和表达可能减少误解并支持可靠合作。"
+        },
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "能够推动工作的沟通可能提升项目协作和价值交付质量。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年项目协作与职业化训练实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
+    },
+    {
+      "id": "PRO-SEL-001",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "自主管理行动与复盘",
+        "en": "Self-Manage Action and Reflection"
+      },
+      "domain_id": "PRO",
+      "subdomain_id": "PRO.SEL",
+      "definition": {
+        "zh": "能够在适当支持下设定阶段目标、安排注意力与行动，监测进展和身心状态，并通过复盘调整方法，持续履行自己作出的合理承诺。",
+        "en": "Set stage-appropriate goals, manage attention and action with suitable support, monitor progress and well-being, and use reflection to adjust methods and sustain reasonable commitments."
+      },
+      "boundaries": [
+        "不等同于长时间工作、压抑休息需求或完全不寻求帮助。",
+        "不把拖延或中断简单解释为意志品质问题。",
+        "与项目计划相关，但侧重个人行动调节、求助和复盘。"
+      ],
+      "observable_behaviors": [
+        "把阶段目标转化为近期可开始的行动，并为重要任务安排注意力。",
+        "记录进展、阻碍和身心状态，在需要时主动求助或调整承诺。",
+        "复盘行动与结果的差距，选择下一轮要保留或改变的方法。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在提醒和共同计划下，能开始一项短任务并说出遇到的困难。",
+        "E2": "借助清单或同伴支持，能安排近期行动、记录进展并完成一次简单复盘。",
+        "E3": "能在熟悉项目中独立管理行动节奏，识别阻碍、适时求助并根据复盘调整。",
+        "E4": "能在新的长期任务中权衡目标、资源和身心状态，建立可持续节奏并迁移有效方法。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "连续的行动记录能够显示目标、实际进展、阻碍、求助和调整之间的关系。",
+          "复盘结论在后续任务中转化为具体方法变化。"
+        ],
+        "weak": [
+          "只提交一份理想化计划或一次自我评价。",
+          "在持续催促下完成任务，但没有学习者自己的监测和调整证据。"
+        ],
+        "cautions": [
+          "健康、家庭、资源和执行功能差异会显著影响表现，不应把产出速度当作自我驱动程度。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "health",
+          "relation": "may_contribute_to",
+          "rationale": "关注状态并调整节奏可能支持更可持续的学习和工作方式。"
+        },
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "持续履行合理承诺并从经验中调整可能支持长期价值创造。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年项目制学习与行动复盘实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
+    },
+    {
       "id": "SOC-AWR-001",
       "version": "0.1.0",
       "status": "draft",
@@ -272,6 +692,151 @@
         {
           "type": "practice",
           "citation": "Richology 青少年商业项目与社会化学习实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
+    },
+    {
+      "id": "SOC-COL-001",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "协同完成共同任务",
+        "en": "Collaborate on Shared Work"
+      },
+      "domain_id": "SOC",
+      "subdomain_id": "SOC.COL",
+      "definition": {
+        "zh": "能够围绕共同目标与他人协商分工、共享必要信息、协调依赖并处理分歧，在相互支持和共同负责中完成任务。",
+        "en": "Work toward a shared goal by negotiating roles, sharing necessary information, coordinating dependencies, and handling disagreements with mutual support and joint responsibility."
+      },
+      "boundaries": [
+        "不等同于把任务平均切分后各自完成。",
+        "不要求避免冲突、牺牲个人边界或始终服从多数。",
+        "侧重共同工作的互动过程，与个人专业沟通能力相区分。"
+      ],
+      "observable_behaviors": [
+        "共同确认目标、角色、接口和完成标准，并在变化时重新协商。",
+        "主动共享会影响他人工作的进展、风险和所需支持。",
+        "面对分歧时陈述理由、倾听差异，并形成可执行的处理方式。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在成人或同伴协调下，能承担明确角色并报告自己的进展。",
+        "E2": "借助团队规则或模板，能参与分工、共享信息并处理简单协作问题。",
+        "E3": "能在熟悉项目中主动协调依赖，回应他人需要并通过协商处理分歧。",
+        "E4": "能在新的复杂团队中识别互动模式与权力差异，改善协作机制并维护共同责任。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "分工、同步、交接、分歧处理和结果责任都有多方记录可以相互印证。",
+          "团队遇到变化或冲突后，学习者参与调整协作方式并说明影响。"
+        ],
+        "weak": [
+          "只根据团队最终作品推断每个成员的协作能力。",
+          "只有个人自述，没有同伴反馈或过程记录。"
+        ],
+        "cautions": [
+          "团队角色、话语权和既有关系会影响表现，应识别学习者实际拥有的参与机会。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "协商分工、相互支持与共同负责可能帮助形成可靠关系。"
+        },
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "有效协调多人工作可能提升复杂项目创造与交付价值的能力。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年团队项目与协作学习实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
+    },
+    {
+      "id": "SOC-RUL-001",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "遵守规则并承担责任",
+        "en": "Follow Rules and Take Responsibility"
+      },
+      "domain_id": "SOC",
+      "subdomain_id": "SOC.RUL",
+      "definition": {
+        "zh": "能够识别行动涉及的安全、隐私、版权、平台与伦理要求，在获得必要同意和保护相关者的前提下作出选择，并对可预见后果负责。",
+        "en": "Identify safety, privacy, copyright, platform, and ethical requirements, make choices with necessary consent and protections, and take responsibility for foreseeable consequences."
+      },
+      "boundaries": [
+        "不等同于机械背诵规则或在成人监督下被动服从。",
+        "不要求青少年独立承担应由监护人、教师、平台或机构承担的责任。",
+        "遵守最低规则不代表已经充分处理公平、伤害和长期影响。"
+      ],
+      "observable_behaviors": [
+        "在行动前识别相关规则、权利人、潜在受影响者和需要获得的同意。",
+        "对个人信息、素材来源和 AI 参与方式进行必要标注与保护。",
+        "发现违规或潜在伤害后停止、报告、补救，并说明后续预防措施。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在明确提醒下，能识别一项安全或隐私规则并按步骤执行。",
+        "E2": "借助检查清单，能识别常见版权、隐私和平台要求，并主动询问不确定事项。",
+        "E3": "能在熟悉项目中独立检查主要规则和影响，取得必要同意并记录合规选择。",
+        "E4": "能在新的复杂情境中权衡规则冲突与多方影响，提出保护措施并对问题进行补救。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "发布前检查、同意记录、素材来源、AI 使用声明和风险处置能够形成完整记录。",
+          "面对规则不清或利益冲突时，学习者主动求助并调整方案。"
+        ],
+        "weak": [
+          "只签署一份承诺书或答对规则知识题。",
+          "作品没有出现问题，但无法说明采取过哪些保护行动。"
+        ],
+        "cautions": [
+          "合规结果可能主要来自成人控制；评价时应区分学习者能够理解和承担的责任范围。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "尊重同意、隐私和权利可能帮助建立安全与可信的关系。"
+        },
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "理解版权、平台和责任边界可能降低价值创造中的法律与声誉风险。"
+        },
+        {
+          "account": "health",
+          "relation": "may_contribute_to",
+          "rationale": "识别安全风险并采取保护措施可能减少对自己和他人的伤害。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 项目安全、隐私与版权实践总结"
         }
       ],
       "change_log": [
