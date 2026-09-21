@@ -1,3 +1,8 @@
 # 示例
 
-本目录将提供课程映射、项目证据和家长成长报告示例。所有涉及青少年的材料必须为虚构、合成或经过充分匿名化的数据。
+本目录提供课程映射和学习证据示例：
+
+- [`course-mapping-example.md`](course-mapping-example.md)
+- [`evidence-example.md`](evidence-example.md)
+
+所有涉及青少年的材料必须为虚构、合成或经过充分匿名化的数据。

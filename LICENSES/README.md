@@ -4,7 +4,7 @@
 
 | 内容范围 | 许可 |
 |---|---|
-| `tools/`、`website/` 中的程序代码 | Apache License 2.0 |
+| `tools/`、`.github/` 中的程序代码与自动化 | Apache License 2.0 |
 | `data/` 中的图谱数据库与关系数据 | Open Database License 1.0 |
 | `framework/`、`methodology/`、`specification/`、`examples/` 和一般说明文档 | Creative Commons Attribution-ShareAlike 4.0 International |
 

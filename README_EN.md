@@ -2,7 +2,7 @@
 
 An open framework, competency graph, and practical methodology for youth growth through AI-powered creation and commercialization.
 
-This repository is currently an early **v0.1 Draft**. The Chinese README is the primary project description. English documentation will be expanded as the framework stabilizes.
+The Chinese README is the primary project description. Node status and dataset counts are recorded in `data/manifest.json`.
 
 The project contains three connected layers:
 
