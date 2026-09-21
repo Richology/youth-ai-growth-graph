@@ -166,6 +166,66 @@
       "status": "draft",
       "version": "0.1.0",
       "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0016", "source_id": "AI-BND-002", "target_id": "AI-BND-001", "type": "requires",
+      "rationale": "评估具体使用风险需要先理解 AI 适用范围、人类核验要求和责任边界。",
+      "contexts": ["AI 安全", "辅助决策", "公开发布"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0017", "source_id": "AI-COL-002", "target_id": "AI-COL-001", "type": "supports",
+      "rationale": "准确且持续更新的任务上下文，有助于减少人机沟通歧义并改善协作流程。",
+      "contexts": ["长任务", "内容创作", "研究学习"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0018", "source_id": "AI-JUD-002", "target_id": "AI-JUD-001", "type": "supports",
+      "rationale": "检查代表性、遗漏和刻板印象，可以补充事实与逻辑核验，使输出纠正更加完整。",
+      "contexts": ["公共内容", "用户研究", "辅助决策"], "status": "draft", "version": "0.1.0", "sources": ["Richology framework hypothesis"]
+    },
+    {
+      "id": "REL-0019", "source_id": "BIZ-NED-002", "target_id": "BIZ-NED-001", "type": "supports",
+      "rationale": "围绕真实经历开展访谈，可以为发现问题提供当事人信息并修正未经验证的假设。",
+      "contexts": ["用户研究", "社会创新", "产品设计"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0020", "source_id": "BIZ-PRO-002", "target_id": "BIZ-PRO-001", "type": "requires",
+      "rationale": "根据反馈迭代方案通常需要先有一个目标对象能够理解或体验的可测试版本。",
+      "contexts": ["产品迭代", "原型测试", "项目式学习"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0021", "source_id": "BIZ-VAL-002", "target_id": "BIZ-VAL-001", "type": "supports",
+      "rationale": "预先设计针对关键不确定性的最小测试，有助于获得可解释的真实反馈并限制过度结论。",
+      "contexts": ["市场验证", "用户测试", "创业实践"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0022", "source_id": "PRO-PJM-002", "target_id": "PRO-PJM-001", "type": "supports",
+      "rationale": "持续识别风险和管理变更，有助于保持项目目标、任务依赖和交付承诺的有效性。",
+      "contexts": ["长期项目", "团队项目", "开放任务"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0023", "source_id": "PRO-COM-002", "target_id": "PRO-COM-001", "type": "supports",
+      "rationale": "基于标准开展双向反馈，可以澄清工作差距并把专业沟通转化为具体改进行动。",
+      "contexts": ["作品评议", "团队协作", "项目复盘"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0024", "source_id": "PRO-SEL-002", "target_id": "PRO-SEL-001", "type": "supports",
+      "rationale": "管理注意力、休息和工作节奏，有助于学习者持续行动、监测状态并履行合理承诺。",
+      "contexts": ["自主学习", "长期创作", "项目执行"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0025", "source_id": "SOC-AWR-002", "target_id": "SOC-AWR-001", "type": "requires",
+      "rationale": "识别权力差异和公共影响需要先理解相关角色的处境、利益、影响力和可能承受的后果。",
+      "contexts": ["社会创新", "团队治理", "公共发布"], "status": "draft", "version": "0.1.0", "sources": ["Richology framework hypothesis"]
+    },
+    {
+      "id": "REL-0026", "source_id": "SOC-COL-002", "target_id": "SOC-COL-001", "type": "supports",
+      "rationale": "以共同认可的程序处理分歧和形成决定，有助于团队维持合作并共同承担结果。",
+      "contexts": ["团队项目", "同伴学习", "共同治理"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0027", "source_id": "SOC-RUL-002", "target_id": "SOC-RUL-001", "type": "supports",
+      "rationale": "落实数据最小化、知情同意和撤回机制，有助于学习者在项目中遵守规则并承担具体责任。",
+      "contexts": ["用户访谈", "数据收集", "AI 项目"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
     }
   ]
 }
