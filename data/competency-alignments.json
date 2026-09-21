@@ -1,0 +1,19 @@
+{
+  "schema_version":"0.1.0",
+  "status":"draft",
+  "notice":"映射表示概念覆盖或启发关系，不表示外部机构认可 Richology 节点，也不表示两个框架等价。",
+  "alignments":[
+    {"id":"ALN-0001","subdomain_id":"AI.BND","competency_id":"AI-BND-001","reference_id":"unesco-aicfs-human-centred","relation":"informed_by","strength":"partial","rationale":"两者都要求把人的责任、福祉与最终判断置于 AI 使用中心；本节点进一步规定任务风险与人工核验。","status":"draft"},
+    {"id":"ALN-0002","subdomain_id":"AI.COL","competency_id":"AI-COL-001","reference_id":"unesco-aicfs-techniques","relation":"informed_by","strength":"partial","rationale":"该维度支持学生理解和应用 AI；本节点聚焦目标、约束、迭代和人机分工。","status":"draft"},
+    {"id":"ALN-0003","subdomain_id":"AI.JUD","competency_id":"AI-JUD-001","reference_id":"digcomp-1.2","relation":"overlaps","strength":"strong","rationale":"两者均强调评价数字信息和来源的可信度；本节点增加 AI 推理、偏差和风险相称核验。","status":"draft"},
+    {"id":"ALN-0004","subdomain_id":"BIZ.NED","competency_id":"BIZ-NED-001","reference_id":"entrecomp-1.1","relation":"overlaps","strength":"strong","rationale":"发现真实问题与发现创造价值的机会高度相关；本节点更强调具体人的经历、限制和证据。","status":"draft"},
+    {"id":"ALN-0005","subdomain_id":"BIZ.PRO","competency_id":"BIZ-PRO-001","reference_id":"entrecomp-1.2","relation":"informed_by","strength":"partial","rationale":"创造力支持把想法转成可探索方案；本节点进一步要求低成本、可体验和以学习为目的的原型。","status":"draft"},
+    {"id":"ALN-0006","subdomain_id":"BIZ.VAL","competency_id":"BIZ-VAL-001","reference_id":"entrecomp-3.5","relation":"overlaps","strength":"strong","rationale":"从真实反馈更新判断属于从经验中学习；本节点明确假设、行为证据和结论边界。","status":"draft"},
+    {"id":"ALN-0007","subdomain_id":"PRO.PJM","competency_id":"PRO-PJM-001","reference_id":"entrecomp-3.2","relation":"overlaps","strength":"strong","rationale":"目标拆解、任务、资源和进展调整与规划管理直接对应；本节点强调可交付结果和责任分工。","status":"draft"},
+    {"id":"ALN-0008","subdomain_id":"PRO.COM","competency_id":"PRO-COM-001","reference_id":"digcomp-2.4","relation":"informed_by","strength":"partial","rationale":"数字协作需要表达、倾听、共享和协调；本节点适用于线上线下并强调共识、分歧和下一步。","status":"draft"},
+    {"id":"ALN-0009","subdomain_id":"PRO.SEL","competency_id":"PRO-SEL-001","reference_id":"oecd-lc-student-agency","relation":"overlaps","strength":"strong","rationale":"设定目标、反思并负责任行动与学生能动性相符；本节点同时加入节奏、健康和合理承诺。","status":"draft"},
+    {"id":"ALN-0010","subdomain_id":"SOC.AWR","competency_id":"SOC-AWR-001","reference_id":"oecd-lc-tensions-dilemmas","relation":"informed_by","strength":"partial","rationale":"理解不同角色的利益与影响有助于识别和处理张力；本节点不要求学生独自解决制度问题。","status":"draft"},
+    {"id":"ALN-0011","subdomain_id":"SOC.COL","competency_id":"SOC-COL-001","reference_id":"entrecomp-3.4","relation":"overlaps","strength":"strong","rationale":"共同目标、分工、信息共享和处理分歧与‘与他人合作’直接相关。","status":"draft"},
+    {"id":"ALN-0012","subdomain_id":"SOC.RUL","competency_id":"SOC-RUL-002","reference_id":"digcomp-4.2","relation":"overlaps","strength":"strong","rationale":"两者都覆盖个人数据与隐私保护；本节点进一步要求用途说明、知情同意、退出和删除。","status":"draft"}
+  ]
+}

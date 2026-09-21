@@ -8,6 +8,20 @@ from pathlib import Path
 import validate as graph_validator
 
 ROOT = Path(__file__).resolve().parents[2]
+DATA_NAMES = (
+    "domains.json",
+    "competencies.json",
+    "dependencies.json",
+    "manifest.json",
+    "candidate-pool.json",
+    "life-account-links.json",
+    "competency-guidance.json",
+    "framework-standards.json",
+    "competency-alignments.json",
+    "learning-paths.json",
+    "subdomain-guidance.json",
+    "graph-metrics.json",
+)
 
 
 class GraphValidationTests(unittest.TestCase):
@@ -36,17 +50,34 @@ class GraphValidationTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertIn("synchronized", result.stdout)
 
+    def test_competency_guidance_is_reproducible(self):
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "tools/build_competency_guidance.py")],
+            cwd=ROOT, capture_output=True, text=True, check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("synchronized", result.stdout)
+
+    def test_manifest_is_reproducible(self):
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "tools/build_manifest.py")],
+            cwd=ROOT, capture_output=True, text=True, check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("synchronized", result.stdout)
+
+    def test_graph_metrics_are_reproducible(self):
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "tools/build_graph_metrics.py")],
+            cwd=ROOT, capture_output=True, text=True, check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("synchronized", result.stdout)
+
     def test_node_rejects_generic_draft_language(self):
         documents = {
             name: deepcopy(graph_validator.load_json(name))
-            for name in (
-                "domains.json",
-                "competencies.json",
-                "dependencies.json",
-                "manifest.json",
-                "candidate-pool.json",
-                "life-account-links.json",
-            )
+            for name in DATA_NAMES
         }
         node = documents["competencies.json"]["competencies"][0]
         node["boundaries"].append("不等同于记忆术语、照搬模板或只完成一次任务。")
@@ -64,14 +95,7 @@ class GraphValidationTests(unittest.TestCase):
     def test_node_requires_external_calibration_source(self):
         documents = {
             name: deepcopy(graph_validator.load_json(name))
-            for name in (
-                "domains.json",
-                "competencies.json",
-                "dependencies.json",
-                "manifest.json",
-                "candidate-pool.json",
-                "life-account-links.json",
-            )
+            for name in DATA_NAMES
         }
         node = documents["competencies.json"]["competencies"][0]
         node["sources"] = [
@@ -92,14 +116,7 @@ class GraphValidationTests(unittest.TestCase):
     def test_relationship_rejects_generic_rationale(self):
         documents = {
             name: deepcopy(graph_validator.load_json(name))
-            for name in (
-                "domains.json",
-                "competencies.json",
-                "dependencies.json",
-                "manifest.json",
-                "candidate-pool.json",
-                "life-account-links.json",
-            )
+            for name in DATA_NAMES
         }
         relationship = documents["dependencies.json"]["relationships"][0]
         relationship["rationale"] = (
@@ -120,14 +137,7 @@ class GraphValidationTests(unittest.TestCase):
     def test_schema_closed_object_rejects_unknown_field(self):
         documents = {
             name: deepcopy(graph_validator.load_json(name))
-            for name in (
-                "domains.json",
-                "competencies.json",
-                "dependencies.json",
-                "manifest.json",
-                "candidate-pool.json",
-                "life-account-links.json",
-            )
+            for name in DATA_NAMES
         }
         documents["competencies.json"]["competencies"][0]["internal_note"] = "x"
 
@@ -145,14 +155,7 @@ class GraphValidationTests(unittest.TestCase):
     def test_relationship_rejects_generic_contexts(self):
         documents = {
             name: deepcopy(graph_validator.load_json(name))
-            for name in (
-                "domains.json",
-                "competencies.json",
-                "dependencies.json",
-                "manifest.json",
-                "candidate-pool.json",
-                "life-account-links.json",
-            )
+            for name in DATA_NAMES
         }
         documents["dependencies.json"]["relationships"][0]["contexts"] = [
             "项目式学习",

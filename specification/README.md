@@ -7,3 +7,4 @@
 - [`relationship-types.md`](relationship-types.md)：关系语义
 - [`proficiency-levels.md`](proficiency-levels.md)：E1–E4 熟练度
 - [`evidence-framework.md`](evidence-framework.md)：证据强度、反证和判断限制
+- [`alignment-and-learning-paths.md`](alignment-and-learning-paths.md)：外部映射与学习路径语义

@@ -1,0 +1,18 @@
+{
+  "schema_version":"0.1.0",
+  "status":"draft",
+  "guides":[
+    {"subdomain_id":"AI.BND","summary":"学习判断 AI 适合做什么、哪里可能出错，以及何时必须由人核验、批准或停止。","for_youth":"先问任务有什么风险、谁会受影响，再决定是否使用 AI。","for_teachers":"用低风险案例观察学生是否能识别边界、数据风险和人工监督点。","for_families":"关注孩子会不会暂停、核验和求助，而不是只看是否熟练使用新工具。","common_misconception":"知道‘AI 会幻觉’不等于能够按情境管理风险。","adult_responsibility":"高风险用途、受限数据、工具许可和最终审批由成人负责。"},
+    {"subdomain_id":"AI.COL","summary":"学习把目标、背景和约束交给 AI，并安排人的选择、核验、修改与最终责任。","for_youth":"把 AI 当作协作工具，保留自己的目标、判断和修改记录。","for_teachers":"评价任务拆解、上下文和迭代过程，不以提示词长度或单次结果评高低。","for_families":"询问孩子为什么保留或拒绝某项 AI 建议，而不是要求完全不用或完全依赖。","common_misconception":"作品看起来精美不等于人机协作能力已经形成。","adult_responsibility":"成人确保工具、材料与账号环境可安全使用。"},
+    {"subdomain_id":"AI.JUD","summary":"学习核验 AI 输出的事实、推理、偏差、来源与适用条件，并诚实表达不确定性。","for_youth":"重要主张要回到可检查来源，无法确认时应限定或删除。","for_teachers":"提供可追溯材料和反例，观察学生如何纠错与更新判断。","for_families":"鼓励孩子说明‘我依据什么知道’和‘还有什么不确定’。","common_misconception":"找到一个链接或多个一致答案不等于主张已经成立。","adult_responsibility":"医疗、法律、财务和安全结论由合格成人或专业人员核验。"},
+    {"subdomain_id":"BIZ.NED","summary":"从具体人的经历、行为和限制中发现值得解决的问题，并区分事实、解释与假设。","for_youth":"先理解谁在什么情境遇到什么阻碍，不急着推销自己的方案。","for_teachers":"使用访谈、观察和资料三类证据，要求保留反例和证据空白。","for_families":"多问‘你发现了什么真实困难’，少问‘什么时候做成产品’。","common_misconception":"一个人的意见、一次访谈或宏大口号不能代表真实需求。","adult_responsibility":"成人负责研究许可、安全边界和敏感参与者保护。"},
+    {"subdomain_id":"BIZ.PRO","summary":"围绕关键价值假设制作成本适当、可体验、可反馈的方案，并控制范围和可访问性。","for_youth":"先做能够学习的小版本，不用一次把所有功能做完。","for_teachers":"评价价值假设、范围取舍和测试用途，不以功能数量衡量。","for_families":"允许作品不完整，重点看孩子能否解释为什么这样取舍。","common_misconception":"原型不是缩小版成品，也不是越精美越有价值。","adult_responsibility":"成人负责产品安全、采购、合同和公开部署。"},
+    {"subdomain_id":"BIZ.VAL","summary":"把价值判断写成可检验假设，用行为、结果和反馈更新决定。","for_youth":"测试的目标是减少不确定性，不是证明自己一开始就正确。","for_teachers":"要求预先写指标和停止条件，同时保留支持与反对证据。","for_families":"把修改、暂停或放弃也视为可能的高质量学习结果。","common_misconception":"点赞、口头喜欢或一次成功不等于价值已经验证。","adult_responsibility":"成人负责招募、同意、数据保护和真实交易边界。"},
+    {"subdomain_id":"PRO.PJM","summary":"把目标转成可交付结果、任务、资源、依赖和里程碑，并在变化中更新承诺。","for_youth":"尽早说明阻碍和未知，比最后赶工更专业。","for_teachers":"观察估算依据、依赖沟通和变更记录，不奖励透支健康的按时完成。","for_families":"帮助区分孩子可控制的任务与成人或机构应提供的资源。","common_misconception":"一张计划表或准时完成不自动证明项目管理能力。","adult_responsibility":"成人承担机构资源和外部依赖，不把系统延误归责于青少年。"},
+    {"subdomain_id":"PRO.COM","summary":"面向具体对象表达、倾听、记录和解释判断，使沟通形成共识、决定和下一步。","for_youth":"说清事实、判断、未知和需要对方做什么。","for_teachers":"允许口头、书面和辅助沟通，评价信息与行动是否清楚。","for_families":"不要把外向、语速快或像成人说话当作专业。","common_misconception":"表达流畅和会议热闹不等于沟通推动了工作。","adult_responsibility":"成人提供安全表达、申诉和纠错渠道。"},
+    {"subdomain_id":"PRO.SEL","summary":"设定可修订目标、管理注意力与节奏、主动求助，并从经验中调整行动。","for_youth":"自主不是独自承担；知道何时休息、求助和改变方向也是能力。","for_teachers":"结合健康、资源和责任观察行动，不用持续高产评价自驱。","for_families":"支持合理目标和休息，避免把方向改变解释为失败。","common_misconception":"自我管理不能替代成人照护或制度支持。","adult_responsibility":"成人保障休息、健康、求助与退出权。"},
+    {"subdomain_id":"SOC.AWR","summary":"理解不同角色的处境、利益、权力和可能承受的直接或间接影响。","for_youth":"主动寻找缺失视角，但不要替别人发言或要求其披露隐私。","for_teachers":"让学生区分理解与同意，并检查未参与决定者的影响。","for_families":"讨论一个决定会影响谁、谁没有被听见，而不是给群体贴标签。","common_misconception":"列出利益相关者名称不等于真正理解其处境。","adult_responsibility":"成人处理歧视、伤害和制度问题。"},
+    {"subdomain_id":"SOC.COL","summary":"围绕共同目标协商分工、共享信息、处理分歧、维护责任并在受损后修复。","for_youth":"让承诺和困难可见，在安全边界内共同解决而不是默默补位。","for_teachers":"评价协商、支持与修复过程，不用发言量或工作量简单排名。","for_families":"关注孩子如何说明困难、接受帮助和履行修复承诺。","common_misconception":"没有冲突或少数人完成全部工作不代表协作良好。","adult_responsibility":"成人必须介入欺凌、骚扰、歧视和权力滥用。"},
+    {"subdomain_id":"SOC.RUL","summary":"理解隐私、同意、版权、平台与伦理边界，在发布和使用 AI 时保留问责。","for_youth":"不确定能否收集、上传、使用或公开时，先停止并求助。","for_teachers":"使用虚构或去标识材料，明确哪些决定必须由成人批准。","for_families":"和孩子讨论截图、转发、永久公开和撤回，而不只检查账号是否私密。","common_misconception":"署名、教育用途、一次同意或 AI 生成都不自动意味着可以自由使用和发布。","adult_responsibility":"成人负责法律判断、平台治理、发布审批和严重事件处置。"}
+  ]
+}

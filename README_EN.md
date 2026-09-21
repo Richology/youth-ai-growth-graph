@@ -21,7 +21,7 @@ This project treats commercialization as a complete value-creation process: disc
 | Part | Question | Main outputs |
 |---|---|---|
 | Open framework | How should youth growth in the AI era be understood? | Working paper, conceptual models, terminology |
-| Competency graph | What capabilities matter, and how are they connected? | Nodes, relationships, proficiency levels, evidence guidance, and machine-readable data |
+| Competency graph | What capabilities matter, and how are they connected? | Nodes, relationships, proficiency levels, evidence guidance, cross-domain paths, and machine-readable data |
 | Practical methodology | How can educators and learners use the graph? | Methods for courses, projects, assessment, and family communication |
 
 In short: **the open framework defines the landscape, the competency graph marks its places and paths, and the methodology explains how to act within it.**
@@ -70,8 +70,10 @@ schema/          JSON Schema files
 methodology/     Course, project, and assessment methods
 examples/        Course mapping and evidence examples
 rfcs/            Public proposals for significant changes
-tools/           Validation and data-maintenance tools
+tools/           Validation, derived-data, and release-manifest tools
 ```
+
+The machine-readable layer separates nodes, relationships, external-framework alignments, learning paths, audience guidance, and evidence-elicitation tasks. Complete-file JSON Schemas and reproducible hashes make it suitable as a data source for course tools, search, and 2D or 3D graph interfaces. Applications must preserve the project’s minor-protection and non-psychometric boundaries.
 
 ## Contributing
 

@@ -1,6 +1,6 @@
 {
   "project": "Richology Youth AI Growth Graph",
-  "graph_version": "0.1.8-draft",
+  "graph_version": "0.2.0-draft",
   "released_at": "2026-09-21",
   "language": "zh-CN",
   "counts": {
@@ -9,7 +9,61 @@
     "candidates": 72,
     "selected_candidates": 60,
     "competencies": 60,
-    "relationships": 63
+    "relationships": 75,
+    "life_account_links": 89,
+    "competency_guidance": 60,
+    "framework_references": 14,
+    "competency_alignments": 12,
+    "learning_paths": 5,
+    "subdomain_guides": 12,
+    "graph_metric_nodes": 60
   },
-  "notice": "The first 60 competency nodes are draft foundations for public review and must not be used as a standardized assessment."
+  "notice": "The first 60 competency nodes are draft foundations for public review and must not be used as a standardized assessment.",
+  "generated_at": "2026-09-21T14:59:40.748058Z",
+  "files": {
+    "candidate-pool.json": {
+      "bytes": 11287,
+      "sha256": "5e3b6c3c00244c94b030f99a71688cbc77ab6a89070c110acd6f1099b8dfdb64"
+    },
+    "competencies.json": {
+      "bytes": 195480,
+      "sha256": "e1dcea021ba047d348f5f4e31d1d1a29b3e2906c1c9e0546dcf89ab246800db2"
+    },
+    "competency-alignments.json": {
+      "bytes": 3851,
+      "sha256": "5d42e4277b9ea279e3704ef3187838a26ff5acc4c26fa3189c9a1296020aa18b"
+    },
+    "competency-guidance.json": {
+      "bytes": 134096,
+      "sha256": "167cfda050d60d2e6b8855127f3a39568437bd23710ff289e3df0248ae2d66b9"
+    },
+    "dependencies.json": {
+      "bytes": 35866,
+      "sha256": "4c07c3f1b269c99f41c0515ac4499508f5212b622f004c106ec878bee021c7ac"
+    },
+    "domains.json": {
+      "bytes": 3762,
+      "sha256": "3a2ee43187bf22c4cb012eaf0b8fa14d3b75fdef0a83a0e7c209f50425342ae3"
+    },
+    "framework-standards.json": {
+      "bytes": 5871,
+      "sha256": "1996925e355207c56b7e386de1b082bf53594328aa2b1f7921972e1b477d293a"
+    },
+    "graph-metrics.json": {
+      "bytes": 11397,
+      "sha256": "ca8a34fd7fff2a5fd7824665f82fa6f07832bbdb5663fd8d248a37f187a5a142"
+    },
+    "learning-paths.json": {
+      "bytes": 1898,
+      "sha256": "d763281cb0552444dfd4f7a63842bbd8a845a2358419d4175f922b77b8003b43"
+    },
+    "life-account-links.json": {
+      "bytes": 18572,
+      "sha256": "11c03a18a2d7e2426dcebac47d2429bc8d3f8fc117f973108e5b64efa8a9f0f6"
+    },
+    "subdomain-guidance.json": {
+      "bytes": 7418,
+      "sha256": "c3cfb9b512eca1db5a989349fd2fb29560c3b891b5e347edf952065e3eaeaafe"
+    }
+  }
 }

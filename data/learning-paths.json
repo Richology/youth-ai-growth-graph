@@ -1,0 +1,12 @@
+{
+  "schema_version":"0.1.0",
+  "status":"draft",
+  "notice":"路径是课程设计建议，不是所有学习者必须遵循的固定顺序。",
+  "paths":[
+    {"id":"PATH-001","name":{"zh":"安全的人机创作","en":"Safe Human-AI Creation"},"audiences":["youth","teachers"],"goal":"在不暴露敏感信息的前提下完成可追溯、可核验的 AI 辅助作品。","steps":["SOC-RUL-002","AI-BND-005","AI-COL-002","AI-COL-004","AI-JUD-003","AI-COL-005","SOC-RUL-005"]},
+    {"id":"PATH-002","name":{"zh":"从真实问题到价值验证","en":"From Real Problems to Value Validation"},"audiences":["youth","teachers"],"goal":"从利益相关者和需求证据出发，形成方案并用真实反馈决定下一步。","steps":["SOC-AWR-001","BIZ-NED-002","BIZ-NED-004","BIZ-NED-005","BIZ-PRO-003","BIZ-PRO-004","BIZ-VAL-002","BIZ-VAL-003","BIZ-VAL-005"]},
+    {"id":"PATH-003","name":{"zh":"可靠的团队交付","en":"Reliable Team Delivery"},"audiences":["youth","teachers"],"goal":"建立协作约定、拆解目标、协调依赖并完成可复盘的交付。","steps":["SOC-COL-003","PRO-PJM-001","PRO-PJM-003","PRO-PJM-004","PRO-COM-003","SOC-COL-004","PRO-PJM-005"]},
+    {"id":"PATH-004","name":{"zh":"负责任的公开发布","en":"Responsible Public Release"},"audiences":["youth","teachers","families"],"goal":"检查来源、权利、隐私、非预期影响和问责安排后再决定是否发布。","steps":["AI-JUD-003","SOC-RUL-003","SOC-RUL-002","SOC-AWR-005","SOC-RUL-004","AI-BND-003","SOC-RUL-005"]},
+    {"id":"PATH-005","name":{"zh":"自主学习与持续改进","en":"Self-Directed Learning and Improvement"},"audiences":["youth","teachers","families"],"goal":"设定阶段目标、管理节奏、主动求助，并把失败和反馈转化为下一轮行动。","steps":["PRO-SEL-003","PRO-SEL-002","PRO-SEL-004","PRO-COM-002","PRO-SEL-005","PRO-SEL-001"]}
+  ]
+}

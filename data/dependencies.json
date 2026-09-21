@@ -1000,6 +1000,138 @@
       "sources": [
         "RFC 0001 editorial decision"
       ]
+    },
+    {
+      "id": "REL-0064",
+      "source_id": "AI-BND-005",
+      "target_id": "SOC-RUL-002",
+      "type": "requires",
+      "rationale": "判断 AI 场景中的敏感数据风险，需要先理解数据最小化、知情同意、用途限制和撤回机制。",
+      "contexts": ["AI 工具选择", "个人信息处理", "风险评估"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology cross-domain pathway hypothesis"]
+    },
+    {
+      "id": "REL-0065",
+      "source_id": "AI-COL-005",
+      "target_id": "SOC-RUL-005",
+      "type": "supports",
+      "rationale": "保留提示、输入、修改和核验记录，有助于准确披露 AI 参与范围并追溯人的关键决定。",
+      "contexts": ["课程作业", "团队项目", "公开发布"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology cross-domain pathway hypothesis"]
+    },
+    {
+      "id": "REL-0066",
+      "source_id": "BIZ-NED-005",
+      "target_id": "BIZ-PRO-003",
+      "type": "supports",
+      "rationale": "把分散观察归纳为可检验的需求假设，有助于确定原型必须验证的核心功能与取舍。",
+      "contexts": ["用户研究", "原型规划", "课程项目"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology cross-domain pathway hypothesis"]
+    },
+    {
+      "id": "REL-0067",
+      "source_id": "BIZ-PRO-003",
+      "target_id": "BIZ-VAL-002",
+      "type": "supports",
+      "rationale": "围绕关键假设制作最小可行原型，可以让测试聚焦于具体行为和结果，而非笼统偏好。",
+      "contexts": ["可用性测试", "价值验证", "产品迭代"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology cross-domain pathway hypothesis"]
+    },
+    {
+      "id": "REL-0068",
+      "source_id": "BIZ-VAL-005",
+      "target_id": "BIZ-PRO-004",
+      "type": "supports",
+      "rationale": "综合使用、反馈和交换证据形成迭代判断，可以支持对产品优先级与下一版本范围的调整。",
+      "contexts": ["复盘会议", "产品迭代", "创业实践"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology cross-domain pathway hypothesis"]
+    },
+    {
+      "id": "REL-0069",
+      "source_id": "PRO-COM-003",
+      "target_id": "PRO-PJM-004",
+      "type": "supports",
+      "rationale": "及时说明进展、风险、变更与支持需求，有助于项目依据真实信息调整计划和依赖。",
+      "contexts": ["项目汇报", "跨角色协作", "风险管理"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology cross-domain pathway hypothesis"]
+    },
+    {
+      "id": "REL-0070",
+      "source_id": "SOC-COL-003",
+      "target_id": "PRO-PJM-004",
+      "type": "supports",
+      "rationale": "团队能够提出分歧、澄清影响并形成处理方案时，项目更容易及时修复协作阻碍。",
+      "contexts": ["团队冲突", "项目复盘", "共同决策"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology cross-domain pathway hypothesis"]
+    },
+    {
+      "id": "REL-0071",
+      "source_id": "PRO-PJM-004",
+      "target_id": "SOC-COL-004",
+      "type": "supports",
+      "rationale": "持续识别项目阻碍并更新责任安排，有助于团队公开承诺、暴露依赖并避免隐性补位。",
+      "contexts": ["团队交付", "进度协调", "责任分配"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology cross-domain pathway hypothesis"]
+    },
+    {
+      "id": "REL-0072",
+      "source_id": "PRO-SEL-004",
+      "target_id": "PRO-PJM-002",
+      "type": "supports",
+      "rationale": "识别注意力、精力与情绪状态，有助于制定更现实的个人节奏、承诺和缓冲安排。",
+      "contexts": ["长期项目", "自主学习", "任务规划"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology cross-domain pathway hypothesis"]
+    },
+    {
+      "id": "REL-0073",
+      "source_id": "SOC-AWR-005",
+      "target_id": "AI-BND-002",
+      "type": "supports",
+      "rationale": "分析技术对不同群体的差异影响，有助于识别 AI 输出中被忽略、被放大或被不公平对待的对象。",
+      "contexts": ["算法影响分析", "内容审核", "公共议题"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology cross-domain pathway hypothesis"]
+    },
+    {
+      "id": "REL-0074",
+      "source_id": "AI-JUD-005",
+      "target_id": "PRO-COM-004",
+      "type": "supports",
+      "rationale": "能够综合证据、限制与不确定性作出判断，有助于向不同对象清楚说明结论、依据和保留意见。",
+      "contexts": ["研究汇报", "决策说明", "公开沟通"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology cross-domain pathway hypothesis"]
+    },
+    {
+      "id": "REL-0075",
+      "source_id": "PRO-SEL-005",
+      "target_id": "BIZ-VAL-005",
+      "type": "supports",
+      "rationale": "把失败、反馈与行动结果转化为下一轮调整，可以支持基于验证证据作出继续、改变或停止的决定。",
+      "contexts": ["创业复盘", "课程项目", "个人作品迭代"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology cross-domain pathway hypothesis"]
     }
   ]
 }

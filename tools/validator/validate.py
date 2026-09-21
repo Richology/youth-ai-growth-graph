@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import sys
@@ -74,12 +75,24 @@ def validate() -> tuple[int, int, int, int]:
     manifest = load_json("manifest.json")
     candidate_doc = load_json("candidate-pool.json")
     life_link_doc = load_json("life-account-links.json")
+    guidance_doc = load_json("competency-guidance.json")
+    framework_doc = load_json("framework-standards.json")
+    alignment_doc = load_json("competency-alignments.json")
+    path_doc = load_json("learning-paths.json")
+    subdomain_guidance_doc = load_json("subdomain-guidance.json")
+    graph_metrics_doc = load_json("graph-metrics.json")
 
     domain_items = domain_doc.get("domains", [])
     competencies = competency_doc.get("competencies", [])
     relationships = relationship_doc.get("relationships", [])
     candidates = candidate_doc.get("candidates", [])
     life_links = life_link_doc.get("links", [])
+    guidance = guidance_doc.get("guidance", [])
+    framework_references = framework_doc.get("references", [])
+    alignments = alignment_doc.get("alignments", [])
+    learning_paths = path_doc.get("paths", [])
+    subdomain_guides = subdomain_guidance_doc.get("guides", [])
+    node_metrics = graph_metrics_doc.get("node_metrics", [])
 
     domains = {item["id"] for item in domain_items}
     subdomains = {
@@ -302,6 +315,128 @@ def validate() -> tuple[int, int, int, int]:
     if actual_links != expected_links:
         raise ValidationError("life-account-links.json is not synchronized with competencies.json")
 
+    guidance_ids: set[str] = set()
+    for item in guidance:
+        node_id = item.get("competency_id", "<unknown>")
+        require_exact_keys(
+            item,
+            {
+                "competency_id", "age_policy", "experience_progression",
+                "adult_responsibility", "evidence_task", "observer_questions",
+                "not_sufficient_evidence", "fairness_cautions", "boundaries",
+            },
+            set(),
+            f"Competency guidance {node_id}",
+        )
+        if node_id not in competency_ids or node_id in guidance_ids:
+            raise ValidationError(f"Unknown or duplicate competency guidance: {node_id}")
+        guidance_ids.add(node_id)
+        for field in (
+            "experience_progression", "observer_questions", "not_sufficient_evidence",
+            "fairness_cautions", "boundaries",
+        ):
+            require_nonempty_strings(item[field], f"{field} on {node_id}")
+        task = item["evidence_task"]
+        require_exact_keys(
+            task,
+            {"setup", "behaviors_to_elicit", "artifacts_to_keep"},
+            set(),
+            f"Evidence task on {node_id}",
+        )
+        require_nonempty_strings(task["behaviors_to_elicit"], f"Behaviors to elicit on {node_id}")
+        require_nonempty_strings(task["artifacts_to_keep"], f"Artifacts to keep on {node_id}")
+        if not all(is_nonempty_string(item[field]) for field in ("age_policy", "adult_responsibility")):
+            raise ValidationError(f"Empty developmental guidance on {node_id}")
+    if guidance_ids != competency_ids:
+        raise ValidationError("Competency guidance must cover every competency exactly once")
+
+    reference_ids: set[str] = set()
+    for item in framework_references:
+        reference_id = item.get("id", "<unknown>")
+        require_exact_keys(
+            item,
+            {"id", "framework", "version", "code", "title_zh", "url", "text_included", "use", "license_note"},
+            set(),
+            f"Framework reference {reference_id}",
+        )
+        if reference_id in reference_ids:
+            raise ValidationError(f"Duplicate framework reference: {reference_id}")
+        reference_ids.add(reference_id)
+        if item["text_included"] is not False:
+            raise ValidationError(f"External framework text must not be embedded: {reference_id}")
+        if not item["url"].startswith(("https://", "http://")):
+            raise ValidationError(f"Invalid framework URL: {reference_id}")
+
+    alignment_ids: set[str] = set()
+    aligned_subdomains: set[str] = set()
+    for item in alignments:
+        alignment_id = item.get("id", "<unknown>")
+        require_exact_keys(
+            item,
+            {"id", "subdomain_id", "competency_id", "reference_id", "relation", "strength", "rationale", "status"},
+            set(),
+            f"Alignment {alignment_id}",
+        )
+        if alignment_id in alignment_ids:
+            raise ValidationError(f"Duplicate alignment ID: {alignment_id}")
+        alignment_ids.add(alignment_id)
+        subdomain_id = item["subdomain_id"]
+        if subdomain_id not in subdomains or subdomain_id in aligned_subdomains:
+            raise ValidationError(f"Unknown or duplicate aligned subdomain: {subdomain_id}")
+        aligned_subdomains.add(subdomain_id)
+        if item["competency_id"] not in competency_ids or item["reference_id"] not in reference_ids:
+            raise ValidationError(f"Unknown alignment reference in {alignment_id}")
+        if not item["competency_id"].replace("-", ".", 1).startswith(subdomain_id):
+            raise ValidationError(f"Alignment competency/subdomain mismatch in {alignment_id}")
+        if item["relation"] not in {"informed_by", "overlaps"} or item["strength"] not in {"partial", "strong"}:
+            raise ValidationError(f"Invalid alignment semantics in {alignment_id}")
+    if aligned_subdomains != subdomains:
+        raise ValidationError("Pilot alignments must cover every subdomain exactly once")
+
+    path_ids: set[str] = set()
+    for item in learning_paths:
+        path_id = item.get("id", "<unknown>")
+        require_exact_keys(item, {"id", "name", "audiences", "goal", "steps"}, set(), f"Learning path {path_id}")
+        if path_id in path_ids:
+            raise ValidationError(f"Duplicate learning path: {path_id}")
+        path_ids.add(path_id)
+        if set(item["name"]) != {"zh", "en"} or not all(is_nonempty_string(value) for value in item["name"].values()):
+            raise ValidationError(f"Invalid learning-path name: {path_id}")
+        if not item["audiences"] or not set(item["audiences"]) <= {"youth", "teachers", "families"}:
+            raise ValidationError(f"Invalid learning-path audiences: {path_id}")
+        if len(item["steps"]) < 2 or len(set(item["steps"])) != len(item["steps"]):
+            raise ValidationError(f"Learning path needs distinct steps: {path_id}")
+        unknown_steps = set(item["steps"]) - competency_ids
+        if unknown_steps:
+            raise ValidationError(f"Unknown learning-path steps in {path_id}: {sorted(unknown_steps)}")
+
+    guide_subdomains: set[str] = set()
+    guide_fields = {
+        "subdomain_id", "summary", "for_youth", "for_teachers", "for_families",
+        "common_misconception", "adult_responsibility",
+    }
+    for item in subdomain_guides:
+        subdomain_id = item.get("subdomain_id", "<unknown>")
+        require_exact_keys(item, guide_fields, set(), f"Subdomain guide {subdomain_id}")
+        if subdomain_id not in subdomains or subdomain_id in guide_subdomains:
+            raise ValidationError(f"Unknown or duplicate subdomain guide: {subdomain_id}")
+        guide_subdomains.add(subdomain_id)
+        if not all(is_nonempty_string(item[field]) for field in guide_fields - {"subdomain_id"}):
+            raise ValidationError(f"Empty audience guidance on {subdomain_id}")
+    if guide_subdomains != subdomains:
+        raise ValidationError("Audience guidance must cover every subdomain exactly once")
+
+    metric_ids = [item.get("competency_id") for item in node_metrics]
+    if len(metric_ids) != len(set(metric_ids)) or set(metric_ids) != competency_ids:
+        raise ValidationError("Graph metrics must cover every competency exactly once")
+    metric_summary = graph_metrics_doc.get("summary", {})
+    if (
+        metric_summary.get("node_count") != len(competencies)
+        or metric_summary.get("relationship_count") != len(relationships)
+        or metric_summary.get("isolated_node_ids") != []
+    ):
+        raise ValidationError("Graph metric summary is out of sync")
+
     actual_counts = {
         "domains": len(domains),
         "subdomains": len(subdomains),
@@ -309,11 +444,30 @@ def validate() -> tuple[int, int, int, int]:
         "selected_candidates": len(selected),
         "competencies": len(competencies),
         "relationships": len(relationships),
+        "life_account_links": len(life_links),
+        "competency_guidance": len(guidance),
+        "framework_references": len(framework_references),
+        "competency_alignments": len(alignments),
+        "learning_paths": len(learning_paths),
+        "subdomain_guides": len(subdomain_guides),
+        "graph_metric_nodes": len(node_metrics),
     }
     if manifest.get("counts") != actual_counts:
         raise ValidationError(
             f"Manifest counts {manifest.get('counts')} do not match {actual_counts}"
         )
+
+    expected_files: dict[str, dict[str, Any]] = {}
+    for path in sorted(DATA.glob("*.json")):
+        if path.name == "manifest.json":
+            continue
+        content = path.read_bytes()
+        expected_files[path.name] = {
+            "bytes": len(content),
+            "sha256": hashlib.sha256(content).hexdigest(),
+        }
+    if manifest.get("files") != expected_files:
+        raise ValidationError("Manifest file sizes or SHA-256 hashes are out of sync")
 
     return (
         actual_counts["domains"],

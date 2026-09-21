@@ -1,0 +1,490 @@
+{
+  "schema_version": "0.1.0",
+  "status": "draft",
+  "source_of_truth": [
+    "competencies.json",
+    "dependencies.json",
+    "learning-paths.json"
+  ],
+  "summary": {
+    "node_count": 60,
+    "relationship_count": 75,
+    "relationship_types": {
+      "related_to": 1,
+      "requires": 16,
+      "supports": 58
+    },
+    "cross_domain_relationships": 16,
+    "connected_node_count": 60,
+    "isolated_node_ids": [],
+    "average_incident_relationships": 2.5
+  },
+  "node_metrics": [
+    {
+      "competency_id": "AI-BND-001",
+      "incoming_directed": 5,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 6
+    },
+    {
+      "competency_id": "AI-BND-002",
+      "incoming_directed": 3,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 4
+    },
+    {
+      "competency_id": "AI-BND-003",
+      "incoming_directed": 1,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 2
+    },
+    {
+      "competency_id": "AI-BND-004",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "AI-BND-005",
+      "incoming_directed": 0,
+      "outgoing_directed": 2,
+      "undirected_related": 0,
+      "total_incident": 2
+    },
+    {
+      "competency_id": "AI-COL-001",
+      "incoming_directed": 4,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 5
+    },
+    {
+      "competency_id": "AI-COL-002",
+      "incoming_directed": 1,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 2
+    },
+    {
+      "competency_id": "AI-COL-003",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "AI-COL-004",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "AI-COL-005",
+      "incoming_directed": 0,
+      "outgoing_directed": 2,
+      "undirected_related": 0,
+      "total_incident": 2
+    },
+    {
+      "competency_id": "AI-JUD-001",
+      "incoming_directed": 4,
+      "outgoing_directed": 2,
+      "undirected_related": 0,
+      "total_incident": 6
+    },
+    {
+      "competency_id": "AI-JUD-002",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "AI-JUD-003",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "AI-JUD-004",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "AI-JUD-005",
+      "incoming_directed": 0,
+      "outgoing_directed": 2,
+      "undirected_related": 0,
+      "total_incident": 2
+    },
+    {
+      "competency_id": "BIZ-NED-001",
+      "incoming_directed": 5,
+      "outgoing_directed": 1,
+      "undirected_related": 1,
+      "total_incident": 7
+    },
+    {
+      "competency_id": "BIZ-NED-002",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "BIZ-NED-003",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "BIZ-NED-004",
+      "incoming_directed": 1,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 2
+    },
+    {
+      "competency_id": "BIZ-NED-005",
+      "incoming_directed": 0,
+      "outgoing_directed": 2,
+      "undirected_related": 0,
+      "total_incident": 2
+    },
+    {
+      "competency_id": "BIZ-PRO-001",
+      "incoming_directed": 5,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 6
+    },
+    {
+      "competency_id": "BIZ-PRO-002",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "BIZ-PRO-003",
+      "incoming_directed": 2,
+      "outgoing_directed": 2,
+      "undirected_related": 0,
+      "total_incident": 4
+    },
+    {
+      "competency_id": "BIZ-PRO-004",
+      "incoming_directed": 1,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 2
+    },
+    {
+      "competency_id": "BIZ-PRO-005",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "BIZ-VAL-001",
+      "incoming_directed": 6,
+      "outgoing_directed": 2,
+      "undirected_related": 0,
+      "total_incident": 8
+    },
+    {
+      "competency_id": "BIZ-VAL-002",
+      "incoming_directed": 1,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 2
+    },
+    {
+      "competency_id": "BIZ-VAL-003",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "BIZ-VAL-004",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "BIZ-VAL-005",
+      "incoming_directed": 1,
+      "outgoing_directed": 2,
+      "undirected_related": 0,
+      "total_incident": 3
+    },
+    {
+      "competency_id": "PRO-COM-001",
+      "incoming_directed": 4,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 5
+    },
+    {
+      "competency_id": "PRO-COM-002",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "PRO-COM-003",
+      "incoming_directed": 0,
+      "outgoing_directed": 2,
+      "undirected_related": 0,
+      "total_incident": 2
+    },
+    {
+      "competency_id": "PRO-COM-004",
+      "incoming_directed": 1,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 2
+    },
+    {
+      "competency_id": "PRO-COM-005",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "PRO-PJM-001",
+      "incoming_directed": 5,
+      "outgoing_directed": 1,
+      "undirected_related": 1,
+      "total_incident": 7
+    },
+    {
+      "competency_id": "PRO-PJM-002",
+      "incoming_directed": 1,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 2
+    },
+    {
+      "competency_id": "PRO-PJM-003",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "PRO-PJM-004",
+      "incoming_directed": 2,
+      "outgoing_directed": 2,
+      "undirected_related": 0,
+      "total_incident": 4
+    },
+    {
+      "competency_id": "PRO-PJM-005",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "PRO-SEL-001",
+      "incoming_directed": 4,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 5
+    },
+    {
+      "competency_id": "PRO-SEL-002",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "PRO-SEL-003",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "PRO-SEL-004",
+      "incoming_directed": 0,
+      "outgoing_directed": 2,
+      "undirected_related": 0,
+      "total_incident": 2
+    },
+    {
+      "competency_id": "PRO-SEL-005",
+      "incoming_directed": 0,
+      "outgoing_directed": 2,
+      "undirected_related": 0,
+      "total_incident": 2
+    },
+    {
+      "competency_id": "SOC-AWR-001",
+      "incoming_directed": 6,
+      "outgoing_directed": 0,
+      "undirected_related": 0,
+      "total_incident": 6
+    },
+    {
+      "competency_id": "SOC-AWR-002",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "SOC-AWR-003",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "SOC-AWR-004",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "SOC-AWR-005",
+      "incoming_directed": 0,
+      "outgoing_directed": 2,
+      "undirected_related": 0,
+      "total_incident": 2
+    },
+    {
+      "competency_id": "SOC-COL-001",
+      "incoming_directed": 5,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 6
+    },
+    {
+      "competency_id": "SOC-COL-002",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "SOC-COL-003",
+      "incoming_directed": 0,
+      "outgoing_directed": 2,
+      "undirected_related": 0,
+      "total_incident": 2
+    },
+    {
+      "competency_id": "SOC-COL-004",
+      "incoming_directed": 1,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 2
+    },
+    {
+      "competency_id": "SOC-COL-005",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "SOC-RUL-001",
+      "incoming_directed": 2,
+      "outgoing_directed": 2,
+      "undirected_related": 0,
+      "total_incident": 4
+    },
+    {
+      "competency_id": "SOC-RUL-002",
+      "incoming_directed": 2,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 3
+    },
+    {
+      "competency_id": "SOC-RUL-003",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "SOC-RUL-004",
+      "incoming_directed": 0,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 1
+    },
+    {
+      "competency_id": "SOC-RUL-005",
+      "incoming_directed": 1,
+      "outgoing_directed": 1,
+      "undirected_related": 0,
+      "total_incident": 2
+    }
+  ],
+  "path_metrics": [
+    {
+      "path_id": "PATH-001",
+      "step_count": 7,
+      "domains_covered": [
+        "AI",
+        "SOC"
+      ],
+      "cross_domain_transitions": 2
+    },
+    {
+      "path_id": "PATH-002",
+      "step_count": 9,
+      "domains_covered": [
+        "BIZ",
+        "SOC"
+      ],
+      "cross_domain_transitions": 1
+    },
+    {
+      "path_id": "PATH-003",
+      "step_count": 7,
+      "domains_covered": [
+        "PRO",
+        "SOC"
+      ],
+      "cross_domain_transitions": 3
+    },
+    {
+      "path_id": "PATH-004",
+      "step_count": 7,
+      "domains_covered": [
+        "AI",
+        "SOC"
+      ],
+      "cross_domain_transitions": 3
+    },
+    {
+      "path_id": "PATH-005",
+      "step_count": 6,
+      "domains_covered": [
+        "PRO"
+      ],
+      "cross_domain_transitions": 0
+    }
+  ]
+}
