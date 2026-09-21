@@ -1,7 +1,11 @@
 import subprocess
 import sys
 import unittest
+from copy import deepcopy
+from unittest.mock import patch
 from pathlib import Path
+
+import validate as graph_validator
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -20,6 +24,35 @@ class GraphValidationTests(unittest.TestCase):
         for path in [*ROOT.glob("data/*.json"), *ROOT.glob("schema/*.json")]:
             with self.subTest(path=path.name):
                 json.loads(path.read_text(encoding="utf-8"))
+
+    def test_upgraded_node_rejects_generic_draft_language(self):
+        documents = {
+            name: deepcopy(graph_validator.load_json(name))
+            for name in (
+                "domains.json",
+                "competencies.json",
+                "dependencies.json",
+                "manifest.json",
+                "candidate-pool.json",
+                "life-account-links.json",
+            )
+        }
+        node = next(
+            item
+            for item in documents["competencies.json"]["competencies"]
+            if item["version"] != "0.1.0"
+        )
+        node["boundaries"].append("不等同于记忆术语、照搬模板或只完成一次任务。")
+
+        with patch.object(
+            graph_validator,
+            "load_json",
+            side_effect=lambda name: documents[name],
+        ):
+            with self.assertRaisesRegex(
+                graph_validator.ValidationError, "Generic draft language remains"
+            ):
+                graph_validator.validate()
 
 
 if __name__ == "__main__":

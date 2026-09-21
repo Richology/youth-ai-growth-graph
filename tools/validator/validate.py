@@ -15,6 +15,12 @@ DATA = ROOT / "data"
 COMPETENCY_ID = re.compile(r"^(AI|BIZ|PRO|SOC)-[A-Z]{3}-[0-9]{3}$")
 RELATIONSHIP_ID = re.compile(r"^REL-[0-9]{4}$")
 SEMVER = re.compile(r"^[0-9]+\.[0-9]+\.[0-9]+$")
+ISO_DATE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
+GENERIC_DRAFT_PHRASES = {
+    "不等同于记忆术语、照搬模板或只完成一次任务。",
+    "评价时应结合情境、过程与学习者实际承担的判断。",
+    "能解释关键选择，并在新的材料或情境中再次应用。",
+}
 
 
 class ValidationError(Exception):
@@ -37,6 +43,17 @@ def require_keys(item: dict[str, Any], keys: set[str], label: str) -> None:
     missing = sorted(keys - item.keys())
     if missing:
         raise ValidationError(f"{label} is missing fields: {', '.join(missing)}")
+
+
+def require_nonempty_strings(values: Any, label: str, minimum: int = 1) -> None:
+    if not isinstance(values, list) or len(values) < minimum:
+        raise ValidationError(f"{label} needs at least {minimum} item(s)")
+    if not all(isinstance(value, str) and value.strip() for value in values):
+        raise ValidationError(f"{label} must contain non-empty strings")
+
+
+def is_nonempty_string(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
 
 
 def validate() -> tuple[int, int, int, int]:
@@ -94,6 +111,14 @@ def validate() -> tuple[int, int, int, int]:
         competency_ids.add(node_id)
         if not SEMVER.fullmatch(item["version"]):
             raise ValidationError(f"Invalid version on {node_id}: {item['version']}")
+        for field in ("name", "definition"):
+            localized = item[field]
+            if (
+                not isinstance(localized, dict)
+                or set(localized) != {"zh", "en"}
+                or not all(is_nonempty_string(value) for value in localized.values())
+            ):
+                raise ValidationError(f"Invalid localized {field} on {node_id}")
         if item["domain_id"] not in domains:
             raise ValidationError(f"Unknown domain on {node_id}: {item['domain_id']}")
         if item["subdomain_id"] not in subdomains:
@@ -102,21 +127,54 @@ def validate() -> tuple[int, int, int, int]:
             )
         if item["subdomain_id"].split(".", 1)[0] != item["domain_id"]:
             raise ValidationError(f"Domain/subdomain mismatch on {node_id}")
-        if len(item["observable_behaviors"]) < 2:
-            raise ValidationError(f"{node_id} needs at least two observable behaviors")
+        require_nonempty_strings(item["boundaries"], f"Boundaries on {node_id}")
+        require_nonempty_strings(item["observable_behaviors"], f"Observable behaviors on {node_id}", 2)
         if set(item["proficiency_descriptors"]) != {"E1", "E2", "E3", "E4"}:
             raise ValidationError(f"{node_id} must define E1, E2, E3 and E4")
         if item["status"] not in {"proposed", "draft", "stable", "deprecated"}:
             raise ValidationError(f"Invalid status on {node_id}")
         if item["claim_status"] not in {"principle", "observation", "hypothesis", "evidence"}:
             raise ValidationError(f"Invalid claim status on {node_id}")
-        if not item["boundaries"] or not all(item["evidence_guidance"].get(k) for k in ("strong", "weak", "cautions")):
-            raise ValidationError(f"Incomplete boundaries or evidence guidance on {node_id}")
+        evidence = item["evidence_guidance"]
+        if set(evidence) != {"strong", "weak", "cautions"}:
+            raise ValidationError(f"Invalid evidence guidance fields on {node_id}")
+        for kind in ("strong", "weak", "cautions"):
+            require_nonempty_strings(evidence[kind], f"{kind} evidence on {node_id}")
+        node_text = [*item["boundaries"], *evidence["strong"], *evidence["weak"], *evidence["cautions"]]
+        generic = sorted(GENERIC_DRAFT_PHRASES.intersection(node_text))
+        if generic and item["version"] != "0.1.0":
+            raise ValidationError(f"Generic draft language remains on {node_id}: {generic[0]}")
+        for link in item["life_account_links"]:
+            require_keys(link, {"account", "relation", "rationale"}, f"Life-account link on {node_id}")
+            if link["account"] not in {"wealth", "health", "relationships"} or link["relation"] != "may_contribute_to":
+                raise ValidationError(f"Invalid life-account link on {node_id}")
+        for source in item["sources"]:
+            require_keys(source, {"type", "citation"}, f"Source on {node_id}")
+            if source["type"] not in {"practice", "research", "framework", "community"} or not is_nonempty_string(source["citation"]):
+                raise ValidationError(f"Invalid source on {node_id}")
+        logged_versions = set()
+        for change in item["change_log"]:
+            require_keys(change, {"version", "date", "summary"}, f"Change log on {node_id}")
+            if (
+                not isinstance(change["version"], str)
+                or not SEMVER.fullmatch(change["version"])
+                or not isinstance(change["date"], str)
+                or not ISO_DATE.fullmatch(change["date"])
+            ):
+                raise ValidationError(f"Invalid change-log version or date on {node_id}")
+            logged_versions.add(change["version"])
+        if item["version"] not in logged_versions:
+            raise ValidationError(f"Current version is missing from change log on {node_id}")
 
     relationship_ids: set[str] = set()
     relationship_keys: set[tuple[str, str, str]] = set()
     for item in relationships:
         rel_id = item.get("id", "<unknown>")
+        require_keys(
+            item,
+            {"id", "source_id", "target_id", "type", "rationale", "contexts", "status", "version", "sources"},
+            f"Relationship {rel_id}",
+        )
         if not RELATIONSHIP_ID.fullmatch(rel_id):
             raise ValidationError(f"Invalid relationship ID: {rel_id}")
         if rel_id in relationship_ids:
@@ -130,6 +188,12 @@ def validate() -> tuple[int, int, int, int]:
             raise ValidationError(f"Self relationship is not allowed: {rel_id}")
         if item.get("type") not in {"requires", "supports", "related_to"}:
             raise ValidationError(f"Unknown relationship type in {rel_id}")
+        if item["status"] not in {"proposed", "draft", "stable", "deprecated"} or not SEMVER.fullmatch(item["version"]):
+            raise ValidationError(f"Invalid status or version in {rel_id}")
+        if not isinstance(item["rationale"], str) or not item["rationale"].strip():
+            raise ValidationError(f"Empty rationale in {rel_id}")
+        require_nonempty_strings(item["contexts"], f"Contexts in {rel_id}")
+        require_nonempty_strings(item["sources"], f"Sources in {rel_id}")
         if item["type"] == "related_to" and source > target:
             raise ValidationError(
                 f"related_to IDs must use alphabetical order in {rel_id}"
