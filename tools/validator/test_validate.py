@@ -117,6 +117,59 @@ class GraphValidationTests(unittest.TestCase):
             ):
                 graph_validator.validate()
 
+    def test_schema_closed_object_rejects_unknown_field(self):
+        documents = {
+            name: deepcopy(graph_validator.load_json(name))
+            for name in (
+                "domains.json",
+                "competencies.json",
+                "dependencies.json",
+                "manifest.json",
+                "candidate-pool.json",
+                "life-account-links.json",
+            )
+        }
+        documents["competencies.json"]["competencies"][0]["internal_note"] = "x"
+
+        with patch.object(
+            graph_validator,
+            "load_json",
+            side_effect=lambda name: documents[name],
+        ):
+            with self.assertRaisesRegex(
+                graph_validator.ValidationError,
+                "unexpected fields: internal_note",
+            ):
+                graph_validator.validate()
+
+    def test_relationship_rejects_generic_contexts(self):
+        documents = {
+            name: deepcopy(graph_validator.load_json(name))
+            for name in (
+                "domains.json",
+                "competencies.json",
+                "dependencies.json",
+                "manifest.json",
+                "candidate-pool.json",
+                "life-account-links.json",
+            )
+        }
+        documents["dependencies.json"]["relationships"][0]["contexts"] = [
+            "项目式学习",
+            "真实或近真实任务",
+        ]
+
+        with patch.object(
+            graph_validator,
+            "load_json",
+            side_effect=lambda name: documents[name],
+        ):
+            with self.assertRaisesRegex(
+                graph_validator.ValidationError,
+                "Generic relationship contexts remain",
+            ):
+                graph_validator.validate()
+
 
 if __name__ == "__main__":
     unittest.main()

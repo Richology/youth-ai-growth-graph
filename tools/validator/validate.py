@@ -22,6 +22,7 @@ GENERIC_DRAFT_PHRASES = {
     "能解释关键选择，并在新的材料或情境中再次应用。",
 }
 GENERIC_RELATIONSHIP_FRAGMENT = "为该二级领域的综合基础能力提供一种可单独教学"
+GENERIC_RELATIONSHIP_CONTEXTS = ["项目式学习", "真实或近真实任务"]
 
 
 class ValidationError(Exception):
@@ -44,6 +45,15 @@ def require_keys(item: dict[str, Any], keys: set[str], label: str) -> None:
     missing = sorted(keys - item.keys())
     if missing:
         raise ValidationError(f"{label} is missing fields: {', '.join(missing)}")
+
+
+def require_exact_keys(
+    item: dict[str, Any], required: set[str], optional: set[str], label: str
+) -> None:
+    require_keys(item, required, label)
+    unexpected = sorted(item.keys() - required - optional)
+    if unexpected:
+        raise ValidationError(f"{label} has unexpected fields: {', '.join(unexpected)}")
 
 
 def require_nonempty_strings(values: Any, label: str, minimum: int = 1) -> None:
@@ -104,7 +114,7 @@ def validate() -> tuple[int, int, int, int]:
 
     for item in competencies:
         node_id = item.get("id", "<unknown>")
-        require_keys(item, competency_fields, f"Competency {node_id}")
+        require_exact_keys(item, competency_fields, set(), f"Competency {node_id}")
         if not COMPETENCY_ID.fullmatch(node_id):
             raise ValidationError(f"Invalid competency ID: {node_id}")
         if node_id in competency_ids:
@@ -132,6 +142,8 @@ def validate() -> tuple[int, int, int, int]:
         require_nonempty_strings(item["observable_behaviors"], f"Observable behaviors on {node_id}", 2)
         if set(item["proficiency_descriptors"]) != {"E1", "E2", "E3", "E4"}:
             raise ValidationError(f"{node_id} must define E1, E2, E3 and E4")
+        if not all(is_nonempty_string(value) for value in item["proficiency_descriptors"].values()):
+            raise ValidationError(f"Empty proficiency descriptor on {node_id}")
         if item["status"] not in {"proposed", "draft", "stable", "deprecated"}:
             raise ValidationError(f"Invalid status on {node_id}")
         if item["claim_status"] not in {"principle", "observation", "hypothesis", "evidence"}:
@@ -146,13 +158,18 @@ def validate() -> tuple[int, int, int, int]:
         if generic:
             raise ValidationError(f"Generic draft language remains on {node_id}: {generic[0]}")
         for link in item["life_account_links"]:
-            require_keys(link, {"account", "relation", "rationale"}, f"Life-account link on {node_id}")
+            require_exact_keys(link, {"account", "relation", "rationale"}, set(), f"Life-account link on {node_id}")
             if link["account"] not in {"wealth", "health", "relationships"} or link["relation"] != "may_contribute_to":
                 raise ValidationError(f"Invalid life-account link on {node_id}")
         for source in item["sources"]:
-            require_keys(source, {"type", "citation"}, f"Source on {node_id}")
+            require_exact_keys(source, {"type", "citation"}, {"url"}, f"Source on {node_id}")
             if source["type"] not in {"practice", "research", "framework", "community"} or not is_nonempty_string(source["citation"]):
                 raise ValidationError(f"Invalid source on {node_id}")
+            if "url" in source and (
+                not is_nonempty_string(source["url"])
+                or not source["url"].startswith(("https://", "http://"))
+            ):
+                raise ValidationError(f"Invalid source URL on {node_id}")
         source_types = {source["type"] for source in item["sources"]}
         if "practice" not in source_types:
             raise ValidationError(f"Practice source is missing on {node_id}")
@@ -166,7 +183,7 @@ def validate() -> tuple[int, int, int, int]:
             raise ValidationError(f"External calibration source is missing on {node_id}")
         logged_versions = set()
         for change in item["change_log"]:
-            require_keys(change, {"version", "date", "summary"}, f"Change log on {node_id}")
+            require_exact_keys(change, {"version", "date", "summary"}, set(), f"Change log on {node_id}")
             if (
                 not isinstance(change["version"], str)
                 or not SEMVER.fullmatch(change["version"])
@@ -174,6 +191,8 @@ def validate() -> tuple[int, int, int, int]:
                 or not ISO_DATE.fullmatch(change["date"])
             ):
                 raise ValidationError(f"Invalid change-log version or date on {node_id}")
+            if not is_nonempty_string(change["summary"]):
+                raise ValidationError(f"Empty change-log summary on {node_id}")
             logged_versions.add(change["version"])
         if item["version"] not in logged_versions:
             raise ValidationError(f"Current version is missing from change log on {node_id}")
@@ -182,9 +201,10 @@ def validate() -> tuple[int, int, int, int]:
     relationship_keys: set[tuple[str, str, str]] = set()
     for item in relationships:
         rel_id = item.get("id", "<unknown>")
-        require_keys(
+        require_exact_keys(
             item,
             {"id", "source_id", "target_id", "type", "rationale", "contexts", "status", "version", "sources"},
+            set(),
             f"Relationship {rel_id}",
         )
         if not RELATIONSHIP_ID.fullmatch(rel_id):
@@ -207,6 +227,8 @@ def validate() -> tuple[int, int, int, int]:
         if GENERIC_RELATIONSHIP_FRAGMENT in item["rationale"]:
             raise ValidationError(f"Generic relationship rationale remains in {rel_id}")
         require_nonempty_strings(item["contexts"], f"Contexts in {rel_id}")
+        if item["contexts"] == GENERIC_RELATIONSHIP_CONTEXTS:
+            raise ValidationError(f"Generic relationship contexts remain in {rel_id}")
         require_nonempty_strings(item["sources"], f"Sources in {rel_id}")
         if item["type"] == "related_to" and source > target:
             raise ValidationError(
@@ -260,6 +282,20 @@ def validate() -> tuple[int, int, int, int]:
             raise ValidationError(f"Unselected candidate lacks reason: {candidate_id}")
     if len(candidates) != 72 or len(selected) != 60 or selected != competency_ids:
         raise ValidationError("Candidate pool must contain 72 items selecting exactly all 60 competencies")
+
+    for link in life_links:
+        require_exact_keys(
+            link,
+            {"competency_id", "account", "relation", "rationale"},
+            set(),
+            "Derived life-account link",
+        )
+        if link["competency_id"] not in competency_ids:
+            raise ValidationError(f"Unknown competency in life-account link: {link['competency_id']}")
+        if link["account"] not in {"wealth", "health", "relationships"} or link["relation"] != "may_contribute_to":
+            raise ValidationError(f"Invalid derived life-account link on {link['competency_id']}")
+        if not is_nonempty_string(link["rationale"]):
+            raise ValidationError(f"Empty derived life-account rationale on {link['competency_id']}")
 
     expected_links = {(node["id"], link["account"], link["relation"], link["rationale"]) for node in competencies for link in node["life_account_links"]}
     actual_links = {(link["competency_id"], link["account"], link["relation"], link["rationale"]) for link in life_links}
