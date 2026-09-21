@@ -1,0 +1,37 @@
+name: 能力节点提案
+description: 建议新增、修改、合并或废弃一个能力节点
+title: "[能力提案] "
+labels: ["competency"]
+body:
+  - type: dropdown
+    id: change
+    attributes:
+      label: 变更类型
+      options: [新增, 修改, 合并, 拆分, 废弃]
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: 能力名称
+    validations:
+      required: true
+  - type: textarea
+    id: definition
+    attributes:
+      label: 建议定义与边界
+      description: 说明它是什么，也说明它不是什么。
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 可观察行为与可能证据
+    validations:
+      required: true
+  - type: textarea
+    id: rationale
+    attributes:
+      label: 理由与来源
+    validations:
+      required: true
