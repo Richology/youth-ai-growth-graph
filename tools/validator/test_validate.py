@@ -25,6 +25,17 @@ class GraphValidationTests(unittest.TestCase):
             with self.subTest(path=path.name):
                 json.loads(path.read_text(encoding="utf-8"))
 
+    def test_life_account_links_are_reproducible(self):
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "tools/sync_life_account_links.py")],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("synchronized", result.stdout)
+
     def test_node_rejects_generic_draft_language(self):
         documents = {
             name: deepcopy(graph_validator.load_json(name))
