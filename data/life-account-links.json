@@ -1,0 +1,541 @@
+{
+  "schema_version": "0.1.0",
+  "status": "draft",
+  "source_of_truth": "Generated from competencies.json; do not edit directly.",
+  "links": [
+    {
+      "competency_id": "AI-BND-001",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "更可靠的人机分工可能降低创造与商业实践中的错误成本。"
+    },
+    {
+      "competency_id": "AI-BND-001",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "清楚说明 AI 使用与人的责任可能帮助建立合作信任。"
+    },
+    {
+      "competency_id": "AI-COL-001",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "有效的人机协作可能提升创造和交付价值的效率与质量。"
+    },
+    {
+      "competency_id": "AI-COL-001",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "清楚记录人与 AI 的贡献边界可能帮助团队建立透明协作。"
+    },
+    {
+      "competency_id": "AI-JUD-001",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠核验可能减少学习、创作和商业实践中的错误决策成本。"
+    },
+    {
+      "competency_id": "AI-JUD-001",
+      "account": "health",
+      "relation": "may_contribute_to",
+      "rationale": "对高风险健康信息保持核验习惯可能降低误用建议的风险。"
+    },
+    {
+      "competency_id": "BIZ-NED-001",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "理解真实需求是创造可交换价值的一项基础能力。"
+    },
+    {
+      "competency_id": "BIZ-NED-001",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "认真理解他人的真实处境可能促进同理与有效沟通。"
+    },
+    {
+      "competency_id": "BIZ-PRO-001",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "以较低成本把需求转化为可测试方案可能支持持续价值创造。"
+    },
+    {
+      "competency_id": "BIZ-PRO-001",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "让相关者尽早体验方案可能减少误解并促进共同改进。"
+    },
+    {
+      "competency_id": "BIZ-VAL-001",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "依据真实反馈判断价值可能减少无效投入并改善价值交换。"
+    },
+    {
+      "competency_id": "BIZ-VAL-001",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "认真回应使用者反馈可能帮助建立尊重、信任和长期合作。"
+    },
+    {
+      "competency_id": "PRO-PJM-001",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "把目标转化为可靠交付可能支持长期价值创造。"
+    },
+    {
+      "competency_id": "PRO-PJM-001",
+      "account": "health",
+      "relation": "may_contribute_to",
+      "rationale": "合理安排任务和节奏可能减少长期失控与过度消耗。"
+    },
+    {
+      "competency_id": "PRO-COM-001",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "准确倾听、确认和表达可能减少误解并支持可靠合作。"
+    },
+    {
+      "competency_id": "PRO-COM-001",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "能够推动工作的沟通可能提升项目协作和价值交付质量。"
+    },
+    {
+      "competency_id": "PRO-SEL-001",
+      "account": "health",
+      "relation": "may_contribute_to",
+      "rationale": "关注状态并调整节奏可能支持更可持续的学习和工作方式。"
+    },
+    {
+      "competency_id": "PRO-SEL-001",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "持续履行合理承诺并从经验中调整可能支持长期价值创造。"
+    },
+    {
+      "competency_id": "SOC-AWR-001",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "理解不同角色的处境和利益可能支持更负责任的协作与关系建设。"
+    },
+    {
+      "competency_id": "SOC-AWR-001",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "理解价值链中的多方角色可能帮助形成更可持续的价值交换。"
+    },
+    {
+      "competency_id": "SOC-COL-001",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "协商分工、相互支持与共同负责可能帮助形成可靠关系。"
+    },
+    {
+      "competency_id": "SOC-COL-001",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "有效协调多人工作可能提升复杂项目创造与交付价值的能力。"
+    },
+    {
+      "competency_id": "SOC-RUL-001",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "尊重同意、隐私和权利可能帮助建立安全与可信的关系。"
+    },
+    {
+      "competency_id": "SOC-RUL-001",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "理解版权、平台和责任边界可能降低价值创造中的法律与声誉风险。"
+    },
+    {
+      "competency_id": "SOC-RUL-001",
+      "account": "health",
+      "relation": "may_contribute_to",
+      "rationale": "识别安全风险并采取保护措施可能减少对自己和他人的伤害。"
+    },
+    {
+      "competency_id": "AI-BND-002",
+      "account": "health",
+      "relation": "may_contribute_to",
+      "rationale": "按后果控制 AI 使用风险可能减少对身心安全的伤害。"
+    },
+    {
+      "competency_id": "AI-BND-002",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "考虑受影响者并保护敏感信息可能支持信任。"
+    },
+    {
+      "competency_id": "AI-COL-002",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "高质量上下文可能减少返工并提高人机协作产出。"
+    },
+    {
+      "competency_id": "AI-JUD-002",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "识别被忽略的视角可能支持更尊重和公平的沟通。"
+    },
+    {
+      "competency_id": "BIZ-NED-002",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "理解具体经历可能帮助发现值得解决的真实需求。"
+    },
+    {
+      "competency_id": "BIZ-NED-002",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "尊重地倾听与追问可能增进对他人处境的理解。"
+    },
+    {
+      "competency_id": "BIZ-PRO-002",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "依据证据迭代可能提高方案创造和交换价值的能力。"
+    },
+    {
+      "competency_id": "BIZ-VAL-002",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "低成本检验关键假设可能减少无效资源投入。"
+    },
+    {
+      "competency_id": "PRO-PJM-002",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "管理风险和变更可能提高价值交付的可靠性。"
+    },
+    {
+      "competency_id": "PRO-PJM-002",
+      "account": "health",
+      "relation": "may_contribute_to",
+      "rationale": "主动调整范围和节奏可能减少失控与过度消耗。"
+    },
+    {
+      "competency_id": "PRO-COM-002",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "尊重且具体的双向反馈可能支持信任与共同成长。"
+    },
+    {
+      "competency_id": "PRO-COM-002",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "把反馈转化为改进可能提升交付质量。"
+    },
+    {
+      "competency_id": "PRO-SEL-002",
+      "account": "health",
+      "relation": "may_contribute_to",
+      "rationale": "可持续的专注与恢复节奏可能支持身心健康。"
+    },
+    {
+      "competency_id": "PRO-SEL-002",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "合理管理注意力可能提高长期学习和交付可靠性。"
+    },
+    {
+      "competency_id": "SOC-AWR-002",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "理解话语权和影响承担差异可能支持更公平的合作。"
+    },
+    {
+      "competency_id": "SOC-AWR-002",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "考虑公共与弱势角色影响可能支持更可持续的价值创造。"
+    },
+    {
+      "competency_id": "SOC-COL-002",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "公平处理分歧可能支持信任和长期合作。"
+    },
+    {
+      "competency_id": "SOC-RUL-002",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "尊重数据选择和退出权可能支持安全与信任。"
+    },
+    {
+      "competency_id": "SOC-RUL-002",
+      "account": "health",
+      "relation": "may_contribute_to",
+      "rationale": "保护敏感信息可能减少暴露、羞辱和其他伤害。"
+    },
+    {
+      "competency_id": "AI-BND-003",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+    },
+    {
+      "competency_id": "AI-BND-004",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+    },
+    {
+      "competency_id": "AI-BND-005",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+    },
+    {
+      "competency_id": "AI-COL-003",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+    },
+    {
+      "competency_id": "AI-COL-004",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+    },
+    {
+      "competency_id": "AI-COL-005",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+    },
+    {
+      "competency_id": "AI-JUD-003",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+    },
+    {
+      "competency_id": "AI-JUD-004",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+    },
+    {
+      "competency_id": "AI-JUD-005",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+    },
+    {
+      "competency_id": "BIZ-NED-003",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+    },
+    {
+      "competency_id": "BIZ-NED-004",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+    },
+    {
+      "competency_id": "BIZ-NED-005",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+    },
+    {
+      "competency_id": "BIZ-PRO-003",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+    },
+    {
+      "competency_id": "BIZ-PRO-004",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+    },
+    {
+      "competency_id": "BIZ-PRO-005",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+    },
+    {
+      "competency_id": "BIZ-VAL-003",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+    },
+    {
+      "competency_id": "BIZ-VAL-004",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+    },
+    {
+      "competency_id": "BIZ-VAL-005",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+    },
+    {
+      "competency_id": "PRO-PJM-003",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的工作实践可能支持长期价值交付。"
+    },
+    {
+      "competency_id": "PRO-PJM-003",
+      "account": "health",
+      "relation": "may_contribute_to",
+      "rationale": "可持续的工作方式可能减少过度消耗。"
+    },
+    {
+      "competency_id": "PRO-PJM-004",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的工作实践可能支持长期价值交付。"
+    },
+    {
+      "competency_id": "PRO-PJM-004",
+      "account": "health",
+      "relation": "may_contribute_to",
+      "rationale": "可持续的工作方式可能减少过度消耗。"
+    },
+    {
+      "competency_id": "PRO-PJM-005",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的工作实践可能支持长期价值交付。"
+    },
+    {
+      "competency_id": "PRO-PJM-005",
+      "account": "health",
+      "relation": "may_contribute_to",
+      "rationale": "可持续的工作方式可能减少过度消耗。"
+    },
+    {
+      "competency_id": "PRO-COM-003",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的工作实践可能支持长期价值交付。"
+    },
+    {
+      "competency_id": "PRO-COM-003",
+      "account": "health",
+      "relation": "may_contribute_to",
+      "rationale": "可持续的工作方式可能减少过度消耗。"
+    },
+    {
+      "competency_id": "PRO-COM-004",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的工作实践可能支持长期价值交付。"
+    },
+    {
+      "competency_id": "PRO-COM-004",
+      "account": "health",
+      "relation": "may_contribute_to",
+      "rationale": "可持续的工作方式可能减少过度消耗。"
+    },
+    {
+      "competency_id": "PRO-COM-005",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的工作实践可能支持长期价值交付。"
+    },
+    {
+      "competency_id": "PRO-COM-005",
+      "account": "health",
+      "relation": "may_contribute_to",
+      "rationale": "可持续的工作方式可能减少过度消耗。"
+    },
+    {
+      "competency_id": "PRO-SEL-003",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的工作实践可能支持长期价值交付。"
+    },
+    {
+      "competency_id": "PRO-SEL-003",
+      "account": "health",
+      "relation": "may_contribute_to",
+      "rationale": "可持续的工作方式可能减少过度消耗。"
+    },
+    {
+      "competency_id": "PRO-SEL-004",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的工作实践可能支持长期价值交付。"
+    },
+    {
+      "competency_id": "PRO-SEL-004",
+      "account": "health",
+      "relation": "may_contribute_to",
+      "rationale": "可持续的工作方式可能减少过度消耗。"
+    },
+    {
+      "competency_id": "PRO-SEL-005",
+      "account": "wealth",
+      "relation": "may_contribute_to",
+      "rationale": "可靠的工作实践可能支持长期价值交付。"
+    },
+    {
+      "competency_id": "PRO-SEL-005",
+      "account": "health",
+      "relation": "may_contribute_to",
+      "rationale": "可持续的工作方式可能减少过度消耗。"
+    },
+    {
+      "competency_id": "SOC-AWR-003",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+    },
+    {
+      "competency_id": "SOC-AWR-004",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+    },
+    {
+      "competency_id": "SOC-AWR-005",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+    },
+    {
+      "competency_id": "SOC-COL-003",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+    },
+    {
+      "competency_id": "SOC-COL-004",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+    },
+    {
+      "competency_id": "SOC-COL-005",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+    },
+    {
+      "competency_id": "SOC-RUL-003",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+    },
+    {
+      "competency_id": "SOC-RUL-004",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+    },
+    {
+      "competency_id": "SOC-RUL-005",
+      "account": "relationships",
+      "relation": "may_contribute_to",
+      "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+    }
+  ]
+}

@@ -44,10 +44,14 @@ def validate() -> tuple[int, int, int, int]:
     competency_doc = load_json("competencies.json")
     relationship_doc = load_json("dependencies.json")
     manifest = load_json("manifest.json")
+    candidate_doc = load_json("candidate-pool.json")
+    life_link_doc = load_json("life-account-links.json")
 
     domain_items = domain_doc.get("domains", [])
     competencies = competency_doc.get("competencies", [])
     relationships = relationship_doc.get("relationships", [])
+    candidates = candidate_doc.get("candidates", [])
+    life_links = life_link_doc.get("links", [])
 
     domains = {item["id"] for item in domain_items}
     subdomains = {
@@ -102,8 +106,15 @@ def validate() -> tuple[int, int, int, int]:
             raise ValidationError(f"{node_id} needs at least two observable behaviors")
         if set(item["proficiency_descriptors"]) != {"E1", "E2", "E3", "E4"}:
             raise ValidationError(f"{node_id} must define E1, E2, E3 and E4")
+        if item["status"] not in {"proposed", "draft", "stable", "deprecated"}:
+            raise ValidationError(f"Invalid status on {node_id}")
+        if item["claim_status"] not in {"principle", "observation", "hypothesis", "evidence"}:
+            raise ValidationError(f"Invalid claim status on {node_id}")
+        if not item["boundaries"] or not all(item["evidence_guidance"].get(k) for k in ("strong", "weak", "cautions")):
+            raise ValidationError(f"Incomplete boundaries or evidence guidance on {node_id}")
 
     relationship_ids: set[str] = set()
+    relationship_keys: set[tuple[str, str, str]] = set()
     for item in relationships:
         rel_id = item.get("id", "<unknown>")
         if not RELATIONSHIP_ID.fullmatch(rel_id):
@@ -123,10 +134,65 @@ def validate() -> tuple[int, int, int, int]:
             raise ValidationError(
                 f"related_to IDs must use alphabetical order in {rel_id}"
             )
+        key = (source, target, item["type"])
+        if key in relationship_keys:
+            raise ValidationError(f"Duplicate relationship semantics in {rel_id}")
+        relationship_keys.add(key)
+
+    # requires edges encode source -> prerequisite. Any cycle is invalid.
+    requires = {node_id: [] for node_id in competency_ids}
+    for item in relationships:
+        if item["type"] == "requires":
+            requires[item["source_id"]].append(item["target_id"])
+    visiting: set[str] = set()
+    visited: set[str] = set()
+    def visit(node_id: str) -> None:
+        if node_id in visiting:
+            raise ValidationError(f"requires cycle detected at {node_id}")
+        if node_id in visited:
+            return
+        visiting.add(node_id)
+        for target in requires[node_id]:
+            visit(target)
+        visiting.remove(node_id)
+        visited.add(node_id)
+    for node_id in competency_ids:
+        visit(node_id)
+
+    connected = {item[side] for item in relationships for side in ("source_id", "target_id")}
+    isolated = sorted(competency_ids - connected)
+    if isolated:
+        raise ValidationError(f"Isolated competency nodes: {', '.join(isolated)}")
+
+    candidate_ids: set[str] = set()
+    selected: set[str] = set()
+    for item in candidates:
+        candidate_id = item.get("candidate_id", "<unknown>")
+        if candidate_id in candidate_ids:
+            raise ValidationError(f"Duplicate candidate ID: {candidate_id}")
+        candidate_ids.add(candidate_id)
+        if item.get("subdomain_id") not in subdomains:
+            raise ValidationError(f"Unknown candidate subdomain: {candidate_id}")
+        if item.get("status") == "selected":
+            node_id = item.get("competency_id")
+            if node_id not in competency_ids:
+                raise ValidationError(f"Selected candidate lacks competency: {candidate_id}")
+            selected.add(node_id)
+        elif item.get("status") in {"deferred", "rejected"} and not item.get("reason"):
+            raise ValidationError(f"Unselected candidate lacks reason: {candidate_id}")
+    if len(candidates) != 72 or len(selected) != 60 or selected != competency_ids:
+        raise ValidationError("Candidate pool must contain 72 items selecting exactly all 60 competencies")
+
+    expected_links = {(node["id"], link["account"], link["relation"], link["rationale"]) for node in competencies for link in node["life_account_links"]}
+    actual_links = {(link["competency_id"], link["account"], link["relation"], link["rationale"]) for link in life_links}
+    if actual_links != expected_links:
+        raise ValidationError("life-account-links.json is not synchronized with competencies.json")
 
     actual_counts = {
         "domains": len(domains),
         "subdomains": len(subdomains),
+        "candidates": len(candidates),
+        "selected_candidates": len(selected),
         "competencies": len(competencies),
         "relationships": len(relationships),
     }

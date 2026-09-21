@@ -6,7 +6,10 @@
 
 ```bash
 python3 tools/validator/validate.py
+python3 -m unittest discover -s tools/validator -p 'test_*.py'
 ```
+
+校验覆盖领域与候选池计数、节点字段、引用完整性、重复关系、`requires` 环、孤立节点、人生课题派生数据和 manifest 一致性。GitHub Actions 会在 push 和 pull request 时运行同一套检查。
 
 当前检查：
 

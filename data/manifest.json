@@ -6,8 +6,10 @@
   "counts": {
     "domains": 4,
     "subdomains": 12,
-    "competencies": 24,
-    "relationships": 27
+    "candidates": 72,
+    "selected_candidates": 60,
+    "competencies": 60,
+    "relationships": 63
   },
-  "notice": "The first 24 competency nodes are draft foundations for public review and must not be used as a standardized assessment."
+  "notice": "The first 60 competency nodes are draft foundations for public review and must not be used as a standardized assessment."
 }

@@ -848,160 +848,3384 @@
       ]
     },
     {
-      "id": "AI-BND-002", "version": "0.1.0", "status": "draft",
-      "name": {"zh": "评估 AI 使用风险", "en": "Assess Risks of AI Use"},
-      "domain_id": "AI", "subdomain_id": "AI.BND",
-      "definition": {"zh": "能够在使用 AI 前根据数据敏感性、错误后果、影响对象和可逆程度判断风险等级，并选择与风险相称的限制、核验和人工监督措施。", "en": "Assess AI-use risk from data sensitivity, consequences, affected people, and reversibility, then choose proportionate constraints, verification, and human oversight."},
-      "boundaries": ["不等同于笼统地说 AI 有风险。", "不要求消除所有不确定性或拒绝所有高风险任务。", "侧重具体使用情境的风险控制，与一般能力边界判断相区分。"],
-      "observable_behaviors": ["在使用前识别输入数据、输出用途、受影响者和最坏的合理后果。", "依据风险决定是否匿名化、缩小用途、增加核验、请求成人支持或停止使用。", "在情境变化后重新评估风险并更新保护措施。"],
-      "proficiency_descriptors": {"E1": "在示例提示下，能指出一项明显风险并采取给定保护步骤。", "E2": "借助风险清单，能判断常见任务的风险等级并选择基本措施。", "E3": "能在熟悉任务中独立权衡敏感性、后果和可逆性，实施相称控制。", "E4": "能在新的复杂情境中分析多方风险、残余不确定性和措施代价，并动态调整。"},
-      "evidence_guidance": {"strong": ["使用前风险记录与实际采取的保护、核验和升级措施相互对应。", "情境变化后有重新判断和措施调整的版本记录。"], "weak": ["只复述通用安全口号或复制风险清单。", "结果没有出事，便声称风险判断正确。"], "cautions": ["成人预先限制可能掩盖学习者的判断过程，应区分外部控制和自主选择。"]},
-      "life_account_links": [{"account": "health", "relation": "may_contribute_to", "rationale": "按后果控制 AI 使用风险可能减少对身心安全的伤害。"}, {"account": "relationships", "relation": "may_contribute_to", "rationale": "考虑受影响者并保护敏感信息可能支持信任。"}],
-      "claim_status": "observation", "sources": [{"type": "practice", "citation": "Richology 青少年 AI 安全与项目实践总结"}],
-      "change_log": [{"version": "0.1.0", "date": "2026-09-21", "summary": "Initial draft node."}]
+      "id": "AI-BND-002",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "评估 AI 使用风险",
+        "en": "Assess Risks of AI Use"
+      },
+      "domain_id": "AI",
+      "subdomain_id": "AI.BND",
+      "definition": {
+        "zh": "能够在使用 AI 前根据数据敏感性、错误后果、影响对象和可逆程度判断风险等级，并选择与风险相称的限制、核验和人工监督措施。",
+        "en": "Assess AI-use risk from data sensitivity, consequences, affected people, and reversibility, then choose proportionate constraints, verification, and human oversight."
+      },
+      "boundaries": [
+        "不等同于笼统地说 AI 有风险。",
+        "不要求消除所有不确定性或拒绝所有高风险任务。",
+        "侧重具体使用情境的风险控制，与一般能力边界判断相区分。"
+      ],
+      "observable_behaviors": [
+        "在使用前识别输入数据、输出用途、受影响者和最坏的合理后果。",
+        "依据风险决定是否匿名化、缩小用途、增加核验、请求成人支持或停止使用。",
+        "在情境变化后重新评估风险并更新保护措施。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例提示下，能指出一项明显风险并采取给定保护步骤。",
+        "E2": "借助风险清单，能判断常见任务的风险等级并选择基本措施。",
+        "E3": "能在熟悉任务中独立权衡敏感性、后果和可逆性，实施相称控制。",
+        "E4": "能在新的复杂情境中分析多方风险、残余不确定性和措施代价，并动态调整。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "使用前风险记录与实际采取的保护、核验和升级措施相互对应。",
+          "情境变化后有重新判断和措施调整的版本记录。"
+        ],
+        "weak": [
+          "只复述通用安全口号或复制风险清单。",
+          "结果没有出事，便声称风险判断正确。"
+        ],
+        "cautions": [
+          "成人预先限制可能掩盖学习者的判断过程，应区分外部控制和自主选择。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "health",
+          "relation": "may_contribute_to",
+          "rationale": "按后果控制 AI 使用风险可能减少对身心安全的伤害。"
+        },
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "考虑受影响者并保护敏感信息可能支持信任。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 安全与项目实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
     },
     {
-      "id": "AI-COL-002", "version": "0.1.0", "status": "draft",
-      "name": {"zh": "构建有效任务上下文", "en": "Build Effective Task Context"},
-      "domain_id": "AI", "subdomain_id": "AI.COL",
-      "definition": {"zh": "能够选择、组织并持续维护 AI 完成任务所需的背景、材料、示例、术语和约束，使协作建立在准确且足够的上下文之上。", "en": "Select, organize, and maintain the background, materials, examples, terminology, and constraints AI needs to work from accurate and sufficient context."},
-      "boundaries": ["不等同于一次写出很长的提示词。", "不应输入无必要的个人信息、机密材料或受限内容。", "侧重信息准备与上下文维护，不覆盖完整的人机分工。"],
-      "observable_behaviors": ["识别 AI 完成当前任务必须知道和不必知道的信息。", "用材料、示例和术语说明减少目标与标准的歧义。", "发现上下文过时、冲突或缺失时进行更新并检查影响。"],
-      "proficiency_descriptors": {"E1": "在模板帮助下，能补充目标和一个相关示例。", "E2": "能借助清单整理背景、材料和限制，并删除明显无关信息。", "E3": "能在熟悉任务中独立构建最小充分上下文，发现缺口并持续维护。", "E4": "能在复杂长任务中管理多来源、版本和权限，平衡信息充分性、安全与成本。"},
-      "evidence_guidance": {"strong": ["上下文材料的选择、删减、更新及其对输出的影响均有记录。", "能解释某项信息为何必要、为何排除以及如何保护敏感内容。"], "weak": ["只展示最终提示词或堆入大量未筛选材料。", "输出较好但上下文完全由教师或模板准备。"], "cautions": ["模型本身掌握的知识会影响结果，不能仅凭结果反推学习者的上下文构建能力。"]},
-      "life_account_links": [{"account": "wealth", "relation": "may_contribute_to", "rationale": "高质量上下文可能减少返工并提高人机协作产出。"}],
-      "claim_status": "observation", "sources": [{"type": "practice", "citation": "Richology 青少年 AI 协作课程实践总结"}],
-      "change_log": [{"version": "0.1.0", "date": "2026-09-21", "summary": "Initial draft node."}]
+      "id": "AI-COL-002",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "构建有效任务上下文",
+        "en": "Build Effective Task Context"
+      },
+      "domain_id": "AI",
+      "subdomain_id": "AI.COL",
+      "definition": {
+        "zh": "能够选择、组织并持续维护 AI 完成任务所需的背景、材料、示例、术语和约束，使协作建立在准确且足够的上下文之上。",
+        "en": "Select, organize, and maintain the background, materials, examples, terminology, and constraints AI needs to work from accurate and sufficient context."
+      },
+      "boundaries": [
+        "不等同于一次写出很长的提示词。",
+        "不应输入无必要的个人信息、机密材料或受限内容。",
+        "侧重信息准备与上下文维护，不覆盖完整的人机分工。"
+      ],
+      "observable_behaviors": [
+        "识别 AI 完成当前任务必须知道和不必知道的信息。",
+        "用材料、示例和术语说明减少目标与标准的歧义。",
+        "发现上下文过时、冲突或缺失时进行更新并检查影响。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在模板帮助下，能补充目标和一个相关示例。",
+        "E2": "能借助清单整理背景、材料和限制，并删除明显无关信息。",
+        "E3": "能在熟悉任务中独立构建最小充分上下文，发现缺口并持续维护。",
+        "E4": "能在复杂长任务中管理多来源、版本和权限，平衡信息充分性、安全与成本。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "上下文材料的选择、删减、更新及其对输出的影响均有记录。",
+          "能解释某项信息为何必要、为何排除以及如何保护敏感内容。"
+        ],
+        "weak": [
+          "只展示最终提示词或堆入大量未筛选材料。",
+          "输出较好但上下文完全由教师或模板准备。"
+        ],
+        "cautions": [
+          "模型本身掌握的知识会影响结果，不能仅凭结果反推学习者的上下文构建能力。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "高质量上下文可能减少返工并提高人机协作产出。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 协作课程实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
     },
     {
-      "id": "AI-JUD-002", "version": "0.1.0", "status": "draft",
-      "name": {"zh": "识别输出偏差与遗漏", "en": "Identify Bias and Omissions in Outputs"},
-      "domain_id": "AI", "subdomain_id": "AI.JUD",
-      "definition": {"zh": "能够检查 AI 输出采用了谁的视角、忽略了哪些人和条件，以及哪些表述可能强化刻板印象，并通过补充视角和限制说明降低误导。", "en": "Examine whose perspectives an AI output represents, who or what it omits, and where it may reinforce stereotypes, then reduce harm by adding perspectives and limitations."},
-      "boundaries": ["不等同于只寻找冒犯性词语。", "不假定所有差异都来自 AI 偏差。", "侧重代表性、遗漏和刻板印象，与事实核验相区分。"],
-      "observable_behaviors": ["指出输出中的默认对象、缺失群体、隐含前提或不适用条件。", "比较不同提问、来源或当事人视角下的结果差异。", "修订输出并说明仍无法消除的局限。"],
-      "proficiency_descriptors": {"E1": "在案例提示下，能发现一个明显刻板印象或遗漏。", "E2": "借助检查问题，能比较两个视角并补充基本限制说明。", "E3": "能在熟悉主题中独立识别代表性与前提问题，并形成有依据的修订。", "E4": "能在陌生复杂情境中分析数据、权力与用途如何共同产生偏差，并权衡修正方案。"},
-      "evidence_guidance": {"strong": ["原始输出、视角比较、受影响者信息和修订理由形成完整记录。", "能区分可修订偏差、证据不足和任务本身的限制。"], "weak": ["只给输出贴上有偏见或没偏见的标签。", "要求另一个 AI 自动消除偏见但不检查结果。"], "cautions": ["学习者熟悉的文化和语言会影响识别范围，未发现不等于偏差不存在。"]},
-      "life_account_links": [{"account": "relationships", "relation": "may_contribute_to", "rationale": "识别被忽略的视角可能支持更尊重和公平的沟通。"}],
-      "claim_status": "observation", "sources": [{"type": "practice", "citation": "Richology 青少年 AI 信息素养课程实践总结"}],
-      "change_log": [{"version": "0.1.0", "date": "2026-09-21", "summary": "Initial draft node."}]
+      "id": "AI-JUD-002",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "识别输出偏差与遗漏",
+        "en": "Identify Bias and Omissions in Outputs"
+      },
+      "domain_id": "AI",
+      "subdomain_id": "AI.JUD",
+      "definition": {
+        "zh": "能够检查 AI 输出采用了谁的视角、忽略了哪些人和条件，以及哪些表述可能强化刻板印象，并通过补充视角和限制说明降低误导。",
+        "en": "Examine whose perspectives an AI output represents, who or what it omits, and where it may reinforce stereotypes, then reduce harm by adding perspectives and limitations."
+      },
+      "boundaries": [
+        "不等同于只寻找冒犯性词语。",
+        "不假定所有差异都来自 AI 偏差。",
+        "侧重代表性、遗漏和刻板印象，与事实核验相区分。"
+      ],
+      "observable_behaviors": [
+        "指出输出中的默认对象、缺失群体、隐含前提或不适用条件。",
+        "比较不同提问、来源或当事人视角下的结果差异。",
+        "修订输出并说明仍无法消除的局限。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在案例提示下，能发现一个明显刻板印象或遗漏。",
+        "E2": "借助检查问题，能比较两个视角并补充基本限制说明。",
+        "E3": "能在熟悉主题中独立识别代表性与前提问题，并形成有依据的修订。",
+        "E4": "能在陌生复杂情境中分析数据、权力与用途如何共同产生偏差，并权衡修正方案。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "原始输出、视角比较、受影响者信息和修订理由形成完整记录。",
+          "能区分可修订偏差、证据不足和任务本身的限制。"
+        ],
+        "weak": [
+          "只给输出贴上有偏见或没偏见的标签。",
+          "要求另一个 AI 自动消除偏见但不检查结果。"
+        ],
+        "cautions": [
+          "学习者熟悉的文化和语言会影响识别范围，未发现不等于偏差不存在。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "识别被忽略的视角可能支持更尊重和公平的沟通。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 信息素养课程实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
     },
     {
-      "id": "BIZ-NED-002", "version": "0.1.0", "status": "draft",
-      "name": {"zh": "开展需求访谈", "en": "Conduct Needs Interviews"},
-      "domain_id": "BIZ", "subdomain_id": "BIZ.NED",
-      "definition": {"zh": "能够围绕具体经历设计并开展尊重受访者的访谈，通过开放提问、追问和记录获得需求信息，同时避免诱导和过度解读。", "en": "Plan and conduct respectful interviews about concrete experiences, using open questions, follow-up, and records to learn about needs without leading or overinterpreting responses."},
-      "boundaries": ["不等同于推销方案或询问别人是否喜欢自己的想法。", "不要求受访者提供隐私或不愿分享的信息。", "需求访谈是一种信息来源，不能单独代表全部目标人群。"],
-      "observable_behaviors": ["围绕过去的具体行为、情境和困难准备开放问题。", "在访谈中倾听、追问事实并区分原话与自己的解释。", "取得必要同意，整理记录并标注不确定结论。"],
-      "proficiency_descriptors": {"E1": "在提纲和陪同下，能提出开放问题并记录一段具体经历。", "E2": "能借助提纲完成访谈，进行基本追问并区分原话和解释。", "E3": "能独立选择对象、调整问题、控制诱导并从多次访谈中归纳模式。", "E4": "能在复杂敏感主题中处理权力差异、反例与样本限制，持续改进访谈设计。"},
-      "evidence_guidance": {"strong": ["访谈目标、提纲、同意、原始记录、追问和分析过程均可检查。", "根据访谈质量或新信息修改了后续问题。"], "weak": ["只有整理后的结论，没有原始记录或对象说明。", "以 AI 模拟受访者代替真实访谈。"], "cautions": ["接触受访者的机会受环境资源影响，不应以访谈数量直接评价能力。"]},
-      "life_account_links": [{"account": "wealth", "relation": "may_contribute_to", "rationale": "理解具体经历可能帮助发现值得解决的真实需求。"}, {"account": "relationships", "relation": "may_contribute_to", "rationale": "尊重地倾听与追问可能增进对他人处境的理解。"}],
-      "claim_status": "observation", "sources": [{"type": "practice", "citation": "Richology 青少年用户研究课程实践总结"}],
-      "change_log": [{"version": "0.1.0", "date": "2026-09-21", "summary": "Initial draft node."}]
+      "id": "BIZ-NED-002",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "开展需求访谈",
+        "en": "Conduct Needs Interviews"
+      },
+      "domain_id": "BIZ",
+      "subdomain_id": "BIZ.NED",
+      "definition": {
+        "zh": "能够围绕具体经历设计并开展尊重受访者的访谈，通过开放提问、追问和记录获得需求信息，同时避免诱导和过度解读。",
+        "en": "Plan and conduct respectful interviews about concrete experiences, using open questions, follow-up, and records to learn about needs without leading or overinterpreting responses."
+      },
+      "boundaries": [
+        "不等同于推销方案或询问别人是否喜欢自己的想法。",
+        "不要求受访者提供隐私或不愿分享的信息。",
+        "需求访谈是一种信息来源，不能单独代表全部目标人群。"
+      ],
+      "observable_behaviors": [
+        "围绕过去的具体行为、情境和困难准备开放问题。",
+        "在访谈中倾听、追问事实并区分原话与自己的解释。",
+        "取得必要同意，整理记录并标注不确定结论。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在提纲和陪同下，能提出开放问题并记录一段具体经历。",
+        "E2": "能借助提纲完成访谈，进行基本追问并区分原话和解释。",
+        "E3": "能独立选择对象、调整问题、控制诱导并从多次访谈中归纳模式。",
+        "E4": "能在复杂敏感主题中处理权力差异、反例与样本限制，持续改进访谈设计。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "访谈目标、提纲、同意、原始记录、追问和分析过程均可检查。",
+          "根据访谈质量或新信息修改了后续问题。"
+        ],
+        "weak": [
+          "只有整理后的结论，没有原始记录或对象说明。",
+          "以 AI 模拟受访者代替真实访谈。"
+        ],
+        "cautions": [
+          "接触受访者的机会受环境资源影响，不应以访谈数量直接评价能力。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "理解具体经历可能帮助发现值得解决的真实需求。"
+        },
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "尊重地倾听与追问可能增进对他人处境的理解。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年用户研究课程实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
     },
     {
-      "id": "BIZ-PRO-002", "version": "0.1.0", "status": "draft",
-      "name": {"zh": "根据反馈迭代方案", "en": "Iterate Solutions from Feedback"},
-      "domain_id": "BIZ", "subdomain_id": "BIZ.PRO",
-      "definition": {"zh": "能够把反馈和测试结果转化为明确的改进判断，区分应保留、修改和暂不处理的内容，并通过新版本检验改变是否有效。", "en": "Turn feedback and test results into explicit improvement decisions, distinguish what to keep, change, or defer, and use a new version to test whether changes work."},
-      "boundaries": ["不等同于接受每一条反馈或不断增加功能。", "不以版本数量判断迭代质量。", "侧重方案改变，与验证价值的证据判断相区分。"],
-      "observable_behaviors": ["把反馈关联到具体问题、使用情境或假设。", "说明保留、修改或拒绝反馈的理由并确定优先级。", "比较迭代前后结果，判断改动是否解决原问题。"],
-      "proficiency_descriptors": {"E1": "在指导下，能根据一条具体反馈修改方案。", "E2": "借助优先级模板，能整理反馈并完成一个有理由的版本改动。", "E3": "能在熟悉项目中独立综合反馈、成本和目标，实施并检查关键迭代。", "E4": "能在复杂项目中处理冲突证据与系统影响，规划多轮迭代并停止低价值改动。"},
-      "evidence_guidance": {"strong": ["反馈原文、判断理由、变更记录和新一轮测试相互对应。", "包含被拒绝或延后的反馈及其取舍依据。"], "weak": ["只展示前后两个版本，没有反馈与决策过程。", "按教师或 AI 指令修改，无法解释原因。"], "cautions": ["版本变漂亮不一定解决问题，应检查变化是否回应目标对象和验证结果。"]},
-      "life_account_links": [{"account": "wealth", "relation": "may_contribute_to", "rationale": "依据证据迭代可能提高方案创造和交换价值的能力。"}],
-      "claim_status": "observation", "sources": [{"type": "practice", "citation": "Richology 青少年产品迭代课程实践总结"}],
-      "change_log": [{"version": "0.1.0", "date": "2026-09-21", "summary": "Initial draft node."}]
+      "id": "BIZ-PRO-002",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "根据反馈迭代方案",
+        "en": "Iterate Solutions from Feedback"
+      },
+      "domain_id": "BIZ",
+      "subdomain_id": "BIZ.PRO",
+      "definition": {
+        "zh": "能够把反馈和测试结果转化为明确的改进判断，区分应保留、修改和暂不处理的内容，并通过新版本检验改变是否有效。",
+        "en": "Turn feedback and test results into explicit improvement decisions, distinguish what to keep, change, or defer, and use a new version to test whether changes work."
+      },
+      "boundaries": [
+        "不等同于接受每一条反馈或不断增加功能。",
+        "不以版本数量判断迭代质量。",
+        "侧重方案改变，与验证价值的证据判断相区分。"
+      ],
+      "observable_behaviors": [
+        "把反馈关联到具体问题、使用情境或假设。",
+        "说明保留、修改或拒绝反馈的理由并确定优先级。",
+        "比较迭代前后结果，判断改动是否解决原问题。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在指导下，能根据一条具体反馈修改方案。",
+        "E2": "借助优先级模板，能整理反馈并完成一个有理由的版本改动。",
+        "E3": "能在熟悉项目中独立综合反馈、成本和目标，实施并检查关键迭代。",
+        "E4": "能在复杂项目中处理冲突证据与系统影响，规划多轮迭代并停止低价值改动。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "反馈原文、判断理由、变更记录和新一轮测试相互对应。",
+          "包含被拒绝或延后的反馈及其取舍依据。"
+        ],
+        "weak": [
+          "只展示前后两个版本，没有反馈与决策过程。",
+          "按教师或 AI 指令修改，无法解释原因。"
+        ],
+        "cautions": [
+          "版本变漂亮不一定解决问题，应检查变化是否回应目标对象和验证结果。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "依据证据迭代可能提高方案创造和交换价值的能力。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年产品迭代课程实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
     },
     {
-      "id": "BIZ-VAL-002", "version": "0.1.0", "status": "draft",
-      "name": {"zh": "设计最小验证", "en": "Design Minimum Viable Tests"},
-      "domain_id": "BIZ", "subdomain_id": "BIZ.VAL",
-      "definition": {"zh": "能够围绕最关键且最不确定的假设，选择成本、时间和风险可控的最小测试，并预先规定观察指标与结论边界。", "en": "Choose a low-cost, time-bounded, and risk-controlled test for the most critical uncertain assumption, with observation criteria and conclusion limits defined in advance."},
-      "boundaries": ["不等同于把测试做得尽可能小或随意。", "不要求直接收费或公开发布。", "侧重验证设计，与执行测试后解释全部价值证据相区分。"],
-      "observable_behaviors": ["从多个假设中选出对方案最关键且证据最弱的一项。", "设计能产生相关行为证据的最小测试和停止条件。", "在测试前写明指标、可能结果和不能推出的结论。"],
-      "proficiency_descriptors": {"E1": "在示例帮助下，能把一个猜想改写成可观察问题。", "E2": "借助模板，能为明确假设设计一次小规模测试和基本指标。", "E3": "能独立选择关键不确定性，平衡成本与证据质量并预设结论边界。", "E4": "能在复杂约束下比较多种验证路径，管理伦理风险并设计递进测试组合。"},
-      "evidence_guidance": {"strong": ["假设优先级、测试设计、指标和结论边界在执行前已有记录。", "能够解释为何该测试比更昂贵方案更适合当前学习目标。"], "weak": ["先做活动，再根据结果补写验证目标。", "测试产生大量数据，但与关键假设无关。"], "cautions": ["测试规模小不自动代表设计优秀，必须检查其能否产生相关证据。"]},
-      "life_account_links": [{"account": "wealth", "relation": "may_contribute_to", "rationale": "低成本检验关键假设可能减少无效资源投入。"}],
-      "claim_status": "observation", "sources": [{"type": "practice", "citation": "Richology 青少年市场验证课程实践总结"}],
-      "change_log": [{"version": "0.1.0", "date": "2026-09-21", "summary": "Initial draft node."}]
+      "id": "BIZ-VAL-002",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "设计最小验证",
+        "en": "Design Minimum Viable Tests"
+      },
+      "domain_id": "BIZ",
+      "subdomain_id": "BIZ.VAL",
+      "definition": {
+        "zh": "能够围绕最关键且最不确定的假设，选择成本、时间和风险可控的最小测试，并预先规定观察指标与结论边界。",
+        "en": "Choose a low-cost, time-bounded, and risk-controlled test for the most critical uncertain assumption, with observation criteria and conclusion limits defined in advance."
+      },
+      "boundaries": [
+        "不等同于把测试做得尽可能小或随意。",
+        "不要求直接收费或公开发布。",
+        "侧重验证设计，与执行测试后解释全部价值证据相区分。"
+      ],
+      "observable_behaviors": [
+        "从多个假设中选出对方案最关键且证据最弱的一项。",
+        "设计能产生相关行为证据的最小测试和停止条件。",
+        "在测试前写明指标、可能结果和不能推出的结论。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例帮助下，能把一个猜想改写成可观察问题。",
+        "E2": "借助模板，能为明确假设设计一次小规模测试和基本指标。",
+        "E3": "能独立选择关键不确定性，平衡成本与证据质量并预设结论边界。",
+        "E4": "能在复杂约束下比较多种验证路径，管理伦理风险并设计递进测试组合。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "假设优先级、测试设计、指标和结论边界在执行前已有记录。",
+          "能够解释为何该测试比更昂贵方案更适合当前学习目标。"
+        ],
+        "weak": [
+          "先做活动，再根据结果补写验证目标。",
+          "测试产生大量数据，但与关键假设无关。"
+        ],
+        "cautions": [
+          "测试规模小不自动代表设计优秀，必须检查其能否产生相关证据。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "低成本检验关键假设可能减少无效资源投入。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年市场验证课程实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
     },
     {
-      "id": "PRO-PJM-002", "version": "0.1.0", "status": "draft",
-      "name": {"zh": "管理项目风险与变更", "en": "Manage Project Risks and Change"},
-      "domain_id": "PRO", "subdomain_id": "PRO.PJM",
-      "definition": {"zh": "能够提前识别可能影响交付的风险和依赖，在变化发生时评估影响、调整范围与节奏，并向相关者清楚说明新的承诺。", "en": "Anticipate risks and dependencies that may affect delivery, assess change impacts, adjust scope and pace, and communicate revised commitments clearly."},
-      "boundaries": ["不要求准确预测所有问题。", "不等同于频繁改计划或通过加班吸收全部变化。", "侧重不确定性与变更控制，与初始目标拆解相区分。"],
-      "observable_behaviors": ["识别关键依赖、可能风险、预警信号和备选方案。", "变化发生时评估对范围、时间、质量和相关者的影响。", "记录变更理由并重新确认负责人、优先级和承诺。"],
-      "proficiency_descriptors": {"E1": "在提示下，能指出一项可能阻碍任务完成的问题。", "E2": "借助风险表，能记录主要风险并在变化后更新计划。", "E3": "能在熟悉项目中独立监测风险、评估变更影响并协商调整。", "E4": "能在开放复杂项目中管理连锁影响、资源冲突和多方预期，保留决策记录。"},
-      "evidence_guidance": {"strong": ["风险记录、预警、变更决定和修订后的承诺能够形成时间线。", "能说明未采用的备选方案及其代价。"], "weak": ["项目结束后补写一份风险清单。", "按时交付但所有变更都由他人处理。"], "cautions": ["外部变化频率不同，应评价应对质量而非风险数量。"]},
-      "life_account_links": [{"account": "wealth", "relation": "may_contribute_to", "rationale": "管理风险和变更可能提高价值交付的可靠性。"}, {"account": "health", "relation": "may_contribute_to", "rationale": "主动调整范围和节奏可能减少失控与过度消耗。"}],
-      "claim_status": "observation", "sources": [{"type": "practice", "citation": "Richology 项目式课程与职业化训练实践总结"}],
-      "change_log": [{"version": "0.1.0", "date": "2026-09-21", "summary": "Initial draft node."}]
+      "id": "PRO-PJM-002",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "管理项目风险与变更",
+        "en": "Manage Project Risks and Change"
+      },
+      "domain_id": "PRO",
+      "subdomain_id": "PRO.PJM",
+      "definition": {
+        "zh": "能够提前识别可能影响交付的风险和依赖，在变化发生时评估影响、调整范围与节奏，并向相关者清楚说明新的承诺。",
+        "en": "Anticipate risks and dependencies that may affect delivery, assess change impacts, adjust scope and pace, and communicate revised commitments clearly."
+      },
+      "boundaries": [
+        "不要求准确预测所有问题。",
+        "不等同于频繁改计划或通过加班吸收全部变化。",
+        "侧重不确定性与变更控制，与初始目标拆解相区分。"
+      ],
+      "observable_behaviors": [
+        "识别关键依赖、可能风险、预警信号和备选方案。",
+        "变化发生时评估对范围、时间、质量和相关者的影响。",
+        "记录变更理由并重新确认负责人、优先级和承诺。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在提示下，能指出一项可能阻碍任务完成的问题。",
+        "E2": "借助风险表，能记录主要风险并在变化后更新计划。",
+        "E3": "能在熟悉项目中独立监测风险、评估变更影响并协商调整。",
+        "E4": "能在开放复杂项目中管理连锁影响、资源冲突和多方预期，保留决策记录。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "风险记录、预警、变更决定和修订后的承诺能够形成时间线。",
+          "能说明未采用的备选方案及其代价。"
+        ],
+        "weak": [
+          "项目结束后补写一份风险清单。",
+          "按时交付但所有变更都由他人处理。"
+        ],
+        "cautions": [
+          "外部变化频率不同，应评价应对质量而非风险数量。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "管理风险和变更可能提高价值交付的可靠性。"
+        },
+        {
+          "account": "health",
+          "relation": "may_contribute_to",
+          "rationale": "主动调整范围和节奏可能减少失控与过度消耗。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 项目式课程与职业化训练实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
     },
     {
-      "id": "PRO-COM-002", "version": "0.1.0", "status": "draft",
-      "name": {"zh": "给予并运用专业反馈", "en": "Give and Apply Professional Feedback"},
-      "domain_id": "PRO", "subdomain_id": "PRO.COM",
-      "definition": {"zh": "能够基于目标、标准和可观察事实提出具体反馈，也能澄清收到的反馈、判断其适用性，并把有价值的部分转化为行动。", "en": "Give specific feedback grounded in goals, criteria, and observable facts, and clarify, evaluate, and turn useful received feedback into action."},
-      "boundaries": ["不等同于评价人格、只表达喜欢与否或无条件接受建议。", "反馈不要求由更高职位的人单向提供。", "侧重改进工作的反馈循环，与一般信息沟通相区分。"],
-      "observable_behaviors": ["描述可观察事实及其对目标或使用者的影响。", "提出可讨论的改进建议，并为对方保留解释和选择空间。", "收到反馈后追问标准、判断适用性并记录采取或不采取的理由。"],
-      "proficiency_descriptors": {"E1": "在句式支持下，能围绕具体作品说出一项事实和建议。", "E2": "能借助标准给予具体反馈，并从收到的建议中选择一项改进。", "E3": "能独立开展双向反馈，处理不同意见并将有效反馈转化为行动。", "E4": "能在复杂协作中建立安全反馈机制，整合冲突反馈并帮助团队持续学习。"},
-      "evidence_guidance": {"strong": ["反馈内容与目标、事实、回应和后续变化可以对应。", "记录了未采用反馈及其基于情境和标准的理由。"], "weak": ["只有同伴打分、称赞或模糊批评。", "作品后来改变，但无法说明反馈如何影响决定。"], "cautions": ["权力关系和心理安全会影响反馈表达，应关注学习者是否拥有真实选择。"]},
-      "life_account_links": [{"account": "relationships", "relation": "may_contribute_to", "rationale": "尊重且具体的双向反馈可能支持信任与共同成长。"}, {"account": "wealth", "relation": "may_contribute_to", "rationale": "把反馈转化为改进可能提升交付质量。"}],
-      "claim_status": "observation", "sources": [{"type": "practice", "citation": "Richology 青少年项目评议与职业化训练实践总结"}],
-      "change_log": [{"version": "0.1.0", "date": "2026-09-21", "summary": "Initial draft node."}]
+      "id": "PRO-COM-002",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "给予并运用专业反馈",
+        "en": "Give and Apply Professional Feedback"
+      },
+      "domain_id": "PRO",
+      "subdomain_id": "PRO.COM",
+      "definition": {
+        "zh": "能够基于目标、标准和可观察事实提出具体反馈，也能澄清收到的反馈、判断其适用性，并把有价值的部分转化为行动。",
+        "en": "Give specific feedback grounded in goals, criteria, and observable facts, and clarify, evaluate, and turn useful received feedback into action."
+      },
+      "boundaries": [
+        "不等同于评价人格、只表达喜欢与否或无条件接受建议。",
+        "反馈不要求由更高职位的人单向提供。",
+        "侧重改进工作的反馈循环，与一般信息沟通相区分。"
+      ],
+      "observable_behaviors": [
+        "描述可观察事实及其对目标或使用者的影响。",
+        "提出可讨论的改进建议，并为对方保留解释和选择空间。",
+        "收到反馈后追问标准、判断适用性并记录采取或不采取的理由。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在句式支持下，能围绕具体作品说出一项事实和建议。",
+        "E2": "能借助标准给予具体反馈，并从收到的建议中选择一项改进。",
+        "E3": "能独立开展双向反馈，处理不同意见并将有效反馈转化为行动。",
+        "E4": "能在复杂协作中建立安全反馈机制，整合冲突反馈并帮助团队持续学习。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "反馈内容与目标、事实、回应和后续变化可以对应。",
+          "记录了未采用反馈及其基于情境和标准的理由。"
+        ],
+        "weak": [
+          "只有同伴打分、称赞或模糊批评。",
+          "作品后来改变，但无法说明反馈如何影响决定。"
+        ],
+        "cautions": [
+          "权力关系和心理安全会影响反馈表达，应关注学习者是否拥有真实选择。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "尊重且具体的双向反馈可能支持信任与共同成长。"
+        },
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "把反馈转化为改进可能提升交付质量。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年项目评议与职业化训练实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
     },
     {
-      "id": "PRO-SEL-002", "version": "0.1.0", "status": "draft",
-      "name": {"zh": "管理注意力与工作节奏", "en": "Manage Attention and Work Rhythm"},
-      "domain_id": "PRO", "subdomain_id": "PRO.SEL",
-      "definition": {"zh": "能够根据任务重要性和自身状态安排专注、切换、休息与求助，减少可控干扰，并形成可以长期维持的工作节奏。", "en": "Arrange focus, switching, rest, and help-seeking around task priorities and personal state, reduce controllable distractions, and build a sustainable work rhythm."},
-      "boundaries": ["不等同于长时间保持专注或追求最大产出。", "不把注意力困难简单归因于自律不足。", "侧重日常节奏调节，与整体目标和复盘管理相区分。"],
-      "observable_behaviors": ["识别任务所需注意力、可控干扰和自己的状态变化。", "选择适合的工作区间、提醒、休息或环境调整。", "根据实际效果而非理想计划调整节奏并在需要时求助。"],
-      "proficiency_descriptors": {"E1": "在共同安排下，能完成一个短专注区间并表达状态。", "E2": "借助工具或提醒，能管理常见干扰并安排基本休息。", "E3": "能在熟悉任务中独立匹配任务与状态，保持可持续节奏并及时调整。", "E4": "能在长期复杂任务中管理多类工作和恢复需求，形成可迁移的个性化系统。"},
-      "evidence_guidance": {"strong": ["一段时间的任务、状态、节奏选择和调整结果记录。", "能说明不同策略何时有效、何时失效以及如何求助。"], "weak": ["只展示计时软件时长或连续打卡天数。", "短期高产来自牺牲睡眠或成人持续监督。"], "cautions": ["神经多样性、健康和环境条件显著影响表现，不应使用单一专注标准。"]},
-      "life_account_links": [{"account": "health", "relation": "may_contribute_to", "rationale": "可持续的专注与恢复节奏可能支持身心健康。"}, {"account": "wealth", "relation": "may_contribute_to", "rationale": "合理管理注意力可能提高长期学习和交付可靠性。"}],
-      "claim_status": "observation", "sources": [{"type": "practice", "citation": "Richology 青少年项目制学习与节奏管理实践总结"}],
-      "change_log": [{"version": "0.1.0", "date": "2026-09-21", "summary": "Initial draft node."}]
+      "id": "PRO-SEL-002",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "管理注意力与工作节奏",
+        "en": "Manage Attention and Work Rhythm"
+      },
+      "domain_id": "PRO",
+      "subdomain_id": "PRO.SEL",
+      "definition": {
+        "zh": "能够根据任务重要性和自身状态安排专注、切换、休息与求助，减少可控干扰，并形成可以长期维持的工作节奏。",
+        "en": "Arrange focus, switching, rest, and help-seeking around task priorities and personal state, reduce controllable distractions, and build a sustainable work rhythm."
+      },
+      "boundaries": [
+        "不等同于长时间保持专注或追求最大产出。",
+        "不把注意力困难简单归因于自律不足。",
+        "侧重日常节奏调节，与整体目标和复盘管理相区分。"
+      ],
+      "observable_behaviors": [
+        "识别任务所需注意力、可控干扰和自己的状态变化。",
+        "选择适合的工作区间、提醒、休息或环境调整。",
+        "根据实际效果而非理想计划调整节奏并在需要时求助。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在共同安排下，能完成一个短专注区间并表达状态。",
+        "E2": "借助工具或提醒，能管理常见干扰并安排基本休息。",
+        "E3": "能在熟悉任务中独立匹配任务与状态，保持可持续节奏并及时调整。",
+        "E4": "能在长期复杂任务中管理多类工作和恢复需求，形成可迁移的个性化系统。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "一段时间的任务、状态、节奏选择和调整结果记录。",
+          "能说明不同策略何时有效、何时失效以及如何求助。"
+        ],
+        "weak": [
+          "只展示计时软件时长或连续打卡天数。",
+          "短期高产来自牺牲睡眠或成人持续监督。"
+        ],
+        "cautions": [
+          "神经多样性、健康和环境条件显著影响表现，不应使用单一专注标准。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "health",
+          "relation": "may_contribute_to",
+          "rationale": "可持续的专注与恢复节奏可能支持身心健康。"
+        },
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "合理管理注意力可能提高长期学习和交付可靠性。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年项目制学习与节奏管理实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
     },
     {
-      "id": "SOC-AWR-002", "version": "0.1.0", "status": "draft",
-      "name": {"zh": "识别权力差异与公共影响", "en": "Recognize Power Differences and Public Impact"},
-      "domain_id": "SOC", "subdomain_id": "SOC.AWR",
-      "definition": {"zh": "能够识别不同角色在资源、信息、表达机会和决策权上的差异，并分析一项行动对未直接参与者和公共环境可能产生的影响。", "en": "Recognize differences in resources, information, voice, and decision power, and examine how an action may affect people not directly involved and the wider public environment."},
-      "boundaries": ["不等同于假定资源较少的一方永远正确。", "不要求青少年独自解决结构性不平等。", "侧重权力与公共影响，与一般利益相关者识别相区分。"],
-      "observable_behaviors": ["指出谁能决定、谁掌握信息、谁承担后果以及谁缺少表达机会。", "识别方案对旁观者、弱势角色或公共资源的间接影响。", "在能力范围内增加参与机会、保护措施或影响说明。"],
-      "proficiency_descriptors": {"E1": "在案例提示下，能指出两个角色拥有的选择机会不同。", "E2": "借助分析模板，能整理资源、话语权和影响承担的主要差异。", "E3": "能在熟悉项目中独立调查权力差异，并据此调整参与和保护安排。", "E4": "能在复杂新情境中分析制度、激励与长期公共影响，提出有限但可行的改进。"},
-      "evidence_guidance": {"strong": ["权力与影响判断有角色信息、规则或实际反馈支持。", "方案因被忽略角色或公共影响而发生具体调整。"], "weak": ["只使用强者、弱者等标签，没有情境证据。", "表达正义立场但未改变任何决策或保护安排。"], "cautions": ["学习者自身位置会影响观察，应鼓励说明信息来源和未知部分。"]},
-      "life_account_links": [{"account": "relationships", "relation": "may_contribute_to", "rationale": "理解话语权和影响承担差异可能支持更公平的合作。"}, {"account": "wealth", "relation": "may_contribute_to", "rationale": "考虑公共与弱势角色影响可能支持更可持续的价值创造。"}],
-      "claim_status": "hypothesis", "sources": [{"type": "framework", "citation": "Richology 青少年 AI 时代成长图谱框架 v0.1"}],
-      "change_log": [{"version": "0.1.0", "date": "2026-09-21", "summary": "Initial draft node."}]
+      "id": "SOC-AWR-002",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "识别权力差异与公共影响",
+        "en": "Recognize Power Differences and Public Impact"
+      },
+      "domain_id": "SOC",
+      "subdomain_id": "SOC.AWR",
+      "definition": {
+        "zh": "能够识别不同角色在资源、信息、表达机会和决策权上的差异，并分析一项行动对未直接参与者和公共环境可能产生的影响。",
+        "en": "Recognize differences in resources, information, voice, and decision power, and examine how an action may affect people not directly involved and the wider public environment."
+      },
+      "boundaries": [
+        "不等同于假定资源较少的一方永远正确。",
+        "不要求青少年独自解决结构性不平等。",
+        "侧重权力与公共影响，与一般利益相关者识别相区分。"
+      ],
+      "observable_behaviors": [
+        "指出谁能决定、谁掌握信息、谁承担后果以及谁缺少表达机会。",
+        "识别方案对旁观者、弱势角色或公共资源的间接影响。",
+        "在能力范围内增加参与机会、保护措施或影响说明。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在案例提示下，能指出两个角色拥有的选择机会不同。",
+        "E2": "借助分析模板，能整理资源、话语权和影响承担的主要差异。",
+        "E3": "能在熟悉项目中独立调查权力差异，并据此调整参与和保护安排。",
+        "E4": "能在复杂新情境中分析制度、激励与长期公共影响，提出有限但可行的改进。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "权力与影响判断有角色信息、规则或实际反馈支持。",
+          "方案因被忽略角色或公共影响而发生具体调整。"
+        ],
+        "weak": [
+          "只使用强者、弱者等标签，没有情境证据。",
+          "表达正义立场但未改变任何决策或保护安排。"
+        ],
+        "cautions": [
+          "学习者自身位置会影响观察，应鼓励说明信息来源和未知部分。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "理解话语权和影响承担差异可能支持更公平的合作。"
+        },
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "考虑公共与弱势角色影响可能支持更可持续的价值创造。"
+        }
+      ],
+      "claim_status": "hypothesis",
+      "sources": [
+        {
+          "type": "framework",
+          "citation": "Richology 青少年 AI 时代成长图谱框架 v0.1"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
     },
     {
-      "id": "SOC-COL-002", "version": "0.1.0", "status": "draft",
-      "name": {"zh": "协商分歧与共同决策", "en": "Negotiate Differences and Shared Decisions"},
-      "domain_id": "SOC", "subdomain_id": "SOC.COL",
-      "definition": {"zh": "能够在分歧中澄清事实、利益和价值差异，提出并比较可选方案，使用事先认可的方式形成决定，并记录少数意见和后续复议条件。", "en": "Clarify factual, interest, and value differences, compare options, reach decisions through an agreed process, and record minority views and conditions for revisiting decisions."},
-      "boundaries": ["不等同于压服对方、回避冲突或凡事投票。", "共同决定不要求每个人完全满意。", "侧重分歧处理和决策程序，与日常团队协调相区分。"],
-      "observable_behaviors": ["区分事实争议、利益冲突、价值差异和沟通误解。", "提出多个可选方案和共同判断标准。", "确认决策方法、记录决定与保留意见，并约定何时复议。"],
-      "proficiency_descriptors": {"E1": "在调解下，能说出自己的理由并复述另一方观点。", "E2": "借助讨论规则，能比较两个方案并参与形成明确决定。", "E3": "能在熟悉团队中独立澄清分歧类型、组织协商并记录共同决定。", "E4": "能在复杂多方冲突中设计公平程序，处理权力差异并维护复议可能。"},
-      "evidence_guidance": {"strong": ["分歧观点、判断标准、方案比较、决策程序和结果均有记录。", "决策执行后能够依据约定条件进行复议。"], "weak": ["只有最终投票结果，没有讨论和程序说明。", "表面没有冲突，但部分成员没有表达机会。"], "cautions": ["群体和谐可能掩盖权力压力，应检查异议是否能安全表达。"]},
-      "life_account_links": [{"account": "relationships", "relation": "may_contribute_to", "rationale": "公平处理分歧可能支持信任和长期合作。"}],
-      "claim_status": "observation", "sources": [{"type": "practice", "citation": "Richology 青少年团队项目与协作学习实践总结"}],
-      "change_log": [{"version": "0.1.0", "date": "2026-09-21", "summary": "Initial draft node."}]
+      "id": "SOC-COL-002",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "协商分歧与共同决策",
+        "en": "Negotiate Differences and Shared Decisions"
+      },
+      "domain_id": "SOC",
+      "subdomain_id": "SOC.COL",
+      "definition": {
+        "zh": "能够在分歧中澄清事实、利益和价值差异，提出并比较可选方案，使用事先认可的方式形成决定，并记录少数意见和后续复议条件。",
+        "en": "Clarify factual, interest, and value differences, compare options, reach decisions through an agreed process, and record minority views and conditions for revisiting decisions."
+      },
+      "boundaries": [
+        "不等同于压服对方、回避冲突或凡事投票。",
+        "共同决定不要求每个人完全满意。",
+        "侧重分歧处理和决策程序，与日常团队协调相区分。"
+      ],
+      "observable_behaviors": [
+        "区分事实争议、利益冲突、价值差异和沟通误解。",
+        "提出多个可选方案和共同判断标准。",
+        "确认决策方法、记录决定与保留意见，并约定何时复议。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在调解下，能说出自己的理由并复述另一方观点。",
+        "E2": "借助讨论规则，能比较两个方案并参与形成明确决定。",
+        "E3": "能在熟悉团队中独立澄清分歧类型、组织协商并记录共同决定。",
+        "E4": "能在复杂多方冲突中设计公平程序，处理权力差异并维护复议可能。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "分歧观点、判断标准、方案比较、决策程序和结果均有记录。",
+          "决策执行后能够依据约定条件进行复议。"
+        ],
+        "weak": [
+          "只有最终投票结果，没有讨论和程序说明。",
+          "表面没有冲突，但部分成员没有表达机会。"
+        ],
+        "cautions": [
+          "群体和谐可能掩盖权力压力，应检查异议是否能安全表达。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "公平处理分歧可能支持信任和长期合作。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年团队项目与协作学习实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
     },
     {
-      "id": "SOC-RUL-002", "version": "0.1.0", "status": "draft",
-      "name": {"zh": "保护隐私与知情同意", "en": "Protect Privacy and Informed Consent"},
-      "domain_id": "SOC", "subdomain_id": "SOC.RUL",
-      "definition": {"zh": "能够只收集任务必需的个人信息，以当事人能理解的方式说明用途、风险和退出选择，取得适当同意并安全保存、分享和删除数据。", "en": "Collect only necessary personal information, explain purpose, risks, and withdrawal choices understandably, obtain appropriate consent, and store, share, and delete data safely."},
-      "boundaries": ["不等同于只勾选同意框或隐藏真实用途。", "未成年人的同意不能替代法律或情境要求的监护人和机构责任。", "侧重个人数据和参与同意，是规则责任中的专项能力。"],
-      "observable_behaviors": ["说明为什么需要某项数据，并删除非必要字段。", "用适龄语言告知用途、接触者、保存时间、风险和退出方式。", "按约定控制访问、匿名化、保存与删除，并处理撤回请求。"],
-      "proficiency_descriptors": {"E1": "在明确指导下，能识别个人信息并遵守给定保护步骤。", "E2": "借助模板，能说明简单活动的数据用途并取得基本同意。", "E3": "能在熟悉项目中独立最小化数据、设计适龄告知并维护访问和删除记录。", "E4": "能在复杂情境中处理二次使用、权力差异和撤回影响，并主动寻求专业支持。"},
-      "evidence_guidance": {"strong": ["数据字段、必要性说明、告知与同意文本、访问和删除记录相互对应。", "出现用途变化或撤回时有重新同意或停止使用的记录。"], "weak": ["只有一份通用隐私声明或口头说已获同意。", "数据没有泄露，便推断隐私能力充分。"], "cautions": ["法律责任因地区与活动而异，学习者表现不能替代成人和机构合规审查。"]},
-      "life_account_links": [{"account": "relationships", "relation": "may_contribute_to", "rationale": "尊重数据选择和退出权可能支持安全与信任。"}, {"account": "health", "relation": "may_contribute_to", "rationale": "保护敏感信息可能减少暴露、羞辱和其他伤害。"}],
-      "claim_status": "observation", "sources": [{"type": "practice", "citation": "Richology 青少年项目隐私与数据保护实践总结"}],
-      "change_log": [{"version": "0.1.0", "date": "2026-09-21", "summary": "Initial draft node."}]
+      "id": "SOC-RUL-002",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "保护隐私与知情同意",
+        "en": "Protect Privacy and Informed Consent"
+      },
+      "domain_id": "SOC",
+      "subdomain_id": "SOC.RUL",
+      "definition": {
+        "zh": "能够只收集任务必需的个人信息，以当事人能理解的方式说明用途、风险和退出选择，取得适当同意并安全保存、分享和删除数据。",
+        "en": "Collect only necessary personal information, explain purpose, risks, and withdrawal choices understandably, obtain appropriate consent, and store, share, and delete data safely."
+      },
+      "boundaries": [
+        "不等同于只勾选同意框或隐藏真实用途。",
+        "未成年人的同意不能替代法律或情境要求的监护人和机构责任。",
+        "侧重个人数据和参与同意，是规则责任中的专项能力。"
+      ],
+      "observable_behaviors": [
+        "说明为什么需要某项数据，并删除非必要字段。",
+        "用适龄语言告知用途、接触者、保存时间、风险和退出方式。",
+        "按约定控制访问、匿名化、保存与删除，并处理撤回请求。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在明确指导下，能识别个人信息并遵守给定保护步骤。",
+        "E2": "借助模板，能说明简单活动的数据用途并取得基本同意。",
+        "E3": "能在熟悉项目中独立最小化数据、设计适龄告知并维护访问和删除记录。",
+        "E4": "能在复杂情境中处理二次使用、权力差异和撤回影响，并主动寻求专业支持。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "数据字段、必要性说明、告知与同意文本、访问和删除记录相互对应。",
+          "出现用途变化或撤回时有重新同意或停止使用的记录。"
+        ],
+        "weak": [
+          "只有一份通用隐私声明或口头说已获同意。",
+          "数据没有泄露，便推断隐私能力充分。"
+        ],
+        "cautions": [
+          "法律责任因地区与活动而异，学习者表现不能替代成人和机构合规审查。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "尊重数据选择和退出权可能支持安全与信任。"
+        },
+        {
+          "account": "health",
+          "relation": "may_contribute_to",
+          "rationale": "保护敏感信息可能减少暴露、羞辱和其他伤害。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年项目隐私与数据保护实践总结"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node."
+        }
+      ]
+    },
+    {
+      "id": "AI-BND-003",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "说明 AI 角色与来源",
+        "en": "Explain AI Roles and Provenance"
+      },
+      "domain_id": "AI",
+      "subdomain_id": "AI.BND",
+      "definition": {
+        "zh": "能够向相关者清楚说明任务中使用了何种 AI、AI 产生了哪些内容、人的关键贡献以及结果来源和限制。",
+        "en": "Explain what AI was used, what it produced, the essential human contribution, and the provenance and limitations of a result."
+      },
+      "boundaries": [
+        "侧重透明说明，不等同于完整评价输出质量。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "标明任务中 AI 参与的环节和生成内容。",
+        "区分人的目标、选择、核验和修改。",
+        "在分享结果时提供适合受众的来源与限制说明。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试说明 AI 角色与来源。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次说明 AI 角色与来源并解释基本选择。",
+        "E3": "能在熟悉情境中独立说明 AI 角色与来源，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进说明 AI 角色与来源的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的说明 AI 角色与来源过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNESCO AI Competency Framework for Students (2024)",
+          "url": "https://www.unesco.org/en/articles/ai-competency-framework-students"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "AI-BND-004",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "设置人工监督点",
+        "en": "Set Human Oversight Points"
+      },
+      "domain_id": "AI",
+      "subdomain_id": "AI.BND",
+      "definition": {
+        "zh": "能够根据任务风险识别不能自动交由 AI 决定的关键节点，安排有权限且有能力的人进行检查、批准或接管。",
+        "en": "Identify decisions that should not be delegated to AI and arrange capable, authorized human review, approval, or intervention according to risk."
+      },
+      "boundaries": [
+        "不把形式上的人工点击视为有效监督。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "标出影响安全、权利或重要结果的决策点。",
+        "说明由谁在何时依据什么标准检查或接管。",
+        "监督失效时暂停流程并升级求助。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试设置人工监督点。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次设置人工监督点并解释基本选择。",
+        "E3": "能在熟悉情境中独立设置人工监督点，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进设置人工监督点的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的设置人工监督点过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNESCO AI Competency Framework for Students (2024)",
+          "url": "https://www.unesco.org/en/articles/ai-competency-framework-students"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "AI-BND-005",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "保护输入中的敏感信息",
+        "en": "Protect Sensitive Information in AI Inputs"
+      },
+      "domain_id": "AI",
+      "subdomain_id": "AI.BND",
+      "definition": {
+        "zh": "能够识别不应直接输入 AI 服务的个人、机密和受限信息，通过删除、替换、概括或获准环境完成任务。",
+        "en": "Recognize personal, confidential, and restricted information that should not be entered into AI services and use deletion, substitution, summarization, or approved environments."
+      },
+      "boundaries": [
+        "侧重输入环节，不替代完整的数据治理。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "在提交前检查材料中的身份、位置和机密信息。",
+        "采用数据最小化、匿名化或虚构替代信息。",
+        "不确定时停止输入并向适当成人或负责人求助。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试保护输入中的敏感信息。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次保护输入中的敏感信息并解释基本选择。",
+        "E3": "能在熟悉情境中独立保护输入中的敏感信息，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进保护输入中的敏感信息的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的保护输入中的敏感信息过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNESCO AI Competency Framework for Students (2024)",
+          "url": "https://www.unesco.org/en/articles/ai-competency-framework-students"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "AI-COL-003",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "拆解 AI 辅助任务",
+        "en": "Decompose AI-Assisted Tasks"
+      },
+      "domain_id": "AI",
+      "subdomain_id": "AI.COL",
+      "definition": {
+        "zh": "能够把复杂目标拆成适合人或 AI 承担的子任务，明确顺序、接口、检查点和最终整合责任。",
+        "en": "Decompose a complex goal into human- and AI-suitable subtasks with sequence, interfaces, checkpoints, and responsibility for integration."
+      },
+      "boundaries": [
+        "不等同于把所有步骤都交给 AI。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "识别需要创造判断、资料处理和人工负责的不同环节。",
+        "为子任务规定输入、输出和检查标准。",
+        "根据中间结果调整顺序与分工并整合成果。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试拆解 AI 辅助任务。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次拆解 AI 辅助任务并解释基本选择。",
+        "E3": "能在熟悉情境中独立拆解 AI 辅助任务，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进拆解 AI 辅助任务的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的拆解 AI 辅助任务过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNESCO AI Competency Framework for Students (2024)",
+          "url": "https://www.unesco.org/en/articles/ai-competency-framework-students"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "AI-COL-004",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "设计并迭代指令",
+        "en": "Design and Iterate Instructions"
+      },
+      "domain_id": "AI",
+      "subdomain_id": "AI.COL",
+      "definition": {
+        "zh": "能够根据目标和评价标准编写清晰指令，通过小规模试验观察失败模式并有针对性地调整。",
+        "en": "Write clear instructions from goals and criteria, observe failure modes through small trials, and revise instructions purposefully."
+      },
+      "boundaries": [
+        "不以提示词长度、技巧数量或单次惊艳结果评价能力。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "把目标、受众、约束和输出标准写入指令。",
+        "比较修改前后的结果并定位变化原因。",
+        "保留有效部分并避免无目的反复尝试。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试设计并迭代指令。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次设计并迭代指令并解释基本选择。",
+        "E3": "能在熟悉情境中独立设计并迭代指令，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进设计并迭代指令的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的设计并迭代指令过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNESCO AI Competency Framework for Students (2024)",
+          "url": "https://www.unesco.org/en/articles/ai-competency-framework-students"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "AI-COL-005",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "记录人机贡献",
+        "en": "Document Human and AI Contributions"
+      },
+      "domain_id": "AI",
+      "subdomain_id": "AI.COL",
+      "definition": {
+        "zh": "能够在项目过程中记录 AI 生成、人的选择与修改、外部素材和最终责任，使贡献可以被检查和解释。",
+        "en": "Document AI generation, human choices and edits, external materials, and final responsibility so contributions can be inspected and explained."
+      },
+      "boundaries": [
+        "侧重过程可追溯性，不等同于简单声明使用过 AI。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "持续记录关键生成、选择、修改和舍弃。",
+        "标注外部素材、版本和 AI 参与方式。",
+        "能够从记录重建重要决策而非事后猜测。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试记录人机贡献。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次记录人机贡献并解释基本选择。",
+        "E3": "能在熟悉情境中独立记录人机贡献，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进记录人机贡献的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的记录人机贡献过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNESCO AI Competency Framework for Students (2024)",
+          "url": "https://www.unesco.org/en/articles/ai-competency-framework-students"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "AI-JUD-003",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "追溯来源与主张",
+        "en": "Trace Sources and Claims"
+      },
+      "domain_id": "AI",
+      "subdomain_id": "AI.JUD",
+      "definition": {
+        "zh": "能够把 AI 输出中的重要主张追溯到可检查来源，判断来源是否真实、相关、及时并真正支持该主张。",
+        "en": "Trace important AI-generated claims to inspectable sources and judge whether sources are authentic, relevant, current, and genuinely supportive."
+      },
+      "boundaries": [
+        "有链接不等于来源已经支持主张。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "把可核验主张与意见、建议或未知内容分开。",
+        "打开原始来源并检查作者、日期、上下文和证据。",
+        "删除或降级无法追溯的主张并说明原因。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试追溯来源与主张。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次追溯来源与主张并解释基本选择。",
+        "E3": "能在熟悉情境中独立追溯来源与主张，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进追溯来源与主张的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的追溯来源与主张过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNESCO AI Competency Framework for Students (2024)",
+          "url": "https://www.unesco.org/en/articles/ai-competency-framework-students"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "AI-JUD-004",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "比较备选输出",
+        "en": "Compare Alternative Outputs"
+      },
+      "domain_id": "AI",
+      "subdomain_id": "AI.JUD",
+      "definition": {
+        "zh": "能够用事先确定的标准比较多份 AI 或人类方案，识别各自优势、缺陷和适用条件，再作出可解释选择。",
+        "en": "Compare multiple AI or human alternatives against prior criteria, identify strengths, weaknesses, and conditions, and make an explainable choice."
+      },
+      "boundaries": [
+        "不把多数结果一致当作真实性证明。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "在查看结果前明确重要标准和权重。",
+        "使用相同情境比较多个方案而非只挑喜欢的。",
+        "说明选择、组合或拒绝方案的依据。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试比较备选输出。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次比较备选输出并解释基本选择。",
+        "E3": "能在熟悉情境中独立比较备选输出，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进比较备选输出的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的比较备选输出过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNESCO AI Competency Framework for Students (2024)",
+          "url": "https://www.unesco.org/en/articles/ai-competency-framework-students"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "AI-JUD-005",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "表达置信度与不确定性",
+        "en": "Communicate Confidence and Uncertainty"
+      },
+      "domain_id": "AI",
+      "subdomain_id": "AI.JUD",
+      "definition": {
+        "zh": "能够区分已确认、较可信、推测和未知内容，用与证据相称的语言表达把握程度和后续核验需要。",
+        "en": "Distinguish confirmed, plausible, speculative, and unknown content and communicate confidence and further verification needs proportionately."
+      },
+      "boundaries": [
+        "不要求给出虚假的精确概率。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "标出结论依赖的证据与关键假设。",
+        "避免把可能性写成确定事实。",
+        "说明哪些新信息会改变当前判断。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试表达置信度与不确定性。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次表达置信度与不确定性并解释基本选择。",
+        "E3": "能在熟悉情境中独立表达置信度与不确定性，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进表达置信度与不确定性的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的表达置信度与不确定性过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的人机判断可能支持更安全有效的价值创造。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNESCO AI Competency Framework for Students (2024)",
+          "url": "https://www.unesco.org/en/articles/ai-competency-framework-students"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "BIZ-NED-003",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "观察行为与情境",
+        "en": "Observe Behavior and Context"
+      },
+      "domain_id": "BIZ",
+      "subdomain_id": "BIZ.NED",
+      "definition": {
+        "zh": "能够在取得适当同意的前提下观察真实任务中的行为、环境与替代做法，记录事实并延后解释。",
+        "en": "Observe behavior, environment, and workarounds in real tasks with appropriate consent, record facts, and postpone interpretation."
+      },
+      "boundaries": [
+        "不进行隐蔽跟踪或把单次行为解释为固定特征。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "明确观察目的、边界和同意方式。",
+        "记录行为、触发条件、环境限制和替代方案。",
+        "把观察事实、解释和待验证问题分开。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试观察行为与情境。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次观察行为与情境并解释基本选择。",
+        "E3": "能在熟悉情境中独立观察行为与情境，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进观察行为与情境的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的观察行为与情境过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "BIZ-NED-004",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "综合需求证据",
+        "en": "Synthesize Needs Evidence"
+      },
+      "domain_id": "BIZ",
+      "subdomain_id": "BIZ.NED",
+      "definition": {
+        "zh": "能够把访谈、观察、反馈和已有资料放在一起，识别重复模式、重要差异、反例与证据空白。",
+        "en": "Combine interviews, observations, feedback, and existing materials to identify patterns, differences, counterexamples, and evidence gaps."
+      },
+      "boundaries": [
+        "不把相似表达简单计数为确定需求。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "按来源整理证据并保留可追溯性。",
+        "同时呈现共同模式、少数差异和反例。",
+        "说明结论强度以及仍需补充的信息。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试综合需求证据。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次综合需求证据并解释基本选择。",
+        "E3": "能在熟悉情境中独立综合需求证据，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进综合需求证据的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的综合需求证据过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "BIZ-NED-005",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "定义问题与机会",
+        "en": "Frame Problems and Opportunities"
+      },
+      "domain_id": "BIZ",
+      "subdomain_id": "BIZ.NED",
+      "definition": {
+        "zh": "能够基于证据描述具体对象、情境、阻碍和期望进展，形成开放但可行动的问题与机会陈述。",
+        "en": "Frame an actionable yet open problem and opportunity from evidence about people, context, barriers, and desired progress."
+      },
+      "boundaries": [
+        "问题定义不是宣传口号，也不是解决方案名称。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "说明对象、情境、当前做法和具体阻碍。",
+        "把证据支持的事实与待验证假设分开。",
+        "避免在问题陈述中预设唯一解决方案。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试定义问题与机会。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次定义问题与机会并解释基本选择。",
+        "E3": "能在熟悉情境中独立定义问题与机会，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进定义问题与机会的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的定义问题与机会过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "BIZ-PRO-003",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "明确价值主张",
+        "en": "Clarify the Value Proposition"
+      },
+      "domain_id": "BIZ",
+      "subdomain_id": "BIZ.PRO",
+      "definition": {
+        "zh": "能够说明方案为具体对象在特定情境中带来什么进展、为何优于现有替代，并把主张写成可验证假设。",
+        "en": "Explain the progress a solution offers specific people in context, why it may outperform alternatives, and express the claim as a testable hypothesis."
+      },
+      "boundaries": [
+        "不等同于口号、功能清单或未经验证的优势宣称。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "对应具体需求说明预期改变。",
+        "识别使用者当前采用的替代方案和切换成本。",
+        "把价值表述转化为可被真实反馈挑战的假设。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试明确价值主张。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次明确价值主张并解释基本选择。",
+        "E3": "能在熟悉情境中独立明确价值主张，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进明确价值主张的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的明确价值主张过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "BIZ-PRO-004",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "确定产品范围与优先级",
+        "en": "Set Product Scope and Priorities"
+      },
+      "domain_id": "BIZ",
+      "subdomain_id": "BIZ.PRO",
+      "definition": {
+        "zh": "能够依据验证目标、用户价值、依赖和资源限制选择当前版本必须做、暂缓和不做的内容。",
+        "en": "Choose what a current version must include, defer, or exclude based on learning goals, user value, dependencies, and resource constraints."
+      },
+      "boundaries": [
+        "不把功能数量或工作量当作价值。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "建立与当前目标相关的优先级标准。",
+        "明确最小范围和不做清单。",
+        "范围变化时说明代价并重新确认目标。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试确定产品范围与优先级。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次确定产品范围与优先级并解释基本选择。",
+        "E3": "能在熟悉情境中独立确定产品范围与优先级，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进确定产品范围与优先级的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的确定产品范围与优先级过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "BIZ-PRO-005",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "设计可访问的使用体验",
+        "en": "Design Accessible User Experiences"
+      },
+      "domain_id": "BIZ",
+      "subdomain_id": "BIZ.PRO",
+      "definition": {
+        "zh": "能够考虑不同年龄、能力、设备和环境条件，使目标使用者能够理解、操作并在需要时获得替代方式。",
+        "en": "Design so intended users across ages, abilities, devices, and contexts can understand, operate, and access alternatives when needed."
+      },
+      "boundaries": [
+        "不要求掌握全部专业无障碍标准，但必须避免只为自己设计。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "识别影响理解、操作和感知的使用条件。",
+        "与不同使用者测试关键流程和失败情境。",
+        "根据障碍提供清晰提示、容错和替代路径。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试设计可访问的使用体验。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次设计可访问的使用体验并解释基本选择。",
+        "E3": "能在熟悉情境中独立设计可访问的使用体验，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进设计可访问的使用体验的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的设计可访问的使用体验过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "BIZ-VAL-003",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "选择验证指标",
+        "en": "Choose Validation Indicators"
+      },
+      "domain_id": "BIZ",
+      "subdomain_id": "BIZ.VAL",
+      "definition": {
+        "zh": "能够根据假设选择能够反映真实行为、结果或交换意愿的指标，并说明指标的局限和可能被误读之处。",
+        "en": "Choose indicators that reflect real behavior, outcomes, or willingness to exchange, and explain their limitations and possible misinterpretations."
+      },
+      "boundaries": [
+        "不以容易收集或数值较大的指标代替真正价值。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "让指标直接对应待验证假设。",
+        "同时考虑行为、结果和必要的定性解释。",
+        "识别虚荣指标、代理偏差和短期效应。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试选择验证指标。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次选择验证指标并解释基本选择。",
+        "E3": "能在熟悉情境中独立选择验证指标，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进选择验证指标的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的选择验证指标过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "BIZ-VAL-004",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "解释冲突证据",
+        "en": "Interpret Conflicting Evidence"
+      },
+      "domain_id": "BIZ",
+      "subdomain_id": "BIZ.VAL",
+      "definition": {
+        "zh": "能够面对意见、行为和指标之间的不一致，检查来源、样本与情境差异，形成带条件的解释而非挑选有利结果。",
+        "en": "Examine source, sample, and context differences when opinions, behavior, and indicators conflict, producing conditional interpretations rather than cherry-picking."
+      },
+      "boundaries": [
+        "不通过简单平均消除重要差异。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "并列呈现支持和反对假设的证据。",
+        "检查样本、测量和情境能否解释差异。",
+        "说明当前不能决定的事项和下一步验证。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试解释冲突证据。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次解释冲突证据并解释基本选择。",
+        "E3": "能在熟悉情境中独立解释冲突证据，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进解释冲突证据的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的解释冲突证据过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "BIZ-VAL-005",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "依据验证决定下一步",
+        "en": "Decide Next Steps from Validation"
+      },
+      "domain_id": "BIZ",
+      "subdomain_id": "BIZ.VAL",
+      "definition": {
+        "zh": "能够依据预设标准和实际证据决定继续、修改、缩小、暂停或放弃，并明确下一步要减少的不确定性。",
+        "en": "Use prior criteria and evidence to continue, modify, narrow, pause, or stop, and identify the next uncertainty to reduce."
+      },
+      "boundaries": [
+        "继续项目不是默认正确答案，停止也不等于失败。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "把决定与原假设、指标和证据对应。",
+        "考虑沉没成本之外的未来价值和风险。",
+        "记录决定、保留条件和下一轮行动。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试依据验证决定下一步。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次依据验证决定下一步并解释基本选择。",
+        "E3": "能在熟悉情境中独立依据验证决定下一步，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进依据验证决定下一步的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的依据验证决定下一步过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "理解、构建和验证价值可能支持可持续的价值交换。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "PRO-PJM-003",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "估算任务与资源",
+        "en": "Estimate Tasks and Resources"
+      },
+      "domain_id": "PRO",
+      "subdomain_id": "PRO.PJM",
+      "definition": {
+        "zh": "能够依据任务范围、历史信息和未知因素估算时间、人员、材料与支持需求，并保留适当余量。",
+        "en": "Estimate time, people, materials, and support from scope, prior information, and uncertainty, including appropriate contingency."
+      },
+      "boundaries": [
+        "估算是可更新判断，不是必须兑现的精确承诺。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "把大任务拆成可估算部分并说明假设。",
+        "参考实际记录而非只凭愿望给出时间。",
+        "执行后比较估算与实际并校准。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试估算任务与资源。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次估算任务与资源并解释基本选择。",
+        "E3": "能在熟悉情境中独立估算任务与资源，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进估算任务与资源的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的估算任务与资源过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的工作实践可能支持长期价值交付。"
+        },
+        {
+          "account": "health",
+          "relation": "may_contribute_to",
+          "rationale": "可持续的工作方式可能减少过度消耗。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "PRO-PJM-004",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "协调里程碑与依赖",
+        "en": "Coordinate Milestones and Dependencies"
+      },
+      "domain_id": "PRO",
+      "subdomain_id": "PRO.PJM",
+      "definition": {
+        "zh": "能够识别任务交接和外部依赖，设置可检查里程碑，及时同步阻塞并调整关键路径。",
+        "en": "Identify handoffs and external dependencies, set inspectable milestones, surface blockers early, and adjust the critical path."
+      },
+      "boundaries": [
+        "不等同于制作一张静态甘特图。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "标出任务间先后、交接和等待关系。",
+        "用可检查交付物定义里程碑。",
+        "阻塞发生时通知受影响者并协商调整。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试协调里程碑与依赖。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次协调里程碑与依赖并解释基本选择。",
+        "E3": "能在熟悉情境中独立协调里程碑与依赖，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进协调里程碑与依赖的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的协调里程碑与依赖过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的工作实践可能支持长期价值交付。"
+        },
+        {
+          "account": "health",
+          "relation": "may_contribute_to",
+          "rationale": "可持续的工作方式可能减少过度消耗。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "PRO-PJM-005",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "完成项目收尾与复盘",
+        "en": "Close and Review Projects"
+      },
+      "domain_id": "PRO",
+      "subdomain_id": "PRO.PJM",
+      "definition": {
+        "zh": "能够确认交付与未完成事项，整理文件和责任，回顾目标、过程、结果与经验，并把结论转化为后续行动。",
+        "en": "Confirm delivery and open items, organize files and responsibilities, review goals, process, outcomes, and lessons, and turn conclusions into follow-up action."
+      },
+      "boundaries": [
+        "复盘不应只庆祝成功或追究个人责任。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "与相关者确认交付、验收和遗留问题。",
+        "保存必要资料并关闭不再需要的访问权限。",
+        "形成基于事实的复盘和可追踪改进行动。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试完成项目收尾与复盘。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次完成项目收尾与复盘并解释基本选择。",
+        "E3": "能在熟悉情境中独立完成项目收尾与复盘，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进完成项目收尾与复盘的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的完成项目收尾与复盘过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的工作实践可能支持长期价值交付。"
+        },
+        {
+          "account": "health",
+          "relation": "may_contribute_to",
+          "rationale": "可持续的工作方式可能减少过度消耗。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "PRO-COM-003",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "撰写可行动工作文档",
+        "en": "Write Actionable Work Documents"
+      },
+      "domain_id": "PRO",
+      "subdomain_id": "PRO.COM",
+      "definition": {
+        "zh": "能够为明确对象和用途撰写结构清晰、事实可追溯、责任与下一步明确的工作文档。",
+        "en": "Write clear, traceable work documents for a defined audience and purpose, with ownership and next actions explicit."
+      },
+      "boundaries": [
+        "不以篇幅、术语密度或排版华丽判断专业性。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "在开头说明目的、读者和需要的行动。",
+        "区分事实、判断、决定和待确认事项。",
+        "标注负责人、期限、来源和版本。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试撰写可行动工作文档。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次撰写可行动工作文档并解释基本选择。",
+        "E3": "能在熟悉情境中独立撰写可行动工作文档，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进撰写可行动工作文档的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的撰写可行动工作文档过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的工作实践可能支持长期价值交付。"
+        },
+        {
+          "account": "health",
+          "relation": "may_contribute_to",
+          "rationale": "可持续的工作方式可能减少过度消耗。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "PRO-COM-004",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "呈现并解释专业判断",
+        "en": "Present and Explain Professional Judgments"
+      },
+      "domain_id": "PRO",
+      "subdomain_id": "PRO.COM",
+      "definition": {
+        "zh": "能够围绕受众关心的问题呈现结论、证据、取舍和限制，并在质询中澄清或修正判断。",
+        "en": "Present conclusions, evidence, trade-offs, and limitations around audience concerns and clarify or revise judgments under questioning."
+      },
+      "boundaries": [
+        "不把说服力建立在夸大、隐瞒限制或操纵情绪上。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "根据受众选择必要信息和呈现顺序。",
+        "把结论与证据、假设和限制连接。",
+        "回应问题时承认未知并记录需要跟进的事项。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试呈现并解释专业判断。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次呈现并解释专业判断并解释基本选择。",
+        "E3": "能在熟悉情境中独立呈现并解释专业判断，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进呈现并解释专业判断的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的呈现并解释专业判断过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的工作实践可能支持长期价值交付。"
+        },
+        {
+          "account": "health",
+          "relation": "may_contribute_to",
+          "rationale": "可持续的工作方式可能减少过度消耗。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "PRO-COM-005",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "主持有效会议",
+        "en": "Facilitate Effective Meetings"
+      },
+      "domain_id": "PRO",
+      "subdomain_id": "PRO.COM",
+      "definition": {
+        "zh": "能够判断是否需要会议，设置目标与议程，促进适当参与，并形成决定、负责人和后续记录。",
+        "en": "Decide whether a meeting is needed, set objectives and agenda, support appropriate participation, and capture decisions, owners, and follow-up."
+      },
+      "boundaries": [
+        "不以会议时长、发言次数或主持者控制程度衡量效果。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "会前说明目的、材料和需要作出的决定。",
+        "控制节奏并让相关角色有表达机会。",
+        "会后发布决定、未决问题、负责人和期限。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试主持有效会议。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次主持有效会议并解释基本选择。",
+        "E3": "能在熟悉情境中独立主持有效会议，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进主持有效会议的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的主持有效会议过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的工作实践可能支持长期价值交付。"
+        },
+        {
+          "account": "health",
+          "relation": "may_contribute_to",
+          "rationale": "可持续的工作方式可能减少过度消耗。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "PRO-SEL-003",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "设定并修订个人目标",
+        "en": "Set and Revise Personal Goals"
+      },
+      "domain_id": "PRO",
+      "subdomain_id": "PRO.SEL",
+      "definition": {
+        "zh": "能够把长期愿望转化为与当前条件相符的阶段目标、成功标准和近期行动，并根据证据修订。",
+        "en": "Turn longer-term intentions into stage-appropriate goals, success criteria, and near-term actions, revising them from evidence."
+      },
+      "boundaries": [
+        "不要求过早确定固定职业或人生方向。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "说明目标与自身价值、责任和现实条件的关系。",
+        "把成功状态写成可观察标准和近期行动。",
+        "进展或条件变化时调整目标而非机械坚持。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试设定并修订个人目标。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次设定并修订个人目标并解释基本选择。",
+        "E3": "能在熟悉情境中独立设定并修订个人目标，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进设定并修订个人目标的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的设定并修订个人目标过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的工作实践可能支持长期价值交付。"
+        },
+        {
+          "account": "health",
+          "relation": "may_contribute_to",
+          "rationale": "可持续的工作方式可能减少过度消耗。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "PRO-SEL-004",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "主动求助并运用资源",
+        "en": "Seek Help and Use Resources"
+      },
+      "domain_id": "PRO",
+      "subdomain_id": "PRO.SEL",
+      "definition": {
+        "zh": "能够识别自身能力与权限边界，选择适当的人、工具或材料提出具体求助，并把获得的支持转化为自己的行动。",
+        "en": "Recognize capability and authority limits, seek specific help from suitable people, tools, or materials, and turn support into personal action."
+      },
+      "boundaries": [
+        "求助不是把责任转交给他人，也不是能力不足的标签。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "说明已经尝试、具体阻碍和需要的支持。",
+        "根据问题风险选择同伴、教师、监护人或专业资源。",
+        "获得帮助后确认理解、执行并回报结果。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试主动求助并运用资源。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次主动求助并运用资源并解释基本选择。",
+        "E3": "能在熟悉情境中独立主动求助并运用资源，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进主动求助并运用资源的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的主动求助并运用资源过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的工作实践可能支持长期价值交付。"
+        },
+        {
+          "account": "health",
+          "relation": "may_contribute_to",
+          "rationale": "可持续的工作方式可能减少过度消耗。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "PRO-SEL-005",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "从失败中学习并迁移",
+        "en": "Learn and Transfer from Failure"
+      },
+      "domain_id": "PRO",
+      "subdomain_id": "PRO.SEL",
+      "definition": {
+        "zh": "能够把未达预期的经历分解为条件、行动和结果，提炼可检验经验，并在新情境中调整使用。",
+        "en": "Analyze unmet outcomes through conditions, actions, and results, derive testable lessons, and adapt them in new contexts."
+      },
+      "boundaries": [
+        "不美化伤害、过度消耗或本可避免的失败。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "区分可控行动、外部条件和偶然结果。",
+        "形成具体、有限、可验证的经验而非人格结论。",
+        "在另一任务中尝试经验并根据差异调整。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试从失败中学习并迁移。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次从失败中学习并迁移并解释基本选择。",
+        "E3": "能在熟悉情境中独立从失败中学习并迁移，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进从失败中学习并迁移的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的从失败中学习并迁移过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "wealth",
+          "relation": "may_contribute_to",
+          "rationale": "可靠的工作实践可能支持长期价值交付。"
+        },
+        {
+          "account": "health",
+          "relation": "may_contribute_to",
+          "rationale": "可持续的工作方式可能减少过度消耗。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "European Commission JRC EntreComp",
+          "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "SOC-AWR-003",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "理解差异化视角",
+        "en": "Understand Diverse Perspectives"
+      },
+      "domain_id": "SOC",
+      "subdomain_id": "SOC.AWR",
+      "definition": {
+        "zh": "能够基于当事人的表达和情境理解不同经验与判断，区分理解、同意和代替他人发言。",
+        "en": "Understand different experiences and judgments from people's own accounts and contexts, distinguishing understanding, agreement, and speaking for others."
+      },
+      "boundaries": [
+        "不把群体身份当作个人观点的自动答案。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "主动接触与自己不同的可靠视角。",
+        "复述他人观点并请对方确认理解。",
+        "在决策中说明差异如何被考虑而不抹平。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试理解差异化视角。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次理解差异化视角并解释基本选择。",
+        "E3": "能在熟悉情境中独立理解差异化视角，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进理解差异化视角的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的理解差异化视角过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNICEF Guidance on AI and Children, Version 3",
+          "url": "https://www.unicef.org/innocenti/reports/policy-guidance-ai-children"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "SOC-AWR-004",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "识别社会规范与情境",
+        "en": "Recognize Social Norms and Context"
+      },
+      "domain_id": "SOC",
+      "subdomain_id": "SOC.AWR",
+      "definition": {
+        "zh": "能够识别不同社区和场景中的明示规则、非正式规范与角色期待，判断其作用、冲突和可质疑之处。",
+        "en": "Identify formal rules, informal norms, and role expectations across communities and contexts, judging their functions, conflicts, and contestability."
+      },
+      "boundaries": [
+        "理解规范不代表无条件服从不公平做法。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "区分法律、平台规则、团队约定和非正式习惯。",
+        "观察规范对不同角色的实际影响。",
+        "不确定或冲突时询问、协商或提出改进。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试识别社会规范与情境。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次识别社会规范与情境并解释基本选择。",
+        "E3": "能在熟悉情境中独立识别社会规范与情境，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进识别社会规范与情境的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的识别社会规范与情境过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNICEF Guidance on AI and Children, Version 3",
+          "url": "https://www.unicef.org/innocenti/reports/policy-guidance-ai-children"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "SOC-AWR-005",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "评估非预期影响",
+        "en": "Assess Unintended Impacts"
+      },
+      "domain_id": "SOC",
+      "subdomain_id": "SOC.AWR",
+      "definition": {
+        "zh": "能够在行动前后考虑对不同角色、公共资源和长期行为可能产生的间接或非预期影响，并据此调整。",
+        "en": "Consider indirect or unintended effects on different people, public resources, and longer-term behavior before and after action, and adjust accordingly."
+      },
+      "boundaries": [
+        "不要求预测所有后果，但必须处理合理可预见风险。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "绘制直接结果之外的可能连锁影响。",
+        "寻找可能受损但未参与决定的角色。",
+        "监测实际影响并在出现伤害时修正或补救。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试评估非预期影响。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次评估非预期影响并解释基本选择。",
+        "E3": "能在熟悉情境中独立评估非预期影响，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进评估非预期影响的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的评估非预期影响过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNICEF Guidance on AI and Children, Version 3",
+          "url": "https://www.unicef.org/innocenti/reports/policy-guidance-ai-children"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "SOC-COL-003",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "建立团队协作约定",
+        "en": "Establish Team Agreements"
+      },
+      "domain_id": "SOC",
+      "subdomain_id": "SOC.COL",
+      "definition": {
+        "zh": "能够与成员共同确定目标、角色、沟通、决策、资料和冲突处理规则，并在实践中维护和修订。",
+        "en": "Co-create and maintain team agreements on goals, roles, communication, decisions, materials, and conflict handling."
+      },
+      "boundaries": [
+        "约定不应只是教师提供且成员从未使用的表格。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "让成员共同讨论并确认约定。",
+        "使角色、响应方式、资料权限和升级路径清楚。",
+        "出现新情况时依据经验修订约定。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试建立团队协作约定。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次建立团队协作约定并解释基本选择。",
+        "E3": "能在熟悉情境中独立建立团队协作约定，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进建立团队协作约定的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的建立团队协作约定过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNICEF Guidance on AI and Children, Version 3",
+          "url": "https://www.unicef.org/innocenti/reports/policy-guidance-ai-children"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "SOC-COL-004",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "维护共享责任",
+        "en": "Maintain Shared Accountability"
+      },
+      "domain_id": "SOC",
+      "subdomain_id": "SOC.COL",
+      "definition": {
+        "zh": "能够让团队承诺和进展保持可见，在成员遇到阻碍时相互支持，并公平处理失约而非掩盖或指责。",
+        "en": "Keep commitments and progress visible, support members facing blockers, and handle missed commitments fairly without concealment or blame."
+      },
+      "boundaries": [
+        "共享责任不等于替表现不佳者无限承担工作。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "定期同步承诺、进展、风险和所需支持。",
+        "区分需要帮助、重新协商和应承担责任的情形。",
+        "根据影响共同修复交付并更新约定。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试维护共享责任。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次维护共享责任并解释基本选择。",
+        "E3": "能在熟悉情境中独立维护共享责任，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进维护共享责任的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的维护共享责任过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNICEF Guidance on AI and Children, Version 3",
+          "url": "https://www.unicef.org/innocenti/reports/policy-guidance-ai-children"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "SOC-COL-005",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "修复协作中的信任",
+        "en": "Repair Trust in Collaboration"
+      },
+      "domain_id": "SOC",
+      "subdomain_id": "SOC.COL",
+      "definition": {
+        "zh": "能够在误解、失约或伤害发生后承认影响、倾听相关者、采取与责任相称的补救，并通过后续行动重建可验证的可靠性。",
+        "en": "After misunderstanding, missed commitments, or harm, acknowledge impact, listen, make proportionate repair, and rebuild reliability through follow-through."
+      },
+      "boundaries": [
+        "道歉不自动要求对方原谅或恢复原关系。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "清楚描述行为与影响而非只辩解意图。",
+        "询问受影响者需要的修复并说明自身可承担范围。",
+        "完成补救承诺并观察信任是否逐步恢复。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试修复协作中的信任。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次修复协作中的信任并解释基本选择。",
+        "E3": "能在熟悉情境中独立修复协作中的信任，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进修复协作中的信任的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的修复协作中的信任过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNICEF Guidance on AI and Children, Version 3",
+          "url": "https://www.unicef.org/innocenti/reports/policy-guidance-ai-children"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "SOC-RUL-003",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "尊重版权与正确署名",
+        "en": "Respect Copyright and Attribution"
+      },
+      "domain_id": "SOC",
+      "subdomain_id": "SOC.RUL",
+      "definition": {
+        "zh": "能够识别作品、数据和代码的权利与许可，选择允许的使用方式，保留来源并按要求署名。",
+        "en": "Identify rights and licences for works, data, and code, choose permitted uses, preserve provenance, and attribute as required."
+      },
+      "boundaries": [
+        "署名不自动获得使用许可，教育用途也不自动无限制。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "查找素材的作者、来源、许可和使用条件。",
+        "区分引用、改编、公共领域和无法确认授权。",
+        "在作品中保留清晰署名与变更说明。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试尊重版权与正确署名。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次尊重版权与正确署名并解释基本选择。",
+        "E3": "能在熟悉情境中独立尊重版权与正确署名，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进尊重版权与正确署名的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的尊重版权与正确署名过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNICEF Guidance on AI and Children, Version 3",
+          "url": "https://www.unicef.org/innocenti/reports/policy-guidance-ai-children"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "SOC-RUL-004",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "安全地公开发布",
+        "en": "Publish Safely"
+      },
+      "domain_id": "SOC",
+      "subdomain_id": "SOC.RUL",
+      "definition": {
+        "zh": "能够在公开发布前检查身份暴露、位置、声誉、版权、平台规则和受众扩散风险，并选择保护措施或停止发布。",
+        "en": "Before public release, check identity exposure, location, reputation, copyright, platform rules, audience spread, and choose safeguards or stop publication."
+      },
+      "boundaries": [
+        "获得一次同意不代表可以改变用途或永久公开。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "检查正文、图片、声音和元数据中的可识别信息。",
+        "获得相关人员的适当同意并考虑内容脱离原语境后的影响。",
+        "设置必要的访问、评论或删除措施并保留应急方式。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试安全地公开发布。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次安全地公开发布并解释基本选择。",
+        "E3": "能在熟悉情境中独立安全地公开发布，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进安全地公开发布的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的安全地公开发布过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNICEF Guidance on AI and Children, Version 3",
+          "url": "https://www.unicef.org/innocenti/reports/policy-guidance-ai-children"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
+    },
+    {
+      "id": "SOC-RUL-005",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": {
+        "zh": "披露 AI 使用并保留问责记录",
+        "en": "Disclose AI Use and Preserve Accountability"
+      },
+      "domain_id": "SOC",
+      "subdomain_id": "SOC.RUL",
+      "definition": {
+        "zh": "能够按情境要求披露 AI 参与，保存关键来源、核验和审批记录，并确保有明确的人对最终发布和后果负责。",
+        "en": "Disclose AI involvement as context requires, preserve key provenance, verification, and approval records, and ensure a named human owns final release and consequences."
+      },
+      "boundaries": [
+        "披露不是免责条款，也不替代核验和补救。",
+        "不等同于记忆术语、照搬模板或只完成一次任务。",
+        "评价时应结合情境、过程与学习者实际承担的判断。"
+      ],
+      "observable_behaviors": [
+        "根据受众、平台和任务要求说明 AI 使用程度。",
+        "保存足以复查关键内容来源与人工决定的记录。",
+        "指定最终负责人并建立错误更正或撤回路径。"
+      ],
+      "proficiency_descriptors": {
+        "E1": "在示例和明确步骤支持下，能识别基本要求并尝试披露 AI 使用并保留问责记录。",
+        "E2": "借助模板、检查清单或同伴协作，能完成一次披露 AI 使用并保留问责记录并解释基本选择。",
+        "E3": "能在熟悉情境中独立披露 AI 使用并保留问责记录，检查结果并根据反馈作出调整。",
+        "E4": "能在新的复杂情境中迁移和改进披露 AI 使用并保留问责记录的方法，权衡影响并说明决策。"
+      },
+      "evidence_guidance": {
+        "strong": [
+          "包含情境、学习者行动、结果、反馈与调整的披露 AI 使用并保留问责记录过程记录。",
+          "能解释关键选择，并在新的材料或情境中再次应用。"
+        ],
+        "weak": [
+          "只有最终作品、术语复述或由 AI 直接生成的答案。",
+          "完全依赖教师、同伴或模板完成，无法说明自己的判断。"
+        ],
+        "cautions": [
+          "一次成功不足以证明稳定能力；资源、语言、健康与参与机会也会影响表现。"
+        ]
+      },
+      "life_account_links": [
+        {
+          "account": "relationships",
+          "relation": "may_contribute_to",
+          "rationale": "理解规则与他人并负责任地协作可能支持可信关系。"
+        }
+      ],
+      "claim_status": "observation",
+      "sources": [
+        {
+          "type": "practice",
+          "citation": "Richology 青少年 AI 创造与项目课程实践总结"
+        },
+        {
+          "type": "research",
+          "citation": "UNICEF Guidance on AI and Children, Version 3",
+          "url": "https://www.unicef.org/innocenti/reports/policy-guidance-ai-children"
+        }
+      ],
+      "change_log": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-21",
+          "summary": "Initial draft node accepted by RFC 0001."
+        }
+      ]
     }
   ]
 }

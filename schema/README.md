@@ -4,5 +4,7 @@
 
 - `competency.schema.json`：能力节点结构
 - `dependency.schema.json`：能力关系结构
+- `candidate-pool.schema.json`：候选池与选择状态
+- `life-account-link.schema.json`：能力与人生课题的非因果映射
 
-当前采用 JSON Schema Draft 2020-12。无依赖校验工具将在下一版本加入。
+当前采用 JSON Schema Draft 2020-12，并提供无第三方依赖的本地校验工具。

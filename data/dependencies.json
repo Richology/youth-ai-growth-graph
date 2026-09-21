@@ -8,10 +8,16 @@
       "target_id": "SOC-AWR-001",
       "type": "requires",
       "rationale": "发现真实问题通常需要先理解受到问题影响的具体角色、处境和不同利益。",
-      "contexts": ["用户研究", "社会创新", "产品设计"],
+      "contexts": [
+        "用户研究",
+        "社会创新",
+        "产品设计"
+      ],
       "status": "draft",
       "version": "0.1.0",
-      "sources": ["Richology practice observation"]
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
       "id": "REL-0002",
@@ -19,10 +25,16 @@
       "target_id": "SOC-AWR-001",
       "type": "supports",
       "rationale": "识别 AI 的适用边界和责任范围，有助于分析不同角色可能承受的风险与影响。",
-      "contexts": ["AI 产品设计", "内容创作", "团队协作"],
+      "contexts": [
+        "AI 产品设计",
+        "内容创作",
+        "团队协作"
+      ],
       "status": "draft",
       "version": "0.1.0",
-      "sources": ["Richology framework hypothesis"]
+      "sources": [
+        "Richology framework hypothesis"
+      ]
     },
     {
       "id": "REL-0003",
@@ -30,10 +42,16 @@
       "target_id": "PRO-PJM-001",
       "type": "related_to",
       "rationale": "项目目标的拆解方式会受到问题定义影响，而项目执行中的新信息也可能反过来修正问题。",
-      "contexts": ["项目式学习", "产品开发", "创业实践"],
+      "contexts": [
+        "项目式学习",
+        "产品开发",
+        "创业实践"
+      ],
       "status": "draft",
       "version": "0.1.0",
-      "sources": ["Richology practice observation"]
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
       "id": "REL-0004",
@@ -41,10 +59,16 @@
       "target_id": "AI-BND-001",
       "type": "requires",
       "rationale": "组织人机协作需要先判断哪些环节适合交给 AI，以及哪些判断和责任必须由人保留。",
-      "contexts": ["内容创作", "研究学习", "项目开发"],
+      "contexts": [
+        "内容创作",
+        "研究学习",
+        "项目开发"
+      ],
       "status": "draft",
       "version": "0.1.0",
-      "sources": ["Richology practice observation"]
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
       "id": "REL-0005",
@@ -52,10 +76,16 @@
       "target_id": "AI-BND-001",
       "type": "requires",
       "rationale": "安排核验重点与强度通常需要先理解 AI 的不可靠环节、任务风险和人的责任边界。",
-      "contexts": ["信息检索", "内容创作", "辅助决策"],
+      "contexts": [
+        "信息检索",
+        "内容创作",
+        "辅助决策"
+      ],
       "status": "draft",
       "version": "0.1.0",
-      "sources": ["Richology practice observation"]
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
       "id": "REL-0006",
@@ -63,10 +93,16 @@
       "target_id": "AI-COL-001",
       "type": "supports",
       "rationale": "对中间输出进行核验和纠正，有助于学习者调整提示、上下文和人机分工，使协作持续改进。",
-      "contexts": ["人机迭代", "研究学习", "产品开发"],
+      "contexts": [
+        "人机迭代",
+        "研究学习",
+        "产品开发"
+      ],
       "status": "draft",
       "version": "0.1.0",
-      "sources": ["Richology framework hypothesis"]
+      "sources": [
+        "Richology framework hypothesis"
+      ]
     },
     {
       "id": "REL-0007",
@@ -74,10 +110,16 @@
       "target_id": "BIZ-NED-001",
       "type": "requires",
       "rationale": "构建可测试解决方案通常需要以对具体对象、情境和问题的初步理解作为设计起点。",
-      "contexts": ["产品设计", "社会创新", "创业实践"],
+      "contexts": [
+        "产品设计",
+        "社会创新",
+        "创业实践"
+      ],
       "status": "draft",
       "version": "0.1.0",
-      "sources": ["Richology practice observation"]
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
       "id": "REL-0008",
@@ -85,10 +127,16 @@
       "target_id": "BIZ-PRO-001",
       "type": "requires",
       "rationale": "验证价值需要一个目标对象可以理解或体验的方案，才能观察真实或近真实的使用行为与反馈。",
-      "contexts": ["原型测试", "市场验证", "课程项目"],
+      "contexts": [
+        "原型测试",
+        "市场验证",
+        "课程项目"
+      ],
       "status": "draft",
       "version": "0.1.0",
-      "sources": ["Richology practice observation"]
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
       "id": "REL-0009",
@@ -96,10 +144,16 @@
       "target_id": "BIZ-NED-001",
       "type": "supports",
       "rationale": "真实使用与反馈会暴露原问题描述中的偏差或遗漏，从而支持对需求判断进行修订。",
-      "contexts": ["用户研究", "产品迭代", "创业实践"],
+      "contexts": [
+        "用户研究",
+        "产品迭代",
+        "创业实践"
+      ],
       "status": "draft",
       "version": "0.1.0",
-      "sources": ["Richology framework hypothesis"]
+      "sources": [
+        "Richology framework hypothesis"
+      ]
     },
     {
       "id": "REL-0010",
@@ -107,10 +161,16 @@
       "target_id": "BIZ-PRO-001",
       "type": "supports",
       "rationale": "明确交付物、任务依赖和时间节点，有助于控制原型范围并按验证目标完成可测试方案。",
-      "contexts": ["项目式学习", "产品开发", "团队创作"],
+      "contexts": [
+        "项目式学习",
+        "产品开发",
+        "团队创作"
+      ],
       "status": "draft",
       "version": "0.1.0",
-      "sources": ["Richology practice observation"]
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
       "id": "REL-0011",
@@ -118,10 +178,16 @@
       "target_id": "SOC-COL-001",
       "type": "supports",
       "rationale": "准确表达、倾听和确认共识，有助于团队协调依赖、处理分歧并维持共同工作。",
-      "contexts": ["团队项目", "同伴学习", "跨角色协作"],
+      "contexts": [
+        "团队项目",
+        "同伴学习",
+        "跨角色协作"
+      ],
       "status": "draft",
       "version": "0.1.0",
-      "sources": ["Richology practice observation"]
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
       "id": "REL-0012",
@@ -129,10 +195,16 @@
       "target_id": "PRO-PJM-001",
       "type": "supports",
       "rationale": "个人能够监测行动、识别阻碍并根据复盘调整，有助于项目计划保持与实际进展一致。",
-      "contexts": ["长期项目", "自主学习", "个人创作"],
+      "contexts": [
+        "长期项目",
+        "自主学习",
+        "个人创作"
+      ],
       "status": "draft",
       "version": "0.1.0",
-      "sources": ["Richology practice observation"]
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
       "id": "REL-0013",
@@ -140,10 +212,16 @@
       "target_id": "BIZ-VAL-001",
       "type": "supports",
       "rationale": "协调团队角色与信息共享，有助于在测试中一致地接触使用者、记录反馈并共同解释结果。",
-      "contexts": ["团队验证", "用户测试", "创业实践"],
+      "contexts": [
+        "团队验证",
+        "用户测试",
+        "创业实践"
+      ],
       "status": "draft",
       "version": "0.1.0",
-      "sources": ["Richology framework hypothesis"]
+      "sources": [
+        "Richology framework hypothesis"
+      ]
     },
     {
       "id": "REL-0014",
@@ -151,10 +229,16 @@
       "target_id": "AI-BND-001",
       "type": "supports",
       "rationale": "理解隐私、版权、安全与责任规则，有助于判断 AI 不应独立承担的任务及必要的人类监督。",
-      "contexts": ["AI 内容创作", "数据使用", "公开发布"],
+      "contexts": [
+        "AI 内容创作",
+        "数据使用",
+        "公开发布"
+      ],
       "status": "draft",
       "version": "0.1.0",
-      "sources": ["Richology framework hypothesis"]
+      "sources": [
+        "Richology framework hypothesis"
+      ]
     },
     {
       "id": "REL-0015",
@@ -162,70 +246,796 @@
       "target_id": "BIZ-VAL-001",
       "type": "supports",
       "rationale": "对同意、隐私与平台规则的理解，有助于以保护参与者的方式开展真实或近真实验证。",
-      "contexts": ["用户访谈", "原型测试", "市场验证"],
+      "contexts": [
+        "用户访谈",
+        "原型测试",
+        "市场验证"
+      ],
       "status": "draft",
       "version": "0.1.0",
-      "sources": ["Richology practice observation"]
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
-      "id": "REL-0016", "source_id": "AI-BND-002", "target_id": "AI-BND-001", "type": "requires",
+      "id": "REL-0016",
+      "source_id": "AI-BND-002",
+      "target_id": "AI-BND-001",
+      "type": "requires",
       "rationale": "评估具体使用风险需要先理解 AI 适用范围、人类核验要求和责任边界。",
-      "contexts": ["AI 安全", "辅助决策", "公开发布"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+      "contexts": [
+        "AI 安全",
+        "辅助决策",
+        "公开发布"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
-      "id": "REL-0017", "source_id": "AI-COL-002", "target_id": "AI-COL-001", "type": "supports",
+      "id": "REL-0017",
+      "source_id": "AI-COL-002",
+      "target_id": "AI-COL-001",
+      "type": "supports",
       "rationale": "准确且持续更新的任务上下文，有助于减少人机沟通歧义并改善协作流程。",
-      "contexts": ["长任务", "内容创作", "研究学习"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+      "contexts": [
+        "长任务",
+        "内容创作",
+        "研究学习"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
-      "id": "REL-0018", "source_id": "AI-JUD-002", "target_id": "AI-JUD-001", "type": "supports",
+      "id": "REL-0018",
+      "source_id": "AI-JUD-002",
+      "target_id": "AI-JUD-001",
+      "type": "supports",
       "rationale": "检查代表性、遗漏和刻板印象，可以补充事实与逻辑核验，使输出纠正更加完整。",
-      "contexts": ["公共内容", "用户研究", "辅助决策"], "status": "draft", "version": "0.1.0", "sources": ["Richology framework hypothesis"]
+      "contexts": [
+        "公共内容",
+        "用户研究",
+        "辅助决策"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "Richology framework hypothesis"
+      ]
     },
     {
-      "id": "REL-0019", "source_id": "BIZ-NED-002", "target_id": "BIZ-NED-001", "type": "supports",
+      "id": "REL-0019",
+      "source_id": "BIZ-NED-002",
+      "target_id": "BIZ-NED-001",
+      "type": "supports",
       "rationale": "围绕真实经历开展访谈，可以为发现问题提供当事人信息并修正未经验证的假设。",
-      "contexts": ["用户研究", "社会创新", "产品设计"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+      "contexts": [
+        "用户研究",
+        "社会创新",
+        "产品设计"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
-      "id": "REL-0020", "source_id": "BIZ-PRO-002", "target_id": "BIZ-PRO-001", "type": "requires",
+      "id": "REL-0020",
+      "source_id": "BIZ-PRO-002",
+      "target_id": "BIZ-PRO-001",
+      "type": "requires",
       "rationale": "根据反馈迭代方案通常需要先有一个目标对象能够理解或体验的可测试版本。",
-      "contexts": ["产品迭代", "原型测试", "项目式学习"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+      "contexts": [
+        "产品迭代",
+        "原型测试",
+        "项目式学习"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
-      "id": "REL-0021", "source_id": "BIZ-VAL-002", "target_id": "BIZ-VAL-001", "type": "supports",
+      "id": "REL-0021",
+      "source_id": "BIZ-VAL-002",
+      "target_id": "BIZ-VAL-001",
+      "type": "supports",
       "rationale": "预先设计针对关键不确定性的最小测试，有助于获得可解释的真实反馈并限制过度结论。",
-      "contexts": ["市场验证", "用户测试", "创业实践"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+      "contexts": [
+        "市场验证",
+        "用户测试",
+        "创业实践"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
-      "id": "REL-0022", "source_id": "PRO-PJM-002", "target_id": "PRO-PJM-001", "type": "supports",
+      "id": "REL-0022",
+      "source_id": "PRO-PJM-002",
+      "target_id": "PRO-PJM-001",
+      "type": "supports",
       "rationale": "持续识别风险和管理变更，有助于保持项目目标、任务依赖和交付承诺的有效性。",
-      "contexts": ["长期项目", "团队项目", "开放任务"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+      "contexts": [
+        "长期项目",
+        "团队项目",
+        "开放任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
-      "id": "REL-0023", "source_id": "PRO-COM-002", "target_id": "PRO-COM-001", "type": "supports",
+      "id": "REL-0023",
+      "source_id": "PRO-COM-002",
+      "target_id": "PRO-COM-001",
+      "type": "supports",
       "rationale": "基于标准开展双向反馈，可以澄清工作差距并把专业沟通转化为具体改进行动。",
-      "contexts": ["作品评议", "团队协作", "项目复盘"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+      "contexts": [
+        "作品评议",
+        "团队协作",
+        "项目复盘"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
-      "id": "REL-0024", "source_id": "PRO-SEL-002", "target_id": "PRO-SEL-001", "type": "supports",
+      "id": "REL-0024",
+      "source_id": "PRO-SEL-002",
+      "target_id": "PRO-SEL-001",
+      "type": "supports",
       "rationale": "管理注意力、休息和工作节奏，有助于学习者持续行动、监测状态并履行合理承诺。",
-      "contexts": ["自主学习", "长期创作", "项目执行"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+      "contexts": [
+        "自主学习",
+        "长期创作",
+        "项目执行"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
-      "id": "REL-0025", "source_id": "SOC-AWR-002", "target_id": "SOC-AWR-001", "type": "requires",
+      "id": "REL-0025",
+      "source_id": "SOC-AWR-002",
+      "target_id": "SOC-AWR-001",
+      "type": "requires",
       "rationale": "识别权力差异和公共影响需要先理解相关角色的处境、利益、影响力和可能承受的后果。",
-      "contexts": ["社会创新", "团队治理", "公共发布"], "status": "draft", "version": "0.1.0", "sources": ["Richology framework hypothesis"]
+      "contexts": [
+        "社会创新",
+        "团队治理",
+        "公共发布"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "Richology framework hypothesis"
+      ]
     },
     {
-      "id": "REL-0026", "source_id": "SOC-COL-002", "target_id": "SOC-COL-001", "type": "supports",
+      "id": "REL-0026",
+      "source_id": "SOC-COL-002",
+      "target_id": "SOC-COL-001",
+      "type": "supports",
       "rationale": "以共同认可的程序处理分歧和形成决定，有助于团队维持合作并共同承担结果。",
-      "contexts": ["团队项目", "同伴学习", "共同治理"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+      "contexts": [
+        "团队项目",
+        "同伴学习",
+        "共同治理"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "Richology practice observation"
+      ]
     },
     {
-      "id": "REL-0027", "source_id": "SOC-RUL-002", "target_id": "SOC-RUL-001", "type": "supports",
+      "id": "REL-0027",
+      "source_id": "SOC-RUL-002",
+      "target_id": "SOC-RUL-001",
+      "type": "supports",
       "rationale": "落实数据最小化、知情同意和撤回机制，有助于学习者在项目中遵守规则并承担具体责任。",
-      "contexts": ["用户访谈", "数据收集", "AI 项目"], "status": "draft", "version": "0.1.0", "sources": ["Richology practice observation"]
+      "contexts": [
+        "用户访谈",
+        "数据收集",
+        "AI 项目"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "Richology practice observation"
+      ]
+    },
+    {
+      "id": "REL-0028",
+      "source_id": "AI-BND-003",
+      "target_id": "AI-BND-001",
+      "type": "supports",
+      "rationale": "“说明 AI 角色与来源”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0029",
+      "source_id": "AI-BND-004",
+      "target_id": "AI-BND-001",
+      "type": "supports",
+      "rationale": "“设置人工监督点”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0030",
+      "source_id": "AI-BND-005",
+      "target_id": "AI-BND-001",
+      "type": "supports",
+      "rationale": "“保护输入中的敏感信息”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0031",
+      "source_id": "AI-COL-003",
+      "target_id": "AI-COL-001",
+      "type": "supports",
+      "rationale": "“拆解 AI 辅助任务”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0032",
+      "source_id": "AI-COL-004",
+      "target_id": "AI-COL-001",
+      "type": "supports",
+      "rationale": "“设计并迭代指令”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0033",
+      "source_id": "AI-COL-005",
+      "target_id": "AI-COL-001",
+      "type": "supports",
+      "rationale": "“记录人机贡献”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0034",
+      "source_id": "AI-JUD-003",
+      "target_id": "AI-JUD-001",
+      "type": "supports",
+      "rationale": "“追溯来源与主张”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0035",
+      "source_id": "AI-JUD-004",
+      "target_id": "AI-JUD-001",
+      "type": "supports",
+      "rationale": "“比较备选输出”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0036",
+      "source_id": "AI-JUD-005",
+      "target_id": "AI-JUD-001",
+      "type": "supports",
+      "rationale": "“表达置信度与不确定性”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0037",
+      "source_id": "BIZ-NED-003",
+      "target_id": "BIZ-NED-001",
+      "type": "supports",
+      "rationale": "“观察行为与情境”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0038",
+      "source_id": "BIZ-NED-004",
+      "target_id": "BIZ-NED-001",
+      "type": "supports",
+      "rationale": "“综合需求证据”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0039",
+      "source_id": "BIZ-NED-005",
+      "target_id": "BIZ-NED-001",
+      "type": "supports",
+      "rationale": "“定义问题与机会”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0040",
+      "source_id": "BIZ-PRO-003",
+      "target_id": "BIZ-PRO-001",
+      "type": "supports",
+      "rationale": "“明确价值主张”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0041",
+      "source_id": "BIZ-PRO-004",
+      "target_id": "BIZ-PRO-001",
+      "type": "supports",
+      "rationale": "“确定产品范围与优先级”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0042",
+      "source_id": "BIZ-PRO-005",
+      "target_id": "BIZ-PRO-001",
+      "type": "supports",
+      "rationale": "“设计可访问的使用体验”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0043",
+      "source_id": "BIZ-VAL-003",
+      "target_id": "BIZ-VAL-001",
+      "type": "supports",
+      "rationale": "“选择验证指标”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0044",
+      "source_id": "BIZ-VAL-004",
+      "target_id": "BIZ-VAL-001",
+      "type": "supports",
+      "rationale": "“解释冲突证据”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0045",
+      "source_id": "BIZ-VAL-005",
+      "target_id": "BIZ-VAL-001",
+      "type": "supports",
+      "rationale": "“依据验证决定下一步”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0046",
+      "source_id": "PRO-PJM-003",
+      "target_id": "PRO-PJM-001",
+      "type": "supports",
+      "rationale": "“估算任务与资源”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0047",
+      "source_id": "PRO-PJM-004",
+      "target_id": "PRO-PJM-001",
+      "type": "supports",
+      "rationale": "“协调里程碑与依赖”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0048",
+      "source_id": "PRO-PJM-005",
+      "target_id": "PRO-PJM-001",
+      "type": "supports",
+      "rationale": "“完成项目收尾与复盘”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0049",
+      "source_id": "PRO-COM-003",
+      "target_id": "PRO-COM-001",
+      "type": "supports",
+      "rationale": "“撰写可行动工作文档”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0050",
+      "source_id": "PRO-COM-004",
+      "target_id": "PRO-COM-001",
+      "type": "supports",
+      "rationale": "“呈现并解释专业判断”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0051",
+      "source_id": "PRO-COM-005",
+      "target_id": "PRO-COM-001",
+      "type": "supports",
+      "rationale": "“主持有效会议”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0052",
+      "source_id": "PRO-SEL-003",
+      "target_id": "PRO-SEL-001",
+      "type": "supports",
+      "rationale": "“设定并修订个人目标”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0053",
+      "source_id": "PRO-SEL-004",
+      "target_id": "PRO-SEL-001",
+      "type": "supports",
+      "rationale": "“主动求助并运用资源”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0054",
+      "source_id": "PRO-SEL-005",
+      "target_id": "PRO-SEL-001",
+      "type": "supports",
+      "rationale": "“从失败中学习并迁移”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0055",
+      "source_id": "SOC-AWR-003",
+      "target_id": "SOC-AWR-001",
+      "type": "supports",
+      "rationale": "“理解差异化视角”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0056",
+      "source_id": "SOC-AWR-004",
+      "target_id": "SOC-AWR-001",
+      "type": "supports",
+      "rationale": "“识别社会规范与情境”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0057",
+      "source_id": "SOC-AWR-005",
+      "target_id": "SOC-AWR-001",
+      "type": "supports",
+      "rationale": "“评估非预期影响”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0058",
+      "source_id": "SOC-COL-003",
+      "target_id": "SOC-COL-001",
+      "type": "supports",
+      "rationale": "“建立团队协作约定”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0059",
+      "source_id": "SOC-COL-004",
+      "target_id": "SOC-COL-001",
+      "type": "supports",
+      "rationale": "“维护共享责任”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0060",
+      "source_id": "SOC-COL-005",
+      "target_id": "SOC-COL-001",
+      "type": "supports",
+      "rationale": "“修复协作中的信任”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0061",
+      "source_id": "SOC-RUL-003",
+      "target_id": "SOC-RUL-001",
+      "type": "supports",
+      "rationale": "“尊重版权与正确署名”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0062",
+      "source_id": "SOC-RUL-004",
+      "target_id": "SOC-RUL-001",
+      "type": "supports",
+      "rationale": "“安全地公开发布”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
+    },
+    {
+      "id": "REL-0063",
+      "source_id": "SOC-RUL-005",
+      "target_id": "SOC-RUL-001",
+      "type": "supports",
+      "rationale": "“披露 AI 使用并保留问责记录”为该二级领域的综合基础能力提供一种可单独教学、观察和反馈的具体实践。",
+      "contexts": [
+        "项目式学习",
+        "真实或近真实任务"
+      ],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": [
+        "RFC 0001 editorial decision"
+      ]
     }
   ]
 }
