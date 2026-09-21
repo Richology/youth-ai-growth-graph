@@ -78,6 +78,34 @@ class GraphValidationTests(unittest.TestCase):
             ):
                 graph_validator.validate()
 
+    def test_relationship_rejects_generic_rationale(self):
+        documents = {
+            name: deepcopy(graph_validator.load_json(name))
+            for name in (
+                "domains.json",
+                "competencies.json",
+                "dependencies.json",
+                "manifest.json",
+                "candidate-pool.json",
+                "life-account-links.json",
+            )
+        }
+        relationship = documents["dependencies.json"]["relationships"][0]
+        relationship["rationale"] = (
+            "某能力为该二级领域的综合基础能力提供一种可单独教学的实践。"
+        )
+
+        with patch.object(
+            graph_validator,
+            "load_json",
+            side_effect=lambda name: documents[name],
+        ):
+            with self.assertRaisesRegex(
+                graph_validator.ValidationError,
+                "Generic relationship rationale remains",
+            ):
+                graph_validator.validate()
+
 
 if __name__ == "__main__":
     unittest.main()

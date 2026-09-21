@@ -21,6 +21,7 @@ GENERIC_DRAFT_PHRASES = {
     "评价时应结合情境、过程与学习者实际承担的判断。",
     "能解释关键选择，并在新的材料或情境中再次应用。",
 }
+GENERIC_RELATIONSHIP_FRAGMENT = "为该二级领域的综合基础能力提供一种可单独教学"
 
 
 class ValidationError(Exception):
@@ -203,6 +204,8 @@ def validate() -> tuple[int, int, int, int]:
             raise ValidationError(f"Invalid status or version in {rel_id}")
         if not isinstance(item["rationale"], str) or not item["rationale"].strip():
             raise ValidationError(f"Empty rationale in {rel_id}")
+        if GENERIC_RELATIONSHIP_FRAGMENT in item["rationale"]:
+            raise ValidationError(f"Generic relationship rationale remains in {rel_id}")
         require_nonempty_strings(item["contexts"], f"Contexts in {rel_id}")
         require_nonempty_strings(item["sources"], f"Sources in {rel_id}")
         if item["type"] == "related_to" and source > target:
