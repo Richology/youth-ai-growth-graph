@@ -25,7 +25,7 @@ class GraphValidationTests(unittest.TestCase):
             with self.subTest(path=path.name):
                 json.loads(path.read_text(encoding="utf-8"))
 
-    def test_upgraded_node_rejects_generic_draft_language(self):
+    def test_node_rejects_generic_draft_language(self):
         documents = {
             name: deepcopy(graph_validator.load_json(name))
             for name in (
@@ -37,11 +37,7 @@ class GraphValidationTests(unittest.TestCase):
                 "life-account-links.json",
             )
         }
-        node = next(
-            item
-            for item in documents["competencies.json"]["competencies"]
-            if item["version"] != "0.1.0"
-        )
+        node = documents["competencies.json"]["competencies"][0]
         node["boundaries"].append("不等同于记忆术语、照搬模板或只完成一次任务。")
 
         with patch.object(

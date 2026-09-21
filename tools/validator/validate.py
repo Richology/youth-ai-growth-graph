@@ -142,7 +142,7 @@ def validate() -> tuple[int, int, int, int]:
             require_nonempty_strings(evidence[kind], f"{kind} evidence on {node_id}")
         node_text = [*item["boundaries"], *evidence["strong"], *evidence["weak"], *evidence["cautions"]]
         generic = sorted(GENERIC_DRAFT_PHRASES.intersection(node_text))
-        if generic and item["version"] != "0.1.0":
+        if generic:
             raise ValidationError(f"Generic draft language remains on {node_id}: {generic[0]}")
         for link in item["life_account_links"]:
             require_keys(link, {"account", "relation", "rationale"}, f"Life-account link on {node_id}")
