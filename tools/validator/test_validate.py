@@ -50,6 +50,34 @@ class GraphValidationTests(unittest.TestCase):
             ):
                 graph_validator.validate()
 
+    def test_node_requires_external_calibration_source(self):
+        documents = {
+            name: deepcopy(graph_validator.load_json(name))
+            for name in (
+                "domains.json",
+                "competencies.json",
+                "dependencies.json",
+                "manifest.json",
+                "candidate-pool.json",
+                "life-account-links.json",
+            )
+        }
+        node = documents["competencies.json"]["competencies"][0]
+        node["sources"] = [
+            source for source in node["sources"] if source["type"] == "practice"
+        ]
+
+        with patch.object(
+            graph_validator,
+            "load_json",
+            side_effect=lambda name: documents[name],
+        ):
+            with self.assertRaisesRegex(
+                graph_validator.ValidationError,
+                "External calibration source is missing",
+            ):
+                graph_validator.validate()
+
 
 if __name__ == "__main__":
     unittest.main()

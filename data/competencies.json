@@ -60,8 +60,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年 AI 商业化课程实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年 AI 商业化课程实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "UNESCO AI Competency Framework for Students (2024)",
+      "url": "https://www.unesco.org/en/articles/ai-competency-framework-students"
         }
       ],
       "change_log": [
@@ -130,8 +135,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年 AI 创作与项目课程实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年 AI 创作与项目课程实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "UNESCO AI Competency Framework for Students (2024)",
+      "url": "https://www.unesco.org/en/articles/ai-competency-framework-students"
         }
       ],
       "change_log": [
@@ -200,8 +210,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年 AI 信息素养课程实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年 AI 信息素养课程实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "European Commission JRC DigComp 2.2",
+      "url": "https://joint-research-centre.ec.europa.eu/oldpage-digcomp/digcomp-framework_en"
         }
       ],
       "change_log": [
@@ -270,8 +285,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年创业与 AI 项目课程实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年创业与 AI 项目课程实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "European Commission JRC EntreComp",
+      "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
         }
       ],
       "change_log": [
@@ -340,8 +360,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年产品原型与项目课程实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年产品原型与项目课程实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "European Commission JRC EntreComp",
+      "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
         }
       ],
       "change_log": [
@@ -410,8 +435,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年市场验证与项目课程实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年市场验证与项目课程实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "European Commission JRC EntreComp",
+      "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
         }
       ],
       "change_log": [
@@ -480,8 +510,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 项目式课程与职业化训练实践总结"
+      "type": "practice",
+      "citation": "Richology 项目式课程与职业化训练实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "European Commission JRC EntreComp",
+      "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
         }
       ],
       "change_log": [
@@ -550,8 +585,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年项目协作与职业化训练实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年项目协作与职业化训练实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "OECD Learning Compass 2030",
+      "url": "https://www.oecd.org/en/data/tools/oecd-learning-compass-2030.html"
         }
       ],
       "change_log": [
@@ -620,8 +660,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年项目制学习与行动复盘实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年项目制学习与行动复盘实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "OECD Learning Compass 2030",
+      "url": "https://www.oecd.org/en/data/tools/oecd-learning-compass-2030.html"
         }
       ],
       "change_log": [
@@ -690,8 +735,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年商业项目与社会化学习实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年商业项目与社会化学习实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "OECD Learning Compass 2030",
+      "url": "https://www.oecd.org/en/data/tools/oecd-learning-compass-2030.html"
         }
       ],
       "change_log": [
@@ -760,8 +810,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年团队项目与协作学习实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年团队项目与协作学习实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "OECD Learning Compass 2030",
+      "url": "https://www.oecd.org/en/data/tools/oecd-learning-compass-2030.html"
         }
       ],
       "change_log": [
@@ -835,8 +890,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年 AI 项目安全、隐私与版权实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年 AI 项目安全、隐私与版权实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "European Commission JRC DigComp 2.2",
+      "url": "https://joint-research-centre.ec.europa.eu/oldpage-digcomp/digcomp-framework_en"
         }
       ],
       "change_log": [
@@ -905,8 +965,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年 AI 安全与项目实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年 AI 安全与项目实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "UNESCO AI Competency Framework for Students (2024)",
+      "url": "https://www.unesco.org/en/articles/ai-competency-framework-students"
         }
       ],
       "change_log": [
@@ -970,8 +1035,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年 AI 协作课程实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年 AI 协作课程实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "UNESCO AI Competency Framework for Students (2024)",
+      "url": "https://www.unesco.org/en/articles/ai-competency-framework-students"
         }
       ],
       "change_log": [
@@ -1035,8 +1105,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年 AI 信息素养课程实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年 AI 信息素养课程实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "European Commission JRC DigComp 2.2",
+      "url": "https://joint-research-centre.ec.europa.eu/oldpage-digcomp/digcomp-framework_en"
         }
       ],
       "change_log": [
@@ -1105,8 +1180,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年用户研究课程实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年用户研究课程实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "European Commission JRC EntreComp",
+      "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
         }
       ],
       "change_log": [
@@ -1170,8 +1250,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年产品迭代课程实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年产品迭代课程实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "European Commission JRC EntreComp",
+      "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
         }
       ],
       "change_log": [
@@ -1235,8 +1320,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年市场验证课程实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年市场验证课程实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "European Commission JRC EntreComp",
+      "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
         }
       ],
       "change_log": [
@@ -1305,8 +1395,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 项目式课程与职业化训练实践总结"
+      "type": "practice",
+      "citation": "Richology 项目式课程与职业化训练实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "European Commission JRC EntreComp",
+      "url": "https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework/competence-areas-and-learning-progress_en"
         }
       ],
       "change_log": [
@@ -1375,8 +1470,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年项目评议与职业化训练实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年项目评议与职业化训练实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "OECD Learning Compass 2030",
+      "url": "https://www.oecd.org/en/data/tools/oecd-learning-compass-2030.html"
         }
       ],
       "change_log": [
@@ -1445,8 +1545,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年项目制学习与节奏管理实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年项目制学习与节奏管理实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "OECD Learning Compass 2030",
+      "url": "https://www.oecd.org/en/data/tools/oecd-learning-compass-2030.html"
         }
       ],
       "change_log": [
@@ -1514,10 +1619,19 @@
       ],
       "claim_status": "hypothesis",
       "sources": [
-        {
-          "type": "framework",
-          "citation": "Richology 青少年 AI 时代成长图谱框架 v0.1"
-        }
+    {
+      "type": "framework",
+      "citation": "Richology 青少年 AI 时代成长图谱框架 v0.1"
+    },
+    {
+      "type": "practice",
+      "citation": "Richology 青少年商业项目与社会化学习实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "OECD Learning Compass 2030",
+      "url": "https://www.oecd.org/en/data/tools/oecd-learning-compass-2030.html"
+    }
       ],
       "change_log": [
         {
@@ -1580,8 +1694,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年团队项目与协作学习实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年团队项目与协作学习实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "OECD Learning Compass 2030",
+      "url": "https://www.oecd.org/en/data/tools/oecd-learning-compass-2030.html"
         }
       ],
       "change_log": [
@@ -1650,8 +1769,13 @@
       "claim_status": "observation",
       "sources": [
         {
-          "type": "practice",
-          "citation": "Richology 青少年项目隐私与数据保护实践总结"
+      "type": "practice",
+      "citation": "Richology 青少年项目隐私与数据保护实践总结"
+    },
+    {
+      "type": "framework",
+      "citation": "European Commission JRC DigComp 2.2",
+      "url": "https://joint-research-centre.ec.europa.eu/oldpage-digcomp/digcomp-framework_en"
         }
       ],
       "change_log": [

@@ -152,6 +152,17 @@ def validate() -> tuple[int, int, int, int]:
             require_keys(source, {"type", "citation"}, f"Source on {node_id}")
             if source["type"] not in {"practice", "research", "framework", "community"} or not is_nonempty_string(source["citation"]):
                 raise ValidationError(f"Invalid source on {node_id}")
+        source_types = {source["type"] for source in item["sources"]}
+        if "practice" not in source_types:
+            raise ValidationError(f"Practice source is missing on {node_id}")
+        external_sources = [
+            source
+            for source in item["sources"]
+            if source["type"] in {"research", "framework"}
+            and not source["citation"].startswith("Richology")
+        ]
+        if not external_sources:
+            raise ValidationError(f"External calibration source is missing on {node_id}")
         logged_versions = set()
         for change in item["change_log"]:
             require_keys(change, {"version", "date", "summary"}, f"Change log on {node_id}")
