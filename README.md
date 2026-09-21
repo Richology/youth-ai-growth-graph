@@ -2,7 +2,7 @@
 
 > 面向青少年 AI 创造与商业化教育的开放框架、能力图谱与实践方法论。
 
-[English](README_EN.md) · [项目总纲](docs/project-charter.md) · [路线图](ROADMAP.md) · [参与贡献](CONTRIBUTING.md)
+[English](README_EN.md) · [项目总纲](docs/project-charter.md) · [图谱规范](specification/graph-specification.md) · [路线图](ROADMAP.md) · [参与贡献](CONTRIBUTING.md)
 
 ## 为什么做这个项目
 
@@ -55,6 +55,8 @@
 - 不使用可识别未成年人的原始数据作为公开示例。
 
 理论陈述将尽量区分为：原则、实践观察、待验证假设与已有证据。
+
+当前已发布 4 个一级领域、12 个二级领域、图谱结构规范，以及每个一级领域各 1 个初始示例节点。示例节点用于检验数据结构，不构成完整能力体系。
 
 ## 基本学习循环
 

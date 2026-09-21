@@ -1,0 +1,13 @@
+{
+  "project": "Richology Youth AI Growth Graph",
+  "graph_version": "0.1.0-draft",
+  "released_at": "2026-09-21",
+  "language": "zh-CN",
+  "counts": {
+    "domains": 4,
+    "subdomains": 12,
+    "competencies": 4,
+    "relationships": 3
+  },
+  "notice": "The four competency nodes are initial draft examples and must not be used as a standardized assessment."
+}

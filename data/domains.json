@@ -1,0 +1,94 @@
+{
+  "schema_version": "0.1.0",
+  "status": "draft",
+  "domains": [
+    {
+      "id": "AI",
+      "name": { "zh": "AI 技能化", "en": "AI Enablement" },
+      "definition": "理解 AI 的能力与边界，并通过沟通、判断和纠偏，把 AI 转化为人的基础能力与创造杠杆。",
+      "subdomains": [
+        {
+          "id": "AI.BND",
+          "name": { "zh": "AI 边界", "en": "AI Boundaries" },
+          "definition": "理解 AI 能做什么、不能可靠做什么，以及使用中的风险与责任。"
+        },
+        {
+          "id": "AI.COL",
+          "name": { "zh": "人机沟通与协作", "en": "Human-AI Collaboration" },
+          "definition": "清楚表达目标与约束，并组织人与 AI 之间的有效分工和迭代。"
+        },
+        {
+          "id": "AI.JUD",
+          "name": { "zh": "判断与纠偏", "en": "Judgment and Correction" },
+          "definition": "检查 AI 输出的事实、逻辑、偏差与适用性，并进行修正。"
+        }
+      ]
+    },
+    {
+      "id": "BIZ",
+      "name": { "zh": "商业化", "en": "Commercialization" },
+      "definition": "从真实需求出发，将想法转化为可使用的价值，并通过真实反馈持续验证与迭代。",
+      "subdomains": [
+        {
+          "id": "BIZ.NED",
+          "name": { "zh": "需求洞察", "en": "Needs Discovery" },
+          "definition": "观察和理解具体的人、情境、问题与未满足需求。"
+        },
+        {
+          "id": "BIZ.PRO",
+          "name": { "zh": "产品构建", "en": "Product Building" },
+          "definition": "把需求和想法转化为可体验、可沟通、可迭代的解决方案。"
+        },
+        {
+          "id": "BIZ.VAL",
+          "name": { "zh": "市场验证", "en": "Market Validation" },
+          "definition": "在真实或近真实环境中获取反馈，检验价值、使用意愿与交换可能。"
+        }
+      ]
+    },
+    {
+      "id": "PRO",
+      "name": { "zh": "职业化", "en": "Professional Practice" },
+      "definition": "以可靠、专业和可持续的方式组织工作、沟通协作并完成承诺。",
+      "subdomains": [
+        {
+          "id": "PRO.PJM",
+          "name": { "zh": "项目管理", "en": "Project Management" },
+          "definition": "把目标转化为任务、节奏、资源和可交付结果。"
+        },
+        {
+          "id": "PRO.COM",
+          "name": { "zh": "专业沟通", "en": "Professional Communication" },
+          "definition": "面向不同对象准确表达、倾听、确认并推进共识。"
+        },
+        {
+          "id": "PRO.SEL",
+          "name": { "zh": "自我驱动", "en": "Self-Directed Practice" },
+          "definition": "管理目标、注意力、行动和复盘，在困难中持续推进。"
+        }
+      ]
+    },
+    {
+      "id": "SOC",
+      "name": { "zh": "社会化", "en": "Social Participation" },
+      "definition": "理解他人和社会环境，在协作、规则与公共影响中负责任地行动。",
+      "subdomains": [
+        {
+          "id": "SOC.AWR",
+          "name": { "zh": "社会感知", "en": "Social Awareness" },
+          "definition": "识别不同角色的处境、需求、利益与可能受到的影响。"
+        },
+        {
+          "id": "SOC.COL",
+          "name": { "zh": "协作实践", "en": "Collaborative Practice" },
+          "definition": "与他人分工、协调、处理分歧并共同承担结果。"
+        },
+        {
+          "id": "SOC.RUL",
+          "name": { "zh": "规则意识", "en": "Rules and Responsibility" },
+          "definition": "理解并遵守安全、隐私、版权、伦理和社会规则，对行为后果负责。"
+        }
+      ]
+    }
+  ]
+}

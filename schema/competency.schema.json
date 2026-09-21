@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://richology.cn/schemas/competency.schema.json",
+  "title": "Youth AI Growth Graph Competency",
+  "description": "Schema for one competency node in the Richology Youth AI Growth Graph.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "version",
+    "status",
+    "name",
+    "domain_id",
+    "subdomain_id",
+    "definition",
+    "boundaries",
+    "observable_behaviors",
+    "proficiency_descriptors",
+    "evidence_guidance",
+    "life_account_links",
+    "claim_status",
+    "sources",
+    "change_log"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^(AI|BIZ|PRO|SOC)-[A-Z]{3}-[0-9]{3}$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "status": {
+      "enum": ["proposed", "draft", "stable", "deprecated"]
+    },
+    "name": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["zh", "en"],
+      "properties": {
+        "zh": { "type": "string", "minLength": 2 },
+        "en": { "type": "string", "minLength": 2 }
+      }
+    },
+    "domain_id": {
+      "enum": ["AI", "BIZ", "PRO", "SOC"]
+    },
+    "subdomain_id": {
+      "type": "string",
+      "pattern": "^(AI|BIZ|PRO|SOC)\\.[A-Z]{3}$"
+    },
+    "definition": {
+      "type": "object",
+      "required": ["zh", "en"],
+      "properties": {
+        "zh": { "type": "string", "minLength": 20 },
+        "en": { "type": "string", "minLength": 20 }
+      },
+      "additionalProperties": false
+    },
+    "boundaries": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 5 }
+    },
+    "observable_behaviors": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "type": "string", "minLength": 5 }
+    },
+    "proficiency_descriptors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["E1", "E2", "E3", "E4"],
+      "properties": {
+        "E1": { "type": "string", "minLength": 10 },
+        "E2": { "type": "string", "minLength": 10 },
+        "E3": { "type": "string", "minLength": 10 },
+        "E4": { "type": "string", "minLength": 10 }
+      }
+    },
+    "evidence_guidance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["strong", "weak", "cautions"],
+      "properties": {
+        "strong": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "weak": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "cautions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "life_account_links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["account", "relation", "rationale"],
+        "properties": {
+          "account": { "enum": ["wealth", "health", "relationships"] },
+          "relation": { "const": "may_contribute_to" },
+          "rationale": { "type": "string", "minLength": 10 }
+        }
+      }
+    },
+    "claim_status": {
+      "enum": ["principle", "observation", "hypothesis", "evidence"]
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "citation"],
+        "properties": {
+          "type": { "enum": ["practice", "research", "framework", "community"] },
+          "citation": { "type": "string", "minLength": 3 },
+          "url": { "type": "string", "format": "uri" }
+        }
+      }
+    },
+    "change_log": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["version", "date", "summary"],
+        "properties": {
+          "version": { "type": "string" },
+          "date": { "type": "string", "format": "date" },
+          "summary": { "type": "string" }
+        }
+      }
+    }
+  }
+}

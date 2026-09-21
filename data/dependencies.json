@@ -1,0 +1,39 @@
+{
+  "schema_version": "0.1.0",
+  "status": "draft",
+  "relationships": [
+    {
+      "id": "REL-0001",
+      "source_id": "BIZ-NED-001",
+      "target_id": "SOC-AWR-001",
+      "type": "requires",
+      "rationale": "发现真实问题通常需要先理解受到问题影响的具体角色、处境和不同利益。",
+      "contexts": ["用户研究", "社会创新", "产品设计"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology practice observation"]
+    },
+    {
+      "id": "REL-0002",
+      "source_id": "AI-BND-001",
+      "target_id": "SOC-AWR-001",
+      "type": "supports",
+      "rationale": "识别 AI 的适用边界和责任范围，有助于分析不同角色可能承受的风险与影响。",
+      "contexts": ["AI 产品设计", "内容创作", "团队协作"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology framework hypothesis"]
+    },
+    {
+      "id": "REL-0003",
+      "source_id": "BIZ-NED-001",
+      "target_id": "PRO-PJM-001",
+      "type": "related_to",
+      "rationale": "项目目标的拆解方式会受到问题定义影响，而项目执行中的新信息也可能反过来修正问题。",
+      "contexts": ["项目式学习", "产品开发", "创业实践"],
+      "status": "draft",
+      "version": "0.1.0",
+      "sources": ["Richology practice observation"]
+    }
+  ]
+}
