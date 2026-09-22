@@ -62,4 +62,5 @@ export interface DomainScreenPosition {
   x: number;
   y: number;
   visible: boolean;
+  kind?: "domain" | "node";
 }

@@ -311,6 +311,8 @@ function buildAccessibleIndex() {
       button.innerHTML = `<span>${node.name}</span><small>${node.id} · ${node.subdomain_name}</small>`;
       button.addEventListener("click", () => {
         selectNode(node.id, Boolean(selectedNode));
+        const accessibleIndex = $("#accessible-index") as HTMLDetailsElement | null;
+        if (accessibleIndex) accessibleIndex.open = false;
         details.querySelector<HTMLElement>(".detail-close")?.focus();
       });
       item.append(button);
@@ -338,10 +340,15 @@ function handleHover(node: GraphNode | null, point?: { x: number; y: number }) {
 
 function updateLabels(positions: Array<{ id: string; x: number; y: number; visible: boolean }>) {
   positions.forEach((position) => {
-    const label = $<HTMLElement>(`[data-domain-label="${position.id}"]`);
+    const selector = position.id.startsWith("node:")
+      ? `[data-node-label="${position.id.slice(5)}"]`
+      : `[data-domain-label="${position.id}"]`;
+    const label = $<HTMLElement>(selector);
     if (!label) return;
     label.style.transform = `translate3d(${position.x}px, ${position.y}px, 0)`;
-    label.hidden = !position.visible || !enabledDomains.has(position.id);
+    const nodeId = position.id.startsWith("node:") ? position.id.slice(5) : null;
+    const domainId = nodeId ? nodeById().get(nodeId)?.domain_id : position.id;
+    label.hidden = !position.visible || !domainId || !enabledDomains.has(domainId);
   });
 }
 

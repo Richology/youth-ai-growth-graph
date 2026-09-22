@@ -1,3 +1,12 @@
+---
+import graph from "../../public/data/graph.json";
+
+const keyNodes = graph.domains.flatMap((domain) => graph.nodes
+  .filter((node) => node.domain_id === domain.id)
+  .sort((a, b) => b.metrics.total_incident - a.metrics.total_incident)
+  .slice(0, 3));
+---
+
 <section class="graph-stage" id="graph-stage" aria-label="可交互能力图谱" data-view="star">
   <canvas id="graph-canvas" tabindex="0" aria-describedby="graph-instructions">
     当前浏览器无法显示交互图谱，请使用下方的文本能力索引。
@@ -8,6 +17,9 @@
     <span class="domain-label" data-domain-label="BIZ">商业化</span>
     <span class="domain-label" data-domain-label="PRO">职业化</span>
     <span class="domain-label" data-domain-label="SOC">社会化</span>
+    {keyNodes.map((node) => (
+      <span class="node-label" data-node-label={node.id}>{node.name}</span>
+    ))}
   </div>
 
   <div class="graph-loading" id="graph-loading" role="status">

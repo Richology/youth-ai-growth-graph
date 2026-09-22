@@ -453,6 +453,26 @@ canvas:focus-visible {
 .domain-label[data-domain-label="PRO"] { color: var(--coral); }
 .domain-label[data-domain-label="SOC"] { color: var(--amber); }
 
+.node-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: 12rem;
+  padding: 3px 6px;
+  color: color-mix(in srgb, var(--text) 76%, transparent);
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  border-radius: 4px;
+  translate: 10px -50%;
+  transform: translate3d(-100px, -100px, 0);
+  font-size: 0.7rem;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.graph-stage[data-view="terrain"] .node-label {
+  display: none;
+}
+
 .graph-loading,
 .graph-error {
   position: absolute;

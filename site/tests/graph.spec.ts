@@ -6,7 +6,7 @@ test("switches views and preserves the selected competency", async ({ page }) =>
   await expect(page.locator("#node-index-list button")).toHaveCount(60);
 
   await page.getByText("使用文本方式浏览能力", { exact: true }).click();
-  await page.getByText("识别 AI 能力边界", { exact: true }).click();
+  await page.locator("#accessible-index").getByText("识别 AI 能力边界", { exact: true }).click();
   await expect(page.locator("#detail-title")).toHaveText("识别 AI 能力边界");
   await expect(page).toHaveURL(/node=AI-BND-001/);
 
