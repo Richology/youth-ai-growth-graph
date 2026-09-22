@@ -1,10 +1,6 @@
 ---
 import graph from "../../public/data/graph.json";
 
-const keyNodes = graph.domains.flatMap((domain) => graph.nodes
-  .filter((node) => node.domain_id === domain.id)
-  .sort((a, b) => b.metrics.total_incident - a.metrics.total_incident)
-  .slice(0, 3));
 ---
 
 <section class="graph-stage" id="graph-stage" aria-label="可交互能力图谱" data-view="star">
@@ -17,7 +13,7 @@ const keyNodes = graph.domains.flatMap((domain) => graph.nodes
     <span class="domain-label" data-domain-label="BIZ">商业化</span>
     <span class="domain-label" data-domain-label="PRO">职业化</span>
     <span class="domain-label" data-domain-label="SOC">社会化</span>
-    {keyNodes.map((node) => (
+    {graph.nodes.map((node) => (
       <span class="node-label" data-node-label={node.id}>{node.name}</span>
     ))}
   </div>

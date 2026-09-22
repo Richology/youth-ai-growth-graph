@@ -221,10 +221,18 @@ function setView(view: ViewMode, immediate = false) {
 function bindTabs() {
   const tabs = $$<HTMLButtonElement>("[role=tab]");
   const panels = $$<HTMLElement>("[role=tabpanel]");
-  tabs.forEach((tab) => tab.addEventListener("click", () => {
-    tabs.forEach((item) => item.setAttribute("aria-selected", String(item === tab)));
+  const activate = (tab: HTMLButtonElement) => {
+    tabs.forEach((item) => { item.setAttribute("aria-selected", String(item === tab)); item.tabIndex = item === tab ? 0 : -1; });
     panels.forEach((panel) => { panel.hidden = panel.id !== tab.getAttribute("aria-controls"); });
-  }));
+  };
+  tabs.forEach((tab, index) => {
+    tab.tabIndex = tab.getAttribute('aria-selected') === 'true' ? 0 : -1;
+    tab.addEventListener('click', () => activate(tab));
+    tab.addEventListener('keydown', (event) => {
+      const next = event.key === 'ArrowRight' ? (index+1)%tabs.length : event.key === 'ArrowLeft' ? (index+tabs.length-1)%tabs.length : event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length-1 : -1;
+      if(next >= 0) { event.preventDefault(); activate(tabs[next]); tabs[next].focus(); }
+    });
+  });
 }
 
 function allPrerequisites(startId: string) {
@@ -339,16 +347,25 @@ function handleHover(node: GraphNode | null, point?: { x: number; y: number }) {
 }
 
 function updateLabels(positions: Array<{ id: string; x: number; y: number; visible: boolean }>) {
-  positions.forEach((position) => {
-    const selector = position.id.startsWith("node:")
-      ? `[data-node-label="${position.id.slice(5)}"]`
-      : `[data-domain-label="${position.id}"]`;
-    const label = $<HTMLElement>(selector);
-    if (!label) return;
-    label.style.transform = `translate3d(${position.x}px, ${position.y}px, 0)`;
-    const nodeId = position.id.startsWith("node:") ? position.id.slice(5) : null;
-    const domainId = nodeId ? nodeById().get(nodeId)?.domain_id : position.id;
-    label.hidden = !position.visible || !domainId || !enabledDomains.has(domainId);
+  const occupied: Array<{x:number;y:number;w:number;h:number}> = [];
+  const width=stage.clientWidth;
+  positions.forEach(position => {
+    const nodeId=position.id.startsWith('node:')?position.id.slice(5):null;
+    const label=$<HTMLElement>(nodeId?`[data-node-label="${nodeId}"]`:`[data-domain-label="${position.id}"]`);
+    if(!label) return;
+    const domainId=nodeId?nodeById().get(nodeId)?.domain_id:position.id;
+    label.hidden=!position.visible||!domainId||!enabledDomains.has(domainId);
+    if(label.hidden) return;
+    const w=label.offsetWidth,h=label.offsetHeight;
+    const x=Math.max(8,Math.min(width-w-8,position.x+(nodeId?12:-w/2)));
+    let y=position.y+(nodeId?-h/2:18);
+    const collides=()=>occupied.some(r=>x<r.x+r.w+5&&x+w+5>r.x&&y<r.y+r.h+4&&y+h+4>r.y);
+    if(collides()) y+=h+5;
+    if(collides()) y-=2*(h+5);
+    if(collides() && nodeId!==selectedNode?.id) {label.hidden=true;return;}
+    label.style.translate='none';
+    label.style.transform=`translate3d(${x}px,${y}px,0)`;
+    occupied.push({x,y,w,h});
   });
 }
 

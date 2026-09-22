@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { heightAt, landscapeGeometry, populateLandscape, buildBridge, rockMaterial, makePavilion } from "./landscape";
 import type { DomainScreenPosition, GraphData, GraphDomain, GraphEdge, GraphNode, ViewMode } from "./types";
 
 interface RendererCallbacks {
@@ -24,12 +25,8 @@ interface EdgeVisual {
   target: NodeVisual;
 }
 
-const TERRAIN_CENTERS: Record<string, [number, number]> = {
-  AI: [-4.5, -3.25], BIZ: [4.4, -3.1], PRO: [-4.25, 3.35], SOC: [4.35, 3.35],
-};
-
 const STAR_CENTERS: Record<string, [number, number, number]> = {
-  AI: [3.2, -2.15, -0.25], BIZ: [3.15, 2.2, 0.3], PRO: [-3.15, 2.2, -0.1], SOC: [-3.2, -2.15, 0.25],
+  AI: [-3.0, 2.15, 0], BIZ: [3.0, 2.15, 0], PRO: [-3.0, -2.15, 0], SOC: [3.0, -2.15, 0],
 };
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
@@ -39,110 +36,17 @@ function seeded(index: number): number {
   return value - Math.floor(value);
 }
 
-function boundaryRadius(angle: number): number {
-  return 1 + Math.sin(angle * 3 + 0.4) * 0.055 + Math.cos(angle * 5 - 0.7) * 0.04 + Math.sin(angle * 8) * 0.018;
-}
-
-function terrainHeightAt(x: number, z: number, nodes: GraphNode[]): number {
-  const normalized = Math.sqrt((x / 10.7) ** 2 + (z / 8.25) ** 2);
-  if (normalized > boundaryRadius(Math.atan2(z / 8.25, x / 10.7))) return -1.2;
-  let height = 0.2 + (1 - normalized) * 0.32;
-  for (const [centerX, centerZ] of Object.values(TERRAIN_CENTERS)) {
-    const distance = (x - centerX) ** 2 + (z - centerZ) ** 2;
-    height += Math.exp(-distance / 12) * 0.7;
-  }
-  for (const node of nodes) {
-    const dx = x - node.terrain_position[0];
-    const dz = z - node.terrain_position[2];
-    const distance = dx * dx + dz * dz;
-    const peak = 0.16 + Math.max(0, node.terrain_position[1] - 0.5) * 0.44;
-    height += Math.exp(-distance / 0.62) * peak;
-  }
-  return height + Math.sin(x * 1.22 + z * 0.28) * Math.cos(z * 1.05 - x * 0.18) * 0.07;
-}
-
 function starPosition(node: GraphNode, index: number, domainIndex: number): THREE.Vector3 {
   const center = STAR_CENTERS[node.domain_id];
   const localIndex = index % 15;
   const phi = Math.acos(1 - 2 * ((localIndex + 0.6) / 15));
   const theta = localIndex * 2.399963 + domainIndex * 0.72;
-  const radius = 1.45 + seeded(index * 7 + 3) * 0.85;
+  const radius = 2.0 + seeded(index * 7 + 3) * 0.8;
   return new THREE.Vector3(
-    center[0] + Math.sin(phi) * Math.cos(theta) * radius,
-    center[1] + Math.cos(phi) * radius * 0.82,
-    center[2] + Math.sin(phi) * Math.sin(theta) * radius * 0.9,
+    (center[0] + Math.sin(phi) * Math.cos(theta) * radius) * 1.15,
+    center[1] + Math.cos(phi) * radius * 1.05,
+    center[2] + Math.sin(phi) * Math.sin(theta) * radius * 0.65,
   );
-}
-
-function makeTerrainGeometry(nodes: GraphNode[], domains: GraphDomain[]): THREE.BufferGeometry {
-  const radialSteps = 22;
-  const segments = 96;
-  const positions: number[] = [0, terrainHeightAt(0, 0, nodes) - 0.85, 0];
-  const colors: number[] = [];
-  const indices: number[] = [];
-  const darkRock = new THREE.Color("#25272a");
-  const soil = new THREE.Color("#68685f");
-  const colorByDomain = new Map(domains.map((domain) => [domain.id, new THREE.Color(domain.color)]));
-  const vertexColor = (x: number, z: number, edge = false) => {
-    if (edge) return darkRock.clone().lerp(new THREE.Color("#111114"), 0.28);
-    let nearest = domains[0];
-    let distance = Number.POSITIVE_INFINITY;
-    for (const domain of domains) {
-      const [cx, cz] = TERRAIN_CENTERS[domain.id];
-      const next = (x - cx) ** 2 + (z - cz) ** 2;
-      if (next < distance) { distance = next; nearest = domain; }
-    }
-    return soil.clone().lerp(colorByDomain.get(nearest.id)!, 0.28).offsetHSL(0, 0, seeded(Math.round((x + 12) * 31 + (z + 10) * 17)) * 0.055);
-  };
-  const centerColor = vertexColor(0, 0);
-  colors.push(centerColor.r, centerColor.g, centerColor.b);
-  for (let ring = 1; ring <= radialSteps; ring += 1) {
-    const t = ring / radialSteps;
-    for (let segment = 0; segment < segments; segment += 1) {
-      const angle = (segment / segments) * Math.PI * 2;
-      const wobble = boundaryRadius(angle);
-      const x = Math.cos(angle) * 10.7 * t * wobble;
-      const z = Math.sin(angle) * 8.25 * t * wobble;
-      positions.push(x, terrainHeightAt(x, z, nodes) - 0.85, z);
-      const color = vertexColor(x, z);
-      colors.push(color.r, color.g, color.b);
-    }
-  }
-  for (let segment = 0; segment < segments; segment += 1) {
-    const next = (segment + 1) % segments;
-    indices.push(0, 1 + next, 1 + segment);
-  }
-  for (let ring = 1; ring < radialSteps; ring += 1) {
-    const innerStart = 1 + (ring - 1) * segments;
-    const outerStart = 1 + ring * segments;
-    for (let segment = 0; segment < segments; segment += 1) {
-      const next = (segment + 1) % segments;
-      indices.push(innerStart + segment, outerStart + next, outerStart + segment);
-      indices.push(innerStart + segment, innerStart + next, outerStart + next);
-    }
-  }
-  const topStart = 1 + (radialSteps - 1) * segments;
-  const wallStart = positions.length / 3;
-  for (let segment = 0; segment < segments; segment += 1) {
-    const angle = (segment / segments) * Math.PI * 2;
-    const wobble = boundaryRadius(angle);
-    const x = Math.cos(angle) * 10.7 * wobble;
-    const z = Math.sin(angle) * 8.25 * wobble;
-    positions.push(x, -2.35 - seeded(segment * 11) * 0.42, z);
-    const color = vertexColor(x, z, true);
-    colors.push(color.r, color.g, color.b);
-  }
-  for (let segment = 0; segment < segments; segment += 1) {
-    const next = (segment + 1) % segments;
-    indices.push(topStart + segment, wallStart + next, wallStart + segment);
-    indices.push(topStart + segment, topStart + next, wallStart + next);
-  }
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-  geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
-  geometry.setIndex(indices);
-  geometry.computeVertexNormals();
-  return geometry;
 }
 
 function ellipse(radiusX: number, radiusY: number, rotation: [number, number, number], opacity: number) {
@@ -188,6 +92,13 @@ export class GraphRenderer {
   private targetZoom = 18.5;
   private transitionProgress = 1;
   private reducedMotion = false;
+  private pointers = new Map<number, {x:number;y:number}>();
+  private pinchDistance = 0;
+  private cameras = { star: { x:-.08,y:-.16,zoom:18.5 }, terrain: { x:.88,y:-.12,zoom:25 } };
+  private dirtyFrames = 120;
+  private focusFrames = 0;
+  private invalidate() { this.dirtyFrames = 90; if (!this.frame && this.active) this.animate(); }
+
 
   constructor(canvas: HTMLCanvasElement, data: GraphData, callbacks: RendererCallbacks) {
     this.canvas = canvas;
@@ -200,13 +111,18 @@ export class GraphRenderer {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.08;
+    this.renderer.toneMappingExposure = 1.0;
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.camera.position.set(0, 0.7, this.targetZoom);
     this.scene.add(this.world);
-    const ambient = new THREE.HemisphereLight("#f6ffff", "#17191c", 2.25);
-    const key = new THREE.DirectionalLight("#fff8e8", 3.2);
-    key.position.set(-7, 12, 9);
-    const rim = new THREE.DirectionalLight("#65d9ed", 1.15);
+    const ambient = new THREE.HemisphereLight("#f6ffff", "#96988a", 2.8);
+    const key = new THREE.DirectionalLight("#fff8e8", 2.5);
+    key.position.set(-8, 16, 5);
+    key.castShadow = true; key.shadow.mapSize.set(2048,2048);
+    Object.assign(key.shadow.camera,{left:-15,right:15,top:15,bottom:-15,near:1,far:50});
+    key.shadow.intensity = .55; key.shadow.radius = 3; key.shadow.bias = -.001; key.shadow.normalBias = .035;
+    const rim = new THREE.DirectionalLight("#c6d5dd", 0.4);
     rim.position.set(10, 4, -9);
     this.scene.add(ambient, key, rim);
     this.starField = this.createStarField();
@@ -214,17 +130,17 @@ export class GraphRenderer {
     this.createStarDecor();
     this.world.add(this.starDecor);
     this.terrain = new THREE.Mesh(
-      makeTerrainGeometry(data.nodes, data.domains),
-      new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.9, metalness: 0.02, transparent: true, opacity: 0 }),
+      landscapeGeometry(),
+      rockMaterial(() => this.invalidate()),
     );
     this.terrain.visible = false;
+    this.terrain.receiveShadow = true; this.terrain.castShadow = true;
     this.world.add(this.terrain, this.terrainDecor);
     this.createNodes();
     this.createEdges();
     this.createTerrainDecor();
     this.bindEvents();
     this.resize();
-    this.animate();
   }
 
   private createStarField(): THREE.Points {
@@ -238,40 +154,55 @@ export class GraphRenderer {
   private createStarDecor() {
     this.starDecor.add(ellipse(7.5, 4.85, [0.5, 0.18, -0.23], 0.14), ellipse(7.1, 4.4, [-0.38, 0.55, 0.2], 0.1), ellipse(5.7, 5.7, [0.08, 1.18, 0.08], 0.075));
     for (const domain of this.data.domains) {
-      const center = STAR_CENTERS[domain.id];
-      const ring = ellipse(2.5, 1.8, [0.34, 0.16, seeded(domain.id.charCodeAt(0)) * 0.8], 0.12);
-      (ring.material as THREE.LineBasicMaterial).color.set(domain.color);
-      ring.position.set(...center);
-      this.starDecor.add(ring);
+      const domainGroup=new THREE.Group(); domainGroup.userData.domainId=domain.id; this.starDecor.add(domainGroup);
+      const members=this.data.nodes.filter(n=>n.domain_id===domain.id);
+      const domainCenter=new THREE.Vector3(...STAR_CENTERS[domain.id]);domainCenter.x*=1.15;
+      const hub=new THREE.Mesh(new THREE.SphereGeometry(.19,20,16),new THREE.MeshBasicMaterial({color:domain.color}));hub.position.copy(domainCenter);domainGroup.add(hub);
+      const groups=[...new Set(members.map(n=>n.subdomain_name))];
+      groups.forEach(group=>{
+        const children=members.filter(n=>n.subdomain_name===group);
+        const points=children.map(n=>starPosition(n,this.data.nodes.indexOf(n),this.data.domains.indexOf(domain)));
+        const center=points.reduce((a,b)=>a.add(b),new THREE.Vector3()).multiplyScalar(1/points.length);
+        center.z-=.7;
+        const groupHub=new THREE.Mesh(new THREE.SphereGeometry(.07,12,8),new THREE.MeshBasicMaterial({color:domain.color,transparent:true,opacity:.5}));groupHub.position.copy(center);domainGroup.add(groupHub);
+        for(const point of [...points,domainCenter]) {
+          const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints([center,point]),new THREE.LineBasicMaterial({color:domain.color,transparent:true,opacity:.12,depthWrite:false}));domainGroup.add(line);
+        }
+      });
     }
   }
 
   private createNodes() {
-    const geometry = new THREE.IcosahedronGeometry(0.18, 2);
-    const haloGeometry = new THREE.RingGeometry(0.25, 0.32, 32);
+    const geometry = new THREE.SphereGeometry(0.105, 16, 12);
+    const haloGeometry = new THREE.RingGeometry(0.13, 0.145, 32);
+    const glowCanvas=document.createElement('canvas');glowCanvas.width=64;glowCanvas.height=64;
+    const ctx=glowCanvas.getContext('2d')!;const gradient=ctx.createRadialGradient(32,32,0,32,32,32);
+    gradient.addColorStop(0,'rgba(255,255,255,.6)');gradient.addColorStop(.22,'rgba(255,255,255,.15)');gradient.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=gradient;ctx.fillRect(0,0,64,64);
+    const glowTexture=new THREE.CanvasTexture(glowCanvas);
     this.data.nodes.forEach((node, index) => {
       const domain = this.domainById.get(node.domain_id)!;
-      const material = new THREE.MeshStandardMaterial({ color: domain.color, emissive: domain.color, emissiveIntensity: 0.72, roughness: 0.3, metalness: 0.06, transparent: true, opacity: 0.98 });
+      const material = new THREE.MeshStandardMaterial({ toneMapped: false, color: domain.color, emissive: domain.color, emissiveIntensity: 1.0, roughness: 1, metalness: 0, transparent: true, opacity: 0.98 });
       const mesh = new THREE.Mesh(geometry, material);
       const halo = new THREE.Mesh(haloGeometry, new THREE.MeshBasicMaterial({ color: domain.color, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false }));
       halo.position.z = -0.02;
       mesh.add(halo);
-      const baseScale = 0.9 + Math.min(node.metrics.total_incident, 7) * 0.052;
+      const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTexture,color:domain.color,transparent:true,opacity:.5,depthWrite:false,blending:THREE.AdditiveBlending}));glow.scale.set(.85,.85,1);mesh.add(glow);
+      const baseScale = 0.62 + Math.min(node.metrics.total_incident, 10) * 0.12;
       const star = starPosition(node, index, this.data.domains.findIndex((item) => item.id === node.domain_id));
       const x = node.terrain_position[0];
       const z = node.terrain_position[2];
-      const terrain = new THREE.Vector3(x, terrainHeightAt(x, z, this.data.nodes) - 0.42, z);
+      const terrain = new THREE.Vector3(x, heightAt(x, z) + 0.28, z);
       mesh.scale.setScalar(baseScale);
       mesh.position.copy(star);
       mesh.userData.nodeId = node.id;
       this.world.add(mesh);
       const platform = new THREE.Group();
-      const base = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.46, 0.22, 18), new THREE.MeshStandardMaterial({ color: "#2e3132", roughness: 0.8, metalness: 0.12 }));
-      const platformRim = new THREE.Mesh(new THREE.TorusGeometry(0.35, 0.035, 8, 28), new THREE.MeshBasicMaterial({ color: domain.color, transparent: true, opacity: 0.78 }));
+      const base = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.28, 0.12, 32), new THREE.MeshStandardMaterial({ color: "#a6a796", roughness: 0.8, metalness: 0.12 }));
+      const platformRim = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.025, 8, 32), new THREE.MeshBasicMaterial({ color: domain.color, transparent: true, opacity: 0.78 }));
       platformRim.rotation.x = Math.PI / 2;
       platformRim.position.y = 0.12;
       platform.add(base, platformRim);
-      platform.position.set(x, terrain.y - 0.29, z);
+      platform.position.set(x, terrain.y - 0.16, z);
       platform.visible = false;
       this.terrainDecor.add(platform);
       this.nodes.set(node.id, { node, mesh, halo, platform, star, terrain, baseScale });
@@ -295,86 +226,33 @@ export class GraphRenderer {
   }
 
   private createTerrainDecor() {
-    const trunks = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.035, 0.05, 0.26, 5), new THREE.MeshStandardMaterial({ color: "#35322b", roughness: 1 }), 84);
-    const crowns = new THREE.InstancedMesh(new THREE.ConeGeometry(0.18, 0.55, 6), new THREE.MeshStandardMaterial({ color: "#294c3b", roughness: 0.95 }), 84);
-    const trunkMatrix = new THREE.Matrix4();
-    const crownMatrix = new THREE.Matrix4();
-    let placed = 0;
-    for (let index = 0; index < 160 && placed < 84; index += 1) {
-      const angle = seeded(index * 5) * Math.PI * 2;
-      const radius = 2.2 + seeded(index * 5 + 1) * 7.1;
-      const x = Math.cos(angle) * radius * 1.18;
-      const z = Math.sin(angle) * radius * 0.83;
-      const nearNode = this.data.nodes.some((node) => Math.hypot(x - node.terrain_position[0], z - node.terrain_position[2]) < 0.72);
-      if (nearNode || terrainHeightAt(x, z, this.data.nodes) < -0.3) continue;
-      const y = terrainHeightAt(x, z, this.data.nodes) - 0.84;
-      const scale = 0.72 + seeded(index * 5 + 2) * 0.75;
-      trunkMatrix.compose(new THREE.Vector3(x, y + 0.13 * scale, z), new THREE.Quaternion(), new THREE.Vector3(scale, scale, scale));
-      crownMatrix.compose(new THREE.Vector3(x, y + 0.5 * scale, z), new THREE.Quaternion(), new THREE.Vector3(scale, scale, scale));
-      trunks.setMatrixAt(placed, trunkMatrix);
-      crowns.setMatrixAt(placed, crownMatrix);
-      placed += 1;
+    populateLandscape(this.terrainDecor, [...this.nodes.values()].map(v => v.terrain));
+    const bridges = [[[-2.6,-1.7],[2.3,-1.6]],[[-2.7,4.5],[2.5,2.6]]];
+    for (const [a,b] of bridges) {
+      const start = new THREE.Vector3(a[0],heightAt(a[0],a[1])+.15,a[1]);
+      const end = new THREE.Vector3(b[0],heightAt(b[0],b[1])+.15,b[1]);
+      this.terrainDecor.add(buildBridge(start,end));
     }
-    trunks.count = placed;
-    crowns.count = placed;
-    this.terrainDecor.add(trunks, crowns);
-    const centerMarker = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 1.05, 0.25, 32), new THREE.MeshStandardMaterial({ color: "#34373a", roughness: 0.58, metalness: 0.25 }));
-    centerMarker.position.set(0, terrainHeightAt(0, 0, this.data.nodes) - 0.94, 0);
-    const centerRing = new THREE.Mesh(new THREE.TorusGeometry(0.86, 0.035, 8, 48), new THREE.MeshBasicMaterial({ color: "#f1f1ef", transparent: true, opacity: 0.4 }));
-    centerRing.rotation.x = Math.PI / 2;
-    centerRing.position.y = 0.14;
-    centerMarker.add(centerRing);
-    this.terrainDecor.add(centerMarker);
-
-    const ridgeMaterial = new THREE.MeshStandardMaterial({ color: "#4a4d49", roughness: 0.96, flatShading: true });
-    Object.entries(TERRAIN_CENTERS).forEach(([domainId, [cx, cz]], domainIndex) => {
-      const domain = this.domainById.get(domainId)!;
-      for (let peak = 0; peak < 3; peak += 1) {
-        const angle = domainIndex * 1.45 + peak * 2.2;
-        const x = cx + Math.cos(angle) * (0.8 + peak * 0.28);
-        const z = cz + Math.sin(angle) * (0.65 + peak * 0.24);
-        const rock = new THREE.Mesh(new THREE.ConeGeometry(0.55 - peak * 0.08, 1.25 - peak * 0.16, 7), ridgeMaterial.clone());
-        (rock.material as THREE.MeshStandardMaterial).color.lerp(new THREE.Color(domain.color), 0.13);
-        rock.position.set(x, terrainHeightAt(x, z, this.data.nodes) - 0.2, z);
-        rock.rotation.y = seeded(domainIndex * 10 + peak) * Math.PI;
-        this.terrainDecor.add(rock);
-      }
-    });
-
-    let bridgeCount = 0;
-    this.data.edges.forEach((edge, index) => {
-      const source = this.nodes.get(edge.source);
-      const target = this.nodes.get(edge.target);
-      if (!source || !target) return;
-      const crossDomain = source.node.domain_id !== target.node.domain_id;
-      if (!crossDomain && index % 7 !== 0) return;
-      if (crossDomain && bridgeCount > 4) return;
-      if (crossDomain) bridgeCount += 1;
-      const start = source.terrain.clone();
-      const end = target.terrain.clone();
-      start.y -= 0.08;
-      end.y -= 0.08;
-      const middle = start.clone().lerp(end, 0.5);
-      middle.y += crossDomain ? 0.38 : 0.16;
-      const curve = new THREE.QuadraticBezierCurve3(start, middle, end);
-      const route = new THREE.Mesh(
-        new THREE.TubeGeometry(curve, 24, crossDomain ? 0.035 : 0.022, 6, false),
-        new THREE.MeshStandardMaterial({ color: crossDomain ? "#4e5049" : "#7d8175", roughness: 0.9, metalness: 0.04 }),
-      );
-      this.terrainDecor.add(route);
-    });
+    for(const [x,z] of [[-3.9,-3.3],[4.2,-2.8],[-4.0,3.1],[4.6,3.8]]) this.terrainDecor.add(makePavilion(x,z));
     this.terrainDecor.visible = false;
   }
 
   private bindEvents() {
-    this.canvas.addEventListener("pointerdown", (event) => { this.dragging = true; this.dragged = false; this.previousPointer = { x: event.clientX, y: event.clientY }; this.canvas.setPointerCapture(event.pointerId); });
+    this.canvas.addEventListener("pointerdown", (event) => { this.invalidate(); this.pointers.set(event.pointerId,{x:event.clientX,y:event.clientY}); if(this.pointers.size === 2) { const [a,b]=[...this.pointers.values()]; this.pinchDistance=Math.hypot(a.x-b.x,a.y-b.y); } this.dragging = true; this.dragged = false; this.previousPointer = { x: event.clientX, y: event.clientY }; this.canvas.setPointerCapture(event.pointerId); });
     this.canvas.addEventListener("pointermove", (event) => {
+      this.invalidate();
+      if(this.pointers.has(event.pointerId)) this.pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});
+      if(this.pointers.size===2) {
+        const [a,b]=[...this.pointers.values()], distance=Math.hypot(a.x-b.x,a.y-b.y);
+        this.targetZoom=clamp(this.targetZoom*this.pinchDistance/Math.max(distance,1),11.5,42);
+        this.pinchDistance=distance;this.dragged=true;return;
+      }
       if (this.dragging) {
         const dx = event.clientX - this.previousPointer.x;
         const dy = event.clientY - this.previousPointer.y;
         if (Math.abs(dx) + Math.abs(dy) > 2) this.dragged = true;
         this.targetRotation.y += dx * 0.004;
-        this.targetRotation.x = clamp(this.targetRotation.x + dy * 0.0035, -1.2, 0.68);
+        this.targetRotation.x = clamp(this.targetRotation.x + dy * 0.0035, this.view === "terrain" ? 0.18 : -1.2, this.view === "terrain" ? 1.35 : 0.68);
         this.previousPointer = { x: event.clientX, y: event.clientY };
         return;
       }
@@ -384,12 +262,12 @@ export class GraphRenderer {
       if (nodeId !== this.hoveredId) { this.hoveredId = nodeId; this.callbacks.onHover(hit?.node ?? null, { x: event.clientX, y: event.clientY }); this.canvas.style.cursor = hit ? "pointer" : "grab"; }
       else if (hit) this.callbacks.onHover(hit.node, { x: event.clientX, y: event.clientY });
     });
-    const finishPointer = (event: PointerEvent) => { if (!this.dragging) return; this.dragging = false; if (!this.dragged) { this.updatePointer(event); this.callbacks.onSelect(this.pickNode()?.node ?? null); } };
+    const finishPointer = (event: PointerEvent) => { this.pointers.delete(event.pointerId); if(this.pointers.size) { this.previousPointer=[...this.pointers.values()][0]; return; } if (!this.dragging) return; this.dragging = false; if (!this.dragged) { this.updatePointer(event); this.callbacks.onSelect(this.pickNode()?.node ?? null); } };
     this.canvas.addEventListener("pointerup", finishPointer);
-    this.canvas.addEventListener("pointercancel", () => { this.dragging = false; });
+    this.canvas.addEventListener("pointercancel", () => { this.dragging = false; this.pointers.clear(); });
     this.canvas.addEventListener("pointerleave", () => { if (!this.dragging) { this.hoveredId = null; this.callbacks.onHover(null); } });
-    this.canvas.addEventListener("wheel", (event) => { event.preventDefault(); this.targetZoom = clamp(this.targetZoom + event.deltaY * 0.011, 11.5, 29); }, { passive: false });
-    window.addEventListener("resize", () => this.resize());
+    this.canvas.addEventListener("wheel", (event) => { event.preventDefault(); this.invalidate(); this.targetZoom = clamp(this.targetZoom + event.deltaY * 0.011, 11.5, 42); }, { passive: false });
+    new ResizeObserver(() => this.resize()).observe(this.canvas);
     document.addEventListener("visibilitychange", () => { this.active = !document.hidden; if (this.active && !this.frame) this.animate(); });
   }
 
@@ -408,7 +286,8 @@ export class GraphRenderer {
 
   private animate = () => {
     if (!this.active) { this.frame = 0; return; }
-    this.frame = window.requestAnimationFrame(this.animate);
+    this.frame = 0;
+    if (this.dirtyFrames-- > 0) this.frame = window.requestAnimationFrame(this.animate);
     const ease = this.reducedMotion ? 1 : 0.085;
     this.world.rotation.x += (this.targetRotation.x - this.world.rotation.x) * ease;
     this.world.rotation.y += (this.targetRotation.y - this.world.rotation.y) * ease;
@@ -418,17 +297,39 @@ export class GraphRenderer {
     this.updateEdges();
     this.updateVisualState();
     this.updateEnvironment();
+    if(this.focusFrames-- > 0 && this.selectedId) this.keepSelectionVisible();
     this.renderer.render(this.scene, this.camera);
     this.updateDomainLabels();
   };
+
+  private keepSelectionVisible() {
+    const visual=this.nodes.get(this.selectedId!); if(!visual) return;
+    const rect=this.canvas.getBoundingClientRect();
+    const panel=document.querySelector('#node-details')!.getBoundingClientRect();
+    const mobile=window.innerWidth<768;
+    this.world.updateMatrixWorld(true);
+    const point=visual.mesh.position.clone().applyMatrix4(this.world.matrixWorld).project(this.camera);
+    const x=(point.x*.5+.5)*rect.width,y=(-point.y*.5+.5)*rect.height;
+    const top=mobile?25:90, bottom=mobile?Math.max(80,panel.top-rect.top-35):rect.height-90;
+    const left=mobile?35:Math.min(350,rect.width*.35),right=rect.width-140;
+    let dx=0,dy=0;
+    if(mobile) {dx=rect.width*.5-x;dy=(top+bottom)*.5-y;}
+    else {
+      if(x<left) dx=left-x; if(x>right) dx=right-x;
+      if(y<top) dy=top-y; if(y>bottom) dy=bottom-y;
+      if(this.view==='terrain' && x>panel.left-rect.left-80 && y>panel.top-rect.top-55) dy=panel.top-rect.top-70-y;
+    }
+    const unit=2*Math.tan(THREE.MathUtils.degToRad(this.camera.fov/2))*this.camera.position.z/rect.height;
+    this.world.position.x+=dx*unit*.18;this.world.position.y-=dy*unit*.18;
+  }
 
   private updateEdges() {
     for (const visual of this.edges) {
       const start = visual.source.mesh.position;
       const end = visual.target.mesh.position;
       const middle = start.clone().lerp(end, 0.5);
-      if (this.view === "star") middle.normalize().multiplyScalar(Math.max(start.length(), end.length()) + 0.65);
-      else middle.y += 0.42 + start.distanceTo(end) * 0.045;
+      if (this.view === "star") middle.z += visual.source.node.domain_id === visual.target.node.domain_id ? 0 : .35;
+      else middle.y += 0.24 + start.distanceTo(end) * 0.025;
       const positions = visual.line.geometry.getAttribute("position") as THREE.BufferAttribute;
       new THREE.QuadraticBezierCurve3(start, middle, end).getPoints(12).forEach((point, index) => positions.setXYZ(index, point.x, point.y, point.z));
       positions.needsUpdate = true;
@@ -437,6 +338,7 @@ export class GraphRenderer {
   }
 
   private updateVisualState() {
+    for(const child of this.starDecor.children) if(child.userData.domainId) child.visible=this.enabledDomains.has(child.userData.domainId);
     const neighborIds = new Set<string>();
     if (this.selectedId) {
       neighborIds.add(this.selectedId);
@@ -453,6 +355,8 @@ export class GraphRenderer {
       const selectedScale = visual.node.id === this.selectedId ? 1.65 : visual.node.id === this.hoveredId ? 1.3 : 1;
       const targetScale = visual.baseScale * selectedScale * (this.view === "terrain" ? 0.86 : 1);
       visual.mesh.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.14);
+      const glow=visual.mesh.children.find(c=>c instanceof THREE.Sprite) as THREE.Sprite;
+      (glow.material as THREE.SpriteMaterial).opacity=active ? .5 : .06;
       material.emissiveIntensity = visual.node.id === this.selectedId ? 1.8 : visual.node.id === this.hoveredId ? 1.2 : 0.72;
       (visual.halo.material as THREE.MeshBasicMaterial).opacity = active ? (visual.node.id === this.selectedId ? 0.72 : 0.2) : 0.04;
     }
@@ -462,15 +366,16 @@ export class GraphRenderer {
       if (!visible) continue;
       const connected = this.selectedId && (visual.edge.source === this.selectedId || visual.edge.target === this.selectedId);
       const material = visual.line.material as THREE.LineBasicMaterial;
-      const base = this.view === "terrain" ? 0.26 : visual.edge.type === "related_to" ? 0.16 : visual.edge.type === "requires" ? 0.24 : 0.14;
+      const base = this.view === "terrain" ? 0.38 : visual.edge.type === "related_to" ? 0.24 : visual.edge.type === "requires" ? 0.44 : 0.3;
       material.opacity += ((this.selectedId ? (connected ? 0.9 : 0.018) : base) - material.opacity) * 0.14;
-      material.color.set(connected ? this.domainById.get(visual.source.node.domain_id)?.color ?? "#f1f1ef" : this.view === "terrain" ? "#565e58" : "#aebfc2");
+      material.color.set(visual.source.node.domain_id === visual.target.node.domain_id || connected ? this.domainById.get(visual.source.node.domain_id)!.color : this.view === "terrain" ? "#b8c2a5" : "#b2c1c1");
     }
   }
 
   private updateEnvironment() {
     const terrainMaterial = this.terrain.material as THREE.MeshStandardMaterial;
     const starMaterial = this.starField.material as THREE.PointsMaterial;
+    if(this.view === "terrain") terrainMaterial.userData.loadTexture();
     terrainMaterial.opacity = this.view === "terrain" ? Math.min(1, terrainMaterial.opacity + 0.12) : 0;
     starMaterial.opacity += ((this.view === "star" ? 0.28 : 0.025) - starMaterial.opacity) * 0.1;
     this.terrain.visible = this.view === "terrain";
@@ -483,26 +388,20 @@ export class GraphRenderer {
     const positions: DomainScreenPosition[] = this.data.domains.map((domain) => {
       const members = [...this.nodes.values()].filter((visual) => visual.node.domain_id === domain.id && visual.mesh.visible);
       const center = members.reduce((total, visual) => total.add(visual.mesh.position), new THREE.Vector3()).multiplyScalar(1 / Math.max(members.length, 1));
-      center.y += this.view === "terrain" ? 1.25 : 0;
+      center.y += this.view === "terrain" ? .8 : -.45;
       center.applyMatrix4(this.world.matrixWorld).project(this.camera);
       return { id: domain.id, kind: "domain", x: (center.x * 0.5 + 0.5) * rect.width, y: (-center.y * 0.5 + 0.5) * rect.height, visible: members.length > 0 && center.z > -1 && center.z < 1 };
     });
-    for (const domain of this.data.domains) {
-      const keyNodes = [...this.nodes.values()]
-        .filter((visual) => visual.node.domain_id === domain.id)
-        .sort((a, b) => b.node.metrics.total_incident - a.node.metrics.total_incident)
-        .slice(0, 3);
-      keyNodes.forEach((visual) => {
-        const point = visual.mesh.position.clone();
-        point.applyMatrix4(this.world.matrixWorld).project(this.camera);
-        positions.push({
-          id: `node:${visual.node.id}`,
-          kind: "node",
-          x: (point.x * 0.5 + 0.5) * rect.width,
-          y: (-point.y * 0.5 + 0.5) * rect.height,
-          visible: visual.mesh.visible && point.z > -1 && point.z < 1,
-        });
-      });
+    const keyIds=new Set<string>();
+    if(this.selectedId) {
+      keyIds.add(this.selectedId);
+      for(const {edge} of this.edges) { if(edge.source===this.selectedId) keyIds.add(edge.target); if(edge.target===this.selectedId) keyIds.add(edge.source); }
+    } else {
+      for(const domain of this.data.domains) [...this.nodes.values()].filter(v=>v.node.domain_id===domain.id).sort((a,b)=>b.node.metrics.total_incident-a.node.metrics.total_incident).slice(0,window.innerWidth<768?1:3).forEach(v=>keyIds.add(v.node.id));
+    }
+    for(const visual of this.nodes.values()) {
+      const point=visual.mesh.position.clone().applyMatrix4(this.world.matrixWorld).project(this.camera);
+      positions.push({id:`node:${visual.node.id}`,kind:'node',x:(point.x*.5+.5)*rect.width,y:(-point.y*.5+.5)*rect.height,visible:keyIds.has(visual.node.id)&&visual.mesh.visible&&point.z>-1&&point.z<1});
     }
     this.callbacks.onLabels(positions);
   }
@@ -513,27 +412,39 @@ export class GraphRenderer {
     this.renderer.setSize(rect.width, rect.height, false);
     this.camera.aspect = rect.width / rect.height;
     this.camera.updateProjectionMatrix();
-    this.world.position.x = rect.width > 900 ? 2.25 : 0;
+    const desktop = window.innerWidth >= 768;
+    this.world.position.x = desktop ? (this.view === 'terrain' ? 2.7 : 1.5) : 0;
+    this.world.position.y = this.view === 'terrain' ? 1.15 : .35;
+    this.world.scale.setScalar(desktop ? Math.min(1,Math.max(.64,(rect.width-230)/950)) : 1);
+    this.focusFrames=this.selectedId?70:0;
+    // Narrow viewports need a wider field of view to retain the whole landscape.
+    this.camera.fov = desktop ? 40 : 62;
+    this.camera.updateProjectionMatrix();
+    this.invalidate();
   }
 
   setView(view: ViewMode, immediate = false) {
     if (view === this.view && !immediate) return;
+    this.cameras[this.view] = { ...this.targetRotation, zoom:this.targetZoom };
     this.view = view;
     this.transitionProgress = immediate ? 1 : 0;
-    this.targetRotation = view === "star" ? { x: -0.08, y: -0.16 } : { x: 0.66, y: -0.16 };
-    this.targetZoom = view === "star" ? 18.5 : 20.5;
+    this.targetRotation = { x:this.cameras[view].x, y:this.cameras[view].y };
+    this.targetZoom = this.cameras[view].zoom;
+    this.resize();
     if (immediate) for (const visual of this.nodes.values()) visual.mesh.position.copy(view === "star" ? visual.star : visual.terrain);
   }
 
-  setSelected(nodeId: string | null) { this.selectedId = nodeId; }
+  setSelected(nodeId: string | null) { this.selectedId = nodeId; this.resize(); this.focusFrames=nodeId?70:0; this.invalidate(); }
 
   setEnabledDomains(domains: Set<string>) {
+    this.invalidate();
     this.enabledDomains.clear();
     domains.forEach((domain) => this.enabledDomains.add(domain));
   }
 
   resetView() {
-    this.targetRotation = this.view === "star" ? { x: -0.08, y: -0.16 } : { x: 0.66, y: -0.16 };
-    this.targetZoom = this.view === "star" ? 18.5 : 20.5;
+    this.invalidate();
+    this.targetRotation = this.view === "star" ? { x: -0.08, y: -0.16 } : { x: 0.88, y: -0.12 };
+    this.targetZoom = this.view === "star" ? 18.5 : 25;
   }
 }

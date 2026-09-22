@@ -20,8 +20,10 @@ const description = "从真实任务出发，看见能力之间的关系与成�
     </header>
 
     <section class="intro-panel" aria-labelledby="page-title">
-      <p class="eyebrow">青少年 AI 时代成长图谱</p>
-      <h1 id="page-title">探索能力之间的<br />真实关系</h1>
+      <p class="eyebrow">成长始于真实的能力</p>
+      <div class="terrain-wordmark" aria-hidden="true">Richology</div>
+      <h1 id="page-title">青少年 AI 时代成长图谱</h1>
+      <p class="intro-subtitle">探索能力之间的真实关系</p>
       <p class="intro-copy">从真实任务出发，看见能力如何相互支撑，又如何连接更大的成长可能。</p>
       <p class="data-counts">
         {counts.domains} 个领域 · {counts.subdomains} 个能力群 · {counts.competencies} 项能力 · {counts.relationships} 条关系
@@ -57,9 +59,10 @@ const description = "从真实任务出发，看见能力之间的关系与成�
           <div><dt><i class="line-supports"></i>支持</dt><dd>A 有助于 B，但不是必要条件</dd></div>
           <div><dt><i class="line-related"></i>相关</dt><dd>两项能力存在重要联系</dd></div>
         </dl>
+        <p>星图中的淡色细线表示领域归属，不计入能力关系。</p>
       </details>
 
-      <p class="terrain-note" id="terrain-note" hidden>地形用于呈现能力结构，不代表固定等级或唯一路径。</p>
+      <p class="terrain-note" id="terrain-note" hidden>地形呈现能力结构，不代表等级或唯一路径。</p>
     </section>
 
     <GraphCanvas />
