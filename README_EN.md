@@ -71,9 +71,24 @@ methodology/     Course, project, and assessment methods
 examples/        Course mapping and evidence examples
 rfcs/            Public proposals for significant changes
 tools/           Validation, derived-data, and release-manifest tools
+site/            Dual-view constellation and terrain website
 ```
 
 The machine-readable layer separates nodes, relationships, external-framework alignments, learning paths, audience guidance, and evidence-elicitation tasks. Complete-file JSON Schemas and reproducible hashes make it suitable as a data source for course tools, search, and 2D or 3D graph interfaces. Applications must preserve the project’s minor-protection and non-psychometric boundaries.
+
+## Website Development
+
+The website uses Astro, TypeScript, and Three.js. Its deterministic constellation and terrain coordinates are generated from the source graph data at build time, so the site does not maintain a second copy of competency content.
+
+```bash
+cd site
+npm install
+npm run dev
+npm run build
+npm run test:e2e
+```
+
+See [`site/README.md`](site/README.md) for details.
 
 ## Contributing
 

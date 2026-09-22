@@ -7,6 +7,7 @@
 - [`build_competency_guidance.py`](build_competency_guidance.py)：检查或重建逐节点证据任务与发展支持数据。
 - [`build_manifest.py`](build_manifest.py)：检查或重建统计、字节数和 SHA-256 文件清单。
 - [`build_graph_metrics.py`](build_graph_metrics.py)：检查或重建网站可用的图与路径指标。
+- [`build_web_graph.py`](build_web_graph.py)：从已验证源数据生成网站使用的紧凑数据和确定性双视图坐标。
 
 ```bash
 python3 tools/validator/validate.py
@@ -17,6 +18,8 @@ python3 tools/build_competency_guidance.py
 python3 tools/build_competency_guidance.py --write
 python3 tools/build_graph_metrics.py
 python3 tools/build_graph_metrics.py --write
+python3 tools/build_web_graph.py
+python3 -m unittest tools/test_build_web_graph.py
 python3 tools/build_manifest.py
 python3 tools/build_manifest.py --write
 ```

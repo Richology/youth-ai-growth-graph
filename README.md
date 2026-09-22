@@ -72,9 +72,24 @@ methodology/     课程、项目与评价方法
 examples/        课程映射、项目证据与家长报告示例
 rfcs/            重要改动的公开提案
 tools/           校验、派生数据与发布清单工具
+site/            星图与地形双视图网站
 ```
 
 机器可读层已将节点、关系、外部框架映射、学习路径、受众说明和证据任务分离，并为完整文件提供 JSON Schema 与可复现哈希。这些数据可直接用于课程工具、2D/3D 关系图、搜索和面向不同受众的解释界面；应用仍须保留本项目的未成年人保护与非标准化测评边界。
+
+## 网站开发
+
+网站使用 Astro、TypeScript 与 Three.js，构建时从源数据生成确定性的星图和地形坐标。网站不维护第二份能力内容。
+
+```bash
+cd site
+npm install
+npm run dev
+npm run build
+npm run test:e2e
+```
+
+更多说明参见 [`site/README.md`](site/README.md)。
 
 ## 如何参与
 

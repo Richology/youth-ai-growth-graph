@@ -1,0 +1,78 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import GraphCanvas from "../components/GraphCanvas.astro";
+import NodeDetails from "../components/NodeDetails.astro";
+import AccessibleGraphIndex from "../components/AccessibleGraphIndex.astro";
+import "../styles/global.css";
+import graph from "../../public/data/graph.json";
+
+const counts = graph.meta.counts;
+const description = "从真实任务出发，看见能力之间的关系与成长路径。Richology 青少年 AI 时代成长图谱公开浏览器。";
+---
+<BaseLayout title="Richology 青少年 AI 时代成长图谱" description={description}>
+  <main class="app-shell" id="app-shell">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Richology 青少年 AI 时代成长图谱首页">Richology</a>
+      <nav aria-label="辅助链接">
+        <a href="https://github.com/Richology/youth-ai-growth-graph/blob/main/specification/graph-specification.md">方法与边界</a>
+        <a href="https://github.com/Richology/youth-ai-growth-graph">开放数据 ↗</a>
+      </nav>
+    </header>
+
+    <section class="intro-panel" aria-labelledby="page-title">
+      <p class="eyebrow">青少年 AI 时代成长图谱</p>
+      <h1 id="page-title">探索能力之间的<br />真实关系</h1>
+      <p class="intro-copy">从真实任务出发，看见能力如何相互支撑，又如何连接更大的成长可能。</p>
+      <p class="data-counts">
+        {counts.domains} 个领域 · {counts.subdomains} 个能力群 · {counts.competencies} 项能力 · {counts.relationships} 条关系
+      </p>
+
+      <div class="view-control" aria-label="图谱视图">
+        <span>视图</span>
+        <div role="group" aria-label="选择图谱视图">
+          <button type="button" data-view-button="star" aria-pressed="true">星图</button>
+          <button type="button" data-view-button="terrain" aria-pressed="false">地形</button>
+        </div>
+      </div>
+
+      <fieldset class="domain-filters">
+        <legend>能力领域</legend>
+        {graph.domains.map((domain) => (
+          <button
+            type="button"
+            data-domain-filter={domain.id}
+            data-marker={domain.marker}
+            aria-pressed="true"
+            style={`--domain-color:${domain.color}`}
+          >
+            <i aria-hidden="true"></i>{domain.name}
+          </button>
+        ))}
+      </fieldset>
+
+      <details class="relationship-legend">
+        <summary>关系说明</summary>
+        <dl>
+          <div><dt><i class="line-requires"></i>需要</dt><dd>A 通常需要先具备 B</dd></div>
+          <div><dt><i class="line-supports"></i>支持</dt><dd>A 有助于 B，但不是必要条件</dd></div>
+          <div><dt><i class="line-related"></i>相关</dt><dd>两项能力存在重要联系</dd></div>
+        </dl>
+      </details>
+
+      <p class="terrain-note" id="terrain-note" hidden>地形用于呈现能力结构，不代表固定等级或唯一路径。</p>
+    </section>
+
+    <GraphCanvas />
+    <NodeDetails />
+    <AccessibleGraphIndex />
+
+    <footer class="site-footer">
+      <span>图谱 {graph.meta.graph_version}</span>
+      <span>公开草案，不用于标准化测评、排名或筛选</span>
+      <a href="https://github.com/Richology/youth-ai-growth-graph/blob/main/LICENSES/README.md">开放许可</a>
+    </footer>
+  </main>
+  <script>
+    import "../scripts/graph-app";
+  </script>
+</BaseLayout>

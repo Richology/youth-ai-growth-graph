@@ -1,0 +1,25 @@
+{
+  "name": "richology-youth-ai-growth-graph-site",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "data": "python3 ../tools/build_web_graph.py",
+    "dev": "npm run data && astro dev",
+    "check": "npm run data && astro check",
+    "build": "npm run data && astro check && astro build",
+    "preview": "astro preview",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "astro": "^7.3.3",
+    "three": "^0.180.0",
+    "typescript": "^5.9.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.1",
+    "@types/node": "^24.5.2",
+    "@types/three": "^0.180.0"
+  }
+}

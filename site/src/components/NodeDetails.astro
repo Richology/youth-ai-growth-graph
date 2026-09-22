@@ -1,0 +1,59 @@
+<aside class="node-details" id="node-details" aria-labelledby="detail-title" aria-hidden="true">
+  <div class="detail-grab" aria-hidden="true"></div>
+  <div class="detail-head">
+    <button class="detail-back" id="detail-back" type="button" hidden aria-label="返回上一个能力节点">←</button>
+    <div class="detail-heading">
+      <span class="detail-domain" id="detail-domain"></span>
+      <h2 id="detail-title">能力详情</h2>
+      <p class="detail-meta" id="detail-meta"></p>
+    </div>
+    <button class="detail-close" id="detail-close" type="button" aria-label="关闭能力详情">×</button>
+  </div>
+
+  <p class="detail-definition" id="detail-definition"></p>
+
+  <div class="relation-summary" id="relation-summary"></div>
+
+  <div class="detail-tabs" role="tablist" aria-label="能力详情栏目">
+    <button type="button" role="tab" aria-selected="true" aria-controls="panel-overview" id="tab-overview">概览</button>
+    <button type="button" role="tab" aria-selected="false" aria-controls="panel-levels" id="tab-levels">熟练度</button>
+    <button type="button" role="tab" aria-selected="false" aria-controls="panel-evidence" id="tab-evidence">证据与边界</button>
+  </div>
+
+  <div class="detail-scroll">
+    <section role="tabpanel" id="panel-overview" aria-labelledby="tab-overview">
+      <div class="detail-section">
+        <h3>可观察行为</h3>
+        <ul id="detail-behaviors"></ul>
+      </div>
+      <div class="detail-section">
+        <h3>能力边界</h3>
+        <ul id="detail-boundaries"></ul>
+      </div>
+      <div class="detail-section">
+        <h3>人生课题映射</h3>
+        <div class="life-links" id="detail-life"></div>
+      </div>
+      <div class="detail-section">
+        <div class="section-heading-row">
+          <h3>关系路径</h3>
+          <button type="button" class="text-button" id="show-prerequisites">查看完整前置链</button>
+        </div>
+        <div class="relation-groups" id="detail-relations"></div>
+      </div>
+    </section>
+
+    <section role="tabpanel" id="panel-levels" aria-labelledby="tab-levels" hidden>
+      <p class="section-note">熟练度描述的是特定情境中的表现，不代表年龄、人格或固定水平。</p>
+      <ol class="level-list" id="detail-levels"></ol>
+    </section>
+
+    <section role="tabpanel" id="panel-evidence" aria-labelledby="tab-evidence" hidden>
+      <div class="detail-section evidence-strong"><h3>较强证据</h3><ul id="evidence-strong"></ul></div>
+      <div class="detail-section"><h3>较弱证据与反证</h3><ul id="evidence-weak"></ul></div>
+      <div class="detail-section"><h3>判断注意事项</h3><ul id="evidence-cautions"></ul></div>
+      <div class="detail-section"><h3>来源</h3><ul class="source-list" id="detail-sources"></ul></div>
+      <div class="detail-section"><h3>版本记录</h3><ul class="version-list" id="detail-versions"></ul></div>
+    </section>
+  </div>
+</aside>

@@ -1,0 +1,41 @@
+<section class="graph-stage" id="graph-stage" aria-label="可交互能力图谱" data-view="star">
+  <canvas id="graph-canvas" tabindex="0" aria-describedby="graph-instructions">
+    当前浏览器无法显示交互图谱，请使用下方的文本能力索引。
+  </canvas>
+
+  <div class="domain-labels" aria-hidden="true">
+    <span class="domain-label" data-domain-label="AI">AI 技能化</span>
+    <span class="domain-label" data-domain-label="BIZ">商业化</span>
+    <span class="domain-label" data-domain-label="PRO">职业化</span>
+    <span class="domain-label" data-domain-label="SOC">社会化</span>
+  </div>
+
+  <div class="graph-loading" id="graph-loading" role="status">
+    <span class="loading-mark" aria-hidden="true"></span>
+    <span>正在构建能力图谱…</span>
+  </div>
+
+  <div class="graph-error" id="graph-error" hidden role="alert">
+    <strong>图谱数据暂时无法加载</strong>
+    <span>你仍然可以查看开放数据，或稍后重试。</span>
+    <div>
+      <button type="button" id="retry-graph">重新加载</button>
+      <a href="https://github.com/Richology/youth-ai-growth-graph/tree/main/data">查看开放数据</a>
+    </div>
+  </div>
+
+  <div class="graph-tooltip" id="graph-tooltip" hidden role="tooltip">
+    <span class="tooltip-domain"></span>
+    <strong class="tooltip-name"></strong>
+    <span class="tooltip-definition"></span>
+  </div>
+
+  <p class="graph-instructions" id="graph-instructions">
+    <span>拖动旋转</span><i></i><span>滚轮或双指缩放</span><i></i><span>点击节点查看详情</span>
+  </p>
+
+  <button class="reset-view" id="reset-view" type="button" aria-label="重置图谱视角">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.7 7.8A8 8 0 1 1 4 13M4 4v5h5" /></svg>
+    重置视角
+  </button>
+</section>
