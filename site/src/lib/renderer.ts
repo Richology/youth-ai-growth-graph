@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { heightAt, landscapeGeometry, populateLandscape, buildBridge, rockMaterial, makePavilion, terrainSite, buildFootpath } from "./landscape";
+import { starLayout, STAR_CENTERS } from "./star-layout";
 import type { DomainScreenPosition, GraphData, GraphDomain, GraphEdge, GraphNode, ViewMode } from "./types";
 
 interface RendererCallbacks {
@@ -26,28 +27,11 @@ interface EdgeVisual {
   terrainPoints: THREE.Vector3[];
 }
 
-const STAR_CENTERS: Record<string, [number, number, number]> = {
-  AI: [-2.65, 1.9, .15], BIZ: [2.75, 1.65, -.35], PRO: [-2.9, -1.8, .35], SOC: [2.8, -2.05, .05],
-};
-
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
 function seeded(index: number): number {
   const value = Math.sin(index * 12.9898 + 78.233) * 43758.5453;
   return value - Math.floor(value);
-}
-
-function starPosition(node: GraphNode, index: number, domainIndex: number): THREE.Vector3 {
-  const center = STAR_CENTERS[node.domain_id];
-  const localIndex = index % 15;
-  // Uneven rings with a shared middle ground, rather than four isolated spheres.
-  const theta = localIndex * 2.399963 + domainIndex * .65;
-  const radius = Math.sqrt((localIndex + 1.8) / 16) * 2.75;
-  return new THREE.Vector3(
-    (center[0] + Math.cos(theta) * radius) * 1.16,
-    center[1] + Math.sin(theta) * radius * .83,
-    center[2] + (seeded(index * 9 + 2) - .5) * 3.8,
-  );
 }
 
 function radianceTexture() {
@@ -74,6 +58,7 @@ function ellipse(radiusX: number, radiusY: number, rotation: [number, number, nu
 export class GraphRenderer {
   private readonly canvas: HTMLCanvasElement;
   private readonly data: GraphData;
+  private readonly starPositions: Map<string, THREE.Vector3>;
   private readonly callbacks: RendererCallbacks;
   private readonly renderer: THREE.WebGLRenderer;
   private readonly scene = new THREE.Scene();
@@ -112,6 +97,7 @@ export class GraphRenderer {
   constructor(canvas: HTMLCanvasElement, data: GraphData, callbacks: RendererCallbacks) {
     this.canvas = canvas;
     this.data = data;
+    this.starPositions = starLayout(data);
     this.callbacks = callbacks;
     this.domainById = new Map(data.domains.map((domain) => [domain.id, domain]));
     data.domains.forEach((domain) => this.enabledDomains.add(domain.id));
@@ -125,15 +111,17 @@ export class GraphRenderer {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.camera.position.set(0, 0.7, this.targetZoom);
     this.scene.add(this.world);
-    const ambient = new THREE.HemisphereLight("#eff4f4", "#6a6557", 1.7);
+    const ambient = new THREE.HemisphereLight("#f4f6ed", "#899184", 1.9);
     const key = new THREE.DirectionalLight("#fff3d9", 3.1);
-    key.position.set(-8, 16, 5);
+    key.position.set(-6, 13, 10);
     key.castShadow = true; key.shadow.mapSize.set(2048,2048);
     Object.assign(key.shadow.camera,{left:-15,right:15,top:15,bottom:-15,near:1,far:50});
-    key.shadow.intensity = .7; key.shadow.radius = 3; key.shadow.bias = -.001; key.shadow.normalBias = .035;
-    const rim = new THREE.DirectionalLight("#c6d5dd", 0.4);
+    key.shadow.intensity = .48; key.shadow.radius = 3; key.shadow.bias = -.001; key.shadow.normalBias = .035;
+    const rim = new THREE.DirectionalLight("#daeaf4", .65);
     rim.position.set(10, 4, -9);
-    this.scene.add(ambient, key, rim);
+    const fill = new THREE.DirectionalLight("#edf3f5", .45);
+    fill.position.set(1, 3, 12);
+    this.scene.add(ambient, key, rim, fill);
     this.starField = this.createStarField();
     this.scene.add(this.starField);
     this.createStarDecor();
@@ -171,14 +159,14 @@ export class GraphRenderer {
     for (const domain of this.data.domains) {
       const domainGroup=new THREE.Group(); domainGroup.userData.domainId=domain.id; this.starDecor.add(domainGroup);
       const members=this.data.nodes.filter(n=>n.domain_id===domain.id);
-      const domainCenter=new THREE.Vector3(...STAR_CENTERS[domain.id]);domainCenter.x*=1.15;
-      const hub=new THREE.Mesh(new THREE.SphereGeometry(.20,20,16),new THREE.MeshBasicMaterial({color:domain.color}));hub.position.copy(domainCenter);domainGroup.add(hub);
-      const aura=new THREE.Sprite(new THREE.SpriteMaterial({map:glowMap,color:domain.color,transparent:true,opacity:.55,depthWrite:false,blending:THREE.AdditiveBlending}));
+      const domainCenter=new THREE.Vector3(...STAR_CENTERS[domain.id]);domainCenter.x*=1.23;domainCenter.y*=1.16;
+      const hub=new THREE.Mesh(new THREE.SphereGeometry(.20,20,16),new THREE.MeshBasicMaterial({color:domain.color,toneMapped:false}));hub.position.copy(domainCenter);domainGroup.add(hub);
+      const aura=new THREE.Sprite(new THREE.SpriteMaterial({map:glowMap,color:domain.color,toneMapped:false,transparent:true,opacity:.55,depthWrite:false,blending:THREE.AdditiveBlending}));
       aura.scale.set(2.4,2.4,1);hub.add(aura);
       const groups=[...new Set(members.map(n=>n.subdomain_name))];
       groups.forEach(group=>{
         const children=members.filter(n=>n.subdomain_name===group);
-        const points=children.map(n=>starPosition(n,this.data.nodes.indexOf(n),this.data.domains.indexOf(domain)));
+        const points=children.map(n=>this.starPositions.get(n.id)!.clone());
         const center=points.reduce((a,b)=>a.add(b),new THREE.Vector3()).multiplyScalar(1/points.length);
         center.z-=.7;
         const groupHub=new THREE.Mesh(new THREE.SphereGeometry(.07,12,8),new THREE.MeshBasicMaterial({color:domain.color,transparent:true,opacity:.5}));groupHub.position.copy(center);domainGroup.add(groupHub);
@@ -193,16 +181,16 @@ export class GraphRenderer {
     const geometry = new THREE.SphereGeometry(0.105, 16, 12);
     const haloGeometry = new THREE.RingGeometry(0.13, 0.145, 32);
     const glowTexture=radianceTexture();
-    this.data.nodes.forEach((node, index) => {
+    this.data.nodes.forEach((node) => {
       const domain = this.domainById.get(node.domain_id)!;
-      const material = new THREE.MeshBasicMaterial({ color: domain.color, transparent: true, opacity: .92 });
+      const material = new THREE.MeshBasicMaterial({ color: domain.color, toneMapped:false, transparent: true, opacity: .92 });
       const mesh = new THREE.Mesh(geometry, material);
       const halo = new THREE.Mesh(haloGeometry, new THREE.MeshBasicMaterial({ color: domain.color, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false }));
       halo.position.z = -0.02;
       mesh.add(halo);
-      const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTexture,color:domain.color,transparent:true,opacity:.5,depthWrite:false,blending:THREE.AdditiveBlending}));glow.scale.set(1.25,1.25,1);mesh.add(glow);
+      const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTexture,color:domain.color,toneMapped:false,transparent:true,opacity:.5,depthWrite:false,blending:THREE.AdditiveBlending}));glow.scale.set(1.6,1.6,1);mesh.add(glow);
       const baseScale = 0.64 + Math.min(node.metrics.total_incident, 10) * 0.10;
-      const star = starPosition(node, index, this.data.domains.findIndex((item) => item.id === node.domain_id));
+      const star = this.starPositions.get(node.id)!;
       const ordinal = this.data.nodes.filter(n => n.domain_id === node.domain_id).indexOf(node);
       const site = terrainSite(node.domain_id, ordinal, node.terrain_position);
       const { x, z } = site;
@@ -379,13 +367,14 @@ export class GraphRenderer {
       if (!visible) continue;
       const material = visual.mesh.material as THREE.MeshBasicMaterial;
       const active = !this.selectedId || neighborIds.has(visual.node.id);
-      const depth = this.view === "star" ? THREE.MathUtils.mapLinear(visual.star.z, -2.3, 2.3, .66, 1.0) : .98;
+      const worldDepth = visual.star.clone().applyMatrix4(this.world.matrixWorld).z;
+      const depth = this.view === "star" ? clamp(THREE.MathUtils.mapLinear(worldDepth, -3, 3, .42, 1.0), .35, 1) : .98;
       material.opacity += ((active ? depth : depth * .78) - material.opacity) * 0.12;
       const selectedScale = visual.node.id === this.selectedId ? 1.65 : visual.node.id === this.hoveredId ? 1.3 : 1;
       const targetScale = visual.baseScale * selectedScale * (this.view === "terrain" ? 0.86 : 1);
       visual.mesh.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.14);
       const glow=visual.mesh.children.find(c=>c instanceof THREE.Sprite) as THREE.Sprite;
-      (glow.material as THREE.SpriteMaterial).opacity=(active ? .32 : .16) * depth;
+      (glow.material as THREE.SpriteMaterial).opacity=(active ? .44 : .24) * depth;
 
       (visual.halo.material as THREE.MeshBasicMaterial).opacity = visual.node.id === this.selectedId ? .65 : visual.node.id === this.hoveredId ? .35 : 0;
     }
@@ -396,7 +385,7 @@ export class GraphRenderer {
       const connected = this.selectedId && (visual.edge.source === this.selectedId || visual.edge.target === this.selectedId);
       const material = visual.line.material as THREE.LineBasicMaterial;
       const sameDomain = visual.source.node.domain_id === visual.target.node.domain_id;
-      const base = this.view === "terrain" ? (sameDomain ? .36 : .15) : (sameDomain ? .32 : .15);
+      const base = this.view === "terrain" ? (sameDomain ? .34 : .10) : (sameDomain ? .34 : .16);
       material.opacity += ((this.selectedId ? (connected ? .78 : base * .70) : base) - material.opacity) * 0.14;
       material.color.set(visual.source.node.domain_id === visual.target.node.domain_id || connected ? this.domainById.get(visual.source.node.domain_id)!.color : this.view === "terrain" ? "#b8c2a5" : "#b2c1c1");
     }

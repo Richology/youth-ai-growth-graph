@@ -21,7 +21,7 @@ const ridges = [
   [-8.6,-.2,.8,.55,.5,1.1],[8.5,-4.5,.8,.5,-.2,1.2],[8.3,1.2,.9,.5,1,1.2],[-1.1,6.6,.7,.5,0,1.0],
 ];
 export function coast(a:number) {
-  return .95 / Math.pow(Math.pow(Math.abs(Math.cos(a)),4)+Math.pow(Math.abs(Math.sin(a)),4),.25)
+  return .91 / Math.pow(Math.pow(Math.abs(Math.cos(a)),4)+Math.pow(Math.abs(Math.sin(a)),4),.25)
     + .055*Math.sin(3*a+.4)+.028*Math.cos(7*a)+.018*Math.sin(19*a)+.008*Math.sin(43*a);
 }
 function baseHeight(x:number,z:number):number {
@@ -64,13 +64,13 @@ export function heightAt(x:number,z:number):number {
 export function landscapeGeometry() {
   const rings=160,segments=320;
   const positions:number[]=[],colors:number[]=[],indices:number[]=[];
-  const color=new THREE.Color(), moss=new THREE.Color('#666e42');
+  const color=new THREE.Color(), moss=new THREE.Color('#6f7d49');
   for(let ring=0;ring<=rings;ring++) for(let s=0;s<segments;s++) {
     const a=s/segments*Math.PI*2,t=Math.max(.0001,ring/rings),radius=coast(a);
     const x=Math.cos(a)*10.2*t*radius,z=Math.sin(a)*8*t*radius,y=heightAt(x,z);
     positions.push(x,y,z);
     const slope=Math.hypot(heightAt(x+.07,z)-y,heightAt(x,z+.07)-y)/.07;
-    color.set(y<-.25?'#303632':'#827e6c');
+    color.set(y<-.25?'#2e3330':'#898677');
     color.multiplyScalar(.83+noise(x*9,z*9)*.24);
     if(y>0 && slope<2.2) color.lerp(moss,.30+noise(x*1.3,z*1.3)*.28);
     colors.push(color.r,color.g,color.b);
@@ -105,7 +105,13 @@ export function populateLandscape(group:THREE.Group,anchors:THREE.Vector3[]) {
   }
   rockGeo.computeVertexNormals();
   const rocks=new THREE.InstancedMesh(rockGeo,new THREE.MeshStandardMaterial({color:'#878271',roughness:1,flatShading:true}),2800);
-  const leaves=new THREE.InstancedMesh(new THREE.PlaneGeometry(1,1),new THREE.MeshStandardMaterial({map:foliageTexture(),alphaTest:.22,side:THREE.DoubleSide,roughness:.95}),11000);
+  const leafMaterial=new THREE.MeshStandardMaterial({map:foliageTexture(),alphaTest:.28,alphaToCoverage:true,side:THREE.DoubleSide,roughness:.95});
+  leafMaterial.onBeforeCompile=shader=>{
+    // A small diffuse contribution approximates light passing through thin leaves.
+    // It retains each tree's instance color, including the autumn foliage.
+    shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>', 'outgoingLight += diffuseColor.rgb * .08;\n#include <opaque_fragment>');
+  };
+  const leaves=new THREE.InstancedMesh(new THREE.PlaneGeometry(1,1),leafMaterial,11000);
   const wood=new THREE.InstancedMesh(new THREE.CylinderGeometry(.009,.018,1,5),new THREE.MeshStandardMaterial({color:'#8f8165',roughness:1}),3500);
   const o=new THREE.Object3D(),c=new THREE.Color();let ri=0,li=0,ti=0;
   for(let i=0;i<3600;i++) {
@@ -118,7 +124,7 @@ export function populateLandscape(group:THREE.Group,anchors:THREE.Vector3[]) {
       o.scale.set(scale*(1+random(i+5)),scale*(.5+random(i+9)),scale);o.updateMatrix();rocks.setMatrixAt(ri++,o.matrix);
     }
     if(y<.05 || slope>3.5 || noise(x*.95+3,z*.95)<.47 || ti>3400 || li>10900) continue;
-    const tall=random(i+94)>.73, h=(tall?.6:.32)+random(i+44)*(tall?.65:.42);
+    const tall=random(i+94)>.73, h=(tall?.55:.24)+random(i+44)*(tall?.6:.42);
     o.position.set(x,y+h*.5,z);o.rotation.set(0,random(i)*6,.12*(random(i)-.5));o.scale.set(1,h,1);o.updateMatrix();wood.setMatrixAt(ti++,o.matrix);
     const autumn=x<-.8 && z>.7;
     for(let branch=0;branch<7;branch++) {
@@ -128,7 +134,7 @@ export function populateLandscape(group:THREE.Group,anchors:THREE.Vector3[]) {
       o.position.copy(from).lerp(to,.5);o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),to.clone().sub(from).normalize());o.scale.set(.5,from.distanceTo(to),.5);o.updateMatrix();wood.setMatrixAt(ti++,o.matrix);
       for(let cross=0;cross<3;cross++) {
         o.position.set(bx,by,bz);o.rotation.set(.25+cross*.9,angle+cross*1.05,.2);o.scale.set(h*(tall?.55:.82),h*.64,1);o.updateMatrix();leaves.setMatrixAt(li,o.matrix);
-        c.set(autumn?(random(i)>.5?'#be8740':'#92753b'):(tall?'#58694a':'#899151'));
+        c.set(autumn?(random(i)>.5?'#c3934b':'#a88647'):(tall?'#607249':'#81984e'));
         c.offsetHSL((random(i+branch)-.5)*.045,0,(random(i*2+branch)-.5)*.12);leaves.setColorAt(li++,c);
       }
     }
@@ -136,21 +142,69 @@ export function populateLandscape(group:THREE.Group,anchors:THREE.Vector3[]) {
   rocks.count=ri;leaves.count=li;wood.count=ti;
   rocks.castShadow=true;rocks.receiveShadow=true;leaves.castShadow=true;leaves.receiveShadow=false;wood.castShadow=true;
   group.add(rocks,leaves,wood);
+  addCliffLayers(group, anchors);
+}
+
+// Actual broken ledges interrupt smooth slopes at a scale larger than a texture.
+function addCliffLayers(group:THREE.Group,anchors:THREE.Vector3[]) {
+  const geometry=new THREE.CylinderGeometry(.55,.85,1,9,8);
+  const positions=geometry.getAttribute('position');
+  const colors:number[]=[],color=new THREE.Color();
+  for(let i=0;i<positions.count;i++) {
+    const x=positions.getX(i),y=positions.getY(i),z=positions.getZ(i);
+    const band=Math.floor((y+.5)*8),angle=Math.atan2(z,x);
+    const fracture=.86+noise(Math.cos(angle)*4+band*.15,Math.sin(angle)*4)*.27;
+    positions.setXYZ(i,x*fracture+y*.14,y+Math.sin(angle*3)*.025,z*fracture);
+    color.set('#969480').multiplyScalar(.78+noise(band*.65,angle)*.24);
+    colors.push(color.r,color.g,color.b);
+  }
+  geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geometry.computeVertexNormals();
+  const cliffs=new THREE.InstancedMesh(geometry,new THREE.MeshStandardMaterial({vertexColors:true,roughness:1,flatShading:true}),320);
+  const object=new THREE.Object3D();let count=0;
+  for(let i=0;i<2300 && count<320;i++) {
+    const x=(random(i+8001)-.5)*18,z=(random(i+12001)-.5)*14,y=heightAt(x,z);
+    if(y<.15 || anchors.some(a=>Math.hypot(a.x-x,a.z-z)<.62)) continue;
+    const dx=(heightAt(x+.08,z)-heightAt(x-.08,z))/.16;
+    const dz=(heightAt(x,z+.08)-heightAt(x,z-.08))/.16;
+    const slope=Math.hypot(dx,dz);if(slope<1.45||slope>6) continue;
+    const h=.45+random(i+22)*1.05,w=.12+random(i+23)*.23;
+    object.position.set(x,y-h*.25,z);
+    object.rotation.set(Math.atan(dz)*.13,random(i)*.5, -Math.atan(dx)*.13);
+    object.scale.set(w,h,w*(.65+random(i+29)*.6));object.updateMatrix();cliffs.setMatrixAt(count++,object.matrix);
+  }
+  cliffs.count=count;cliffs.castShadow=true;cliffs.receiveShadow=true;group.add(cliffs);
 }
 
 // Footpaths are neutral scenery; colored curves alone encode graph relationships.
 export function buildFootpath(points:THREE.Vector3[]) {
-  const path=new THREE.Group(),stone=new THREE.MeshStandardMaterial({color:'#b2ab92',roughness:1});
+  const matrices:THREE.Matrix4[]=[],object=new THREE.Object3D();
   for(let n=1;n<points.length;n++) {
-    const a=points[n-1],b=points[n],steps=Math.ceil(a.distanceTo(b)/.10);
-    for(let i=0;i<=steps;i++) {
-      const t=i/steps,x=THREE.MathUtils.lerp(a.x,b.x,t),z=THREE.MathUtils.lerp(a.z,b.z,t);
-      const y=heightAt(x,z);if(y<0) continue;
-      const step=new THREE.Mesh(new THREE.BoxGeometry(.14,.035,.10),stone);
-      step.position.set(x,y+.025,z);step.rotation.y=Math.atan2(b.x-a.x,b.z-a.z);step.receiveShadow=true;path.add(step);
+    const a=points[n-1],b=points[n],length=Math.hypot(b.x-a.x,b.z-a.z);
+    const side=new THREE.Vector3(b.z-a.z,0,a.x-b.x).normalize();
+    const steps=Math.max(2,Math.ceil(length/.09));
+    const position=(t:number,bend:number)=>{
+      const p=a.clone().lerp(b,t).addScaledVector(side,Math.sin(t*Math.PI)*bend);
+      p.y=heightAt(p.x,p.z);return p;
+    };
+    // Prefer a gentle contour over a straight staircase up the cliff face.
+    let bend=0,best=Infinity;
+    for(const candidate of [-.9,-.45,0,.45,.9]) {
+      let cost=Math.abs(candidate)*.06,previous=position(0,candidate);
+      for(let k=1;k<=24;k++) {
+        const p=position(k/24,candidate),rise=Math.abs(p.y-previous.y);
+        cost+=rise*rise+(p.y<.05?2:0);previous=p;
+      }
+      if(cost<best) {best=cost;bend=candidate;}
+    }
+    for(let i=0;i<steps;i++) {
+      const p=position(i/steps,bend),q=position((i+1)/steps,bend);
+      if(p.y<.05) continue;
+      object.position.copy(p);object.position.y+=.035;
+      object.rotation.set(0,Math.atan2(q.x-p.x,q.z-p.z),0);object.updateMatrix();matrices.push(object.matrix.clone());
     }
   }
-  return path;
+  const path=new THREE.InstancedMesh(new THREE.BoxGeometry(.12,.035,.085),new THREE.MeshStandardMaterial({color:'#b9b39f',roughness:1}),matrices.length);
+  matrices.forEach((matrix,i)=>path.setMatrixAt(i,matrix));path.receiveShadow=true;return path;
 }
 
 export function buildBridge(start:THREE.Vector3,end:THREE.Vector3) {
@@ -202,7 +256,6 @@ export function rockMaterial(onLoad: () => void) {
       varying vec3 vRockPosition;
       uniform sampler2D rockTexture;
       uniform float rockTextureStrength;
-      float rockHash(vec3 p){return fract(sin(dot(p,vec3(12.9898,78.233,41.3)))*43758.5453);}
     `);
     shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
       vec3 weights=pow(abs(normalize(cross(dFdx(vRockPosition),dFdy(vRockPosition)))),vec3(4.));
@@ -212,10 +265,11 @@ export function rockMaterial(onLoad: () => void) {
         +texture2D(rockTexture,vRockPosition.xy*.22).rgb*weights.z;
       rock=mix(vec3(dot(rock,vec3(.2126,.7152,.0722))),rock,.22);
       diffuseColor.rgb=mix(diffuseColor.rgb,rock*.98,rockTextureStrength*smoothstep(0.,.5,vRockPosition.y));
-      float grain=rockHash(floor(vRockPosition*110.));
-      float strata=sin(vRockPosition.y*53.+sin(vRockPosition.x*3.)+sin(vRockPosition.z*4.));
-      float fissure=sin(vRockPosition.x*37.+vRockPosition.z*29.+sin(vRockPosition.y*4.));
-      diffuseColor.rgb*=.88+grain*.22+strata*.025+fissure*.055;
+      float bandPosition=vRockPosition.y*15.+sin(vRockPosition.x*1.7)+sin(vRockPosition.z*1.3);
+      float bandAA=1.-smoothstep(.3,1.6,fwidth(bandPosition));
+      float strata=sin(bandPosition)*bandAA;
+      float mineral=sin(vRockPosition.x*4.+sin(vRockPosition.z*3.));
+      diffuseColor.rgb*=.97+strata*.045+mineral*.035;
     `);
   };
   return material;
