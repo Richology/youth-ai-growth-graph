@@ -123,16 +123,6 @@ function renderSources(node: GraphNode) {
     }
     return item;
   }));
-  const versions = $("#detail-versions")!;
-  versions.replaceChildren(...node.change_log.map((change) => {
-    const item = document.createElement("li");
-    const label = document.createElement("strong");
-    label.textContent = `${change.version} · ${change.date}`;
-    const text = document.createElement("span");
-    text.textContent = change.summary;
-    item.append(label, text);
-    return item;
-  }));
 }
 
 function renderDetails(node: GraphNode) {
@@ -141,7 +131,6 @@ function renderDetails(node: GraphNode) {
   $("#detail-domain")!.textContent = `${domain.name} · ${node.subdomain_name}`;
   $("#detail-domain")!.style.setProperty("--node-color", domain.color);
   $("#detail-title")!.textContent = node.name;
-  $("#detail-meta")!.textContent = `${node.id} · ${node.status === "draft" ? "草案" : node.status} · v${node.version}`;
   $("#detail-definition")!.textContent = node.definition;
   replaceList($("#detail-behaviors"), node.observable_behaviors);
   replaceList($("#detail-boundaries"), node.boundaries);
@@ -185,11 +174,13 @@ function renderDetails(node: GraphNode) {
 
 function selectNode(nodeId: string | null, pushHistory = false) {
   const nextNode = nodeId ? nodeById().get(nodeId) ?? null : null;
+  const previousNodeId = selectedNode?.id;
   if (pushHistory && selectedNode && selectedNode.id !== nodeId) nodeHistory.push(selectedNode.id);
   selectedNode = nextNode;
   graphRenderer.setSelected(nextNode?.id ?? null);
   if (nextNode) {
     renderDetails(nextNode);
+    if (previousNodeId !== nodeId) $(".detail-scroll")!.scrollTop = 0;
     details.classList.add("is-open");
     details.setAttribute("aria-hidden", "false");
     app.classList.add("has-details");
@@ -224,6 +215,7 @@ function bindTabs() {
   const activate = (tab: HTMLButtonElement) => {
     tabs.forEach((item) => { item.setAttribute("aria-selected", String(item === tab)); item.tabIndex = item === tab ? 0 : -1; });
     panels.forEach((panel) => { panel.hidden = panel.id !== tab.getAttribute("aria-controls"); });
+    $(".detail-scroll")!.scrollTop = 0;
   };
   tabs.forEach((tab, index) => {
     tab.tabIndex = tab.getAttribute('aria-selected') === 'true' ? 0 : -1;

@@ -10,10 +10,16 @@ test("switches views and preserves the selected competency", async ({ page }) =>
   await expect(page.locator("#detail-title")).toHaveText("识别 AI 能力边界");
   await expect(page).toHaveURL(/node=AI-BND-001/);
 
+  const detailLayout = () => page.locator('#node-details').evaluate((element) => {
+    const style = getComputedStyle(element);
+    return { top: style.top, right: style.right, bottom: style.bottom, width: style.width, height: style.height, borderRadius: style.borderRadius };
+  });
+  const starLayout = await detailLayout();
   await page.getByRole("button", { name: "地形" }).click();
   await expect(page).toHaveURL(/view=terrain/);
   await expect(page.locator("#detail-title")).toHaveText("识别 AI 能力边界");
   await expect(page.locator("#node-details")).toHaveAttribute("aria-hidden", "false");
+  await expect.poll(detailLayout).toEqual(starLayout);
 });
 
 test("filters domains while keeping one domain enabled", async ({ page }) => {
@@ -53,6 +59,21 @@ test('detail tabs support arrow keys and retain panel state across views', async
   await tabs.nth(1).focus();
   await page.keyboard.press('End');
   await expect(tabs.nth(2)).toBeFocused();
+});
+
+test('detail panel gives long content room and starts each tab at the top', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/?view=terrain&node=AI-JUD-001');
+  const content = page.locator('.detail-scroll');
+  await expect(content).toBeVisible();
+  expect((await content.boundingBox())!.height).toBeGreaterThan(300);
+  await expect(page.locator('#detail-meta, #detail-versions')).toHaveCount(0);
+
+  await content.evaluate((element) => { element.scrollTop = element.scrollHeight; });
+  await expect.poll(() => content.evaluate((element) => element.scrollTop)).toBeGreaterThan(100);
+  await page.getByRole('tab', { name: '熟练度' }).click();
+  await expect.poll(() => content.evaluate((element) => element.scrollTop)).toBe(0);
+  await expect(page.locator('#detail-levels')).toBeVisible();
 });
 
 test('mobile selected competency stays visible above the details sheet', async ({ page }) => {

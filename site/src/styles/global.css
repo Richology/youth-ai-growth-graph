@@ -627,22 +627,18 @@ canvas:focus-visible {
   transition-delay: 0s;
 }
 
-.detail-grab {
-  display: none;
-}
-
 .detail-head {
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 10px;
   align-items: start;
-  padding: 22px 22px 16px;
+  padding: 18px 22px 12px;
 }
 
 .detail-back,
 .detail-close {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   color: var(--muted);
   background: transparent;
@@ -680,16 +676,9 @@ canvas:focus-visible {
   letter-spacing: -0.035em;
 }
 
-.detail-meta {
-  margin: 7px 0 0;
-  color: var(--muted);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.6rem;
-}
-
 .detail-definition {
   margin: 0;
-  padding: 0 22px 18px;
+  padding: 18px 0;
   color: color-mix(in srgb, var(--text) 78%, transparent);
   font-size: 0.82rem;
   line-height: 1.7;
@@ -698,7 +687,7 @@ canvas:focus-visible {
 .relation-summary {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  margin: 0 22px;
+  margin: 0;
   border-block: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
 }
 
@@ -720,7 +709,7 @@ canvas:focus-visible {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2px;
-  padding: 10px 22px 0;
+  padding: 0 22px;
 }
 
 .detail-tabs button {
@@ -742,7 +731,7 @@ canvas:focus-visible {
 .detail-scroll {
   flex: 1;
   min-height: 0;
-  padding: 4px 22px 24px;
+  padding: 0 22px 24px;
   overflow: auto;
   scrollbar-width: thin;
   scrollbar-color: color-mix(in srgb, var(--text) 20%, transparent) transparent;
@@ -900,22 +889,6 @@ canvas:focus-visible {
 .source-list a {
   color: var(--cyan);
   text-underline-offset: 3px;
-}
-
-.version-list {
-  padding-left: 0 !important;
-  list-style: none;
-}
-
-.version-list li {
-  display: grid;
-  gap: 3px;
-}
-
-.version-list strong {
-  color: var(--text);
-  font-family: ui-monospace, monospace;
-  font-size: 0.62rem;
 }
 
 .accessible-index {
@@ -1198,25 +1171,8 @@ canvas:focus-visible {
     transform: translateY(0);
   }
 
-  .detail-grab {
-    display: block;
-    width: 38px;
-    height: 4px;
-    margin: 8px auto 0;
-    background: color-mix(in srgb, var(--text) 19%, transparent);
-    border-radius: 99px;
-  }
-
   .detail-head {
     padding: 12px 16px 11px;
-  }
-
-  .detail-definition {
-    padding: 0 16px 12px;
-  }
-
-  .relation-summary {
-    margin-inline: 16px;
   }
 
   .detail-tabs {
@@ -1293,9 +1249,10 @@ canvas:focus-visible {
 .detail-domain,.detail-tabs button,.detail-section h3,.relation-group h4 { font-size: 14px; }
 .detail-definition,.detail-section ul,.level-list p,.life-links > div { font-size: 14px; }
 .relation-node span { font-size: 14px; }
-.detail-meta,.relation-summary span,.relation-node small { font-size: 11px; }
-.node-details { top: 66px; right: 0; bottom: 0; width: 360px; border-radius: 0; box-shadow: none; border-width: 0 0 0 1px; }
-.has-details .graph-stage { right: 360px; }
+.relation-summary span,.relation-node small { font-size: 11px; }
+.app-shell { --details-width: clamp(330px, 30vw, 430px); }
+.node-details { top: 66px; right: 0; bottom: 0; width: var(--details-width); border-radius: 0; box-shadow: none; border-width: 0 0 0 1px; }
+.has-details .graph-stage { right: var(--details-width); }
 .app-shell[data-view="terrain"] { --surface: #efeee9; }
 .app-shell[data-view="terrain"] .intro-panel { width: 295px; }
 .app-shell[data-view="terrain"] .eyebrow { display: flex; color: var(--muted); font-weight: 400; }
@@ -1307,14 +1264,11 @@ canvas:focus-visible {
 .app-shell[data-view="terrain"] .graph-stage { background: radial-gradient(ellipse at 66% 69%,#302b2422,transparent 58%); }
 .app-shell[data-view="terrain"] .node-label { display: block; color: #f1f1ef; background: #20251ec9; font-family:'Songti SC','SimSun',serif; }
 .app-shell[data-view="terrain"] .domain-label { font-family:'Songti SC','SimSun',serif; font-size: 22px; }
-.app-shell[data-view="terrain"] .node-details { top: auto; bottom: 64px; right: 26px; width: 390px; height: 390px; border: 1px solid #11111422; border-radius: 12px; box-shadow: 0 15px 40px #29241715; }
-.app-shell[data-view="terrain"].has-details .graph-stage { right: 0; }
 @media (max-width:1100px) and (min-width:768px) {
  .intro-panel { width: 245px; }
  .app-shell[data-view="terrain"] .intro-panel { width: 240px; }
  .app-shell[data-view="terrain"] .terrain-wordmark { font-size:62px; }
  .app-shell[data-view="terrain"] .intro-panel h1 { width:260px;font-size:24px; }
- .node-details { width:330px; }.has-details .graph-stage { right:330px; }
 }
 @media (max-width:767px) {
  .intro-panel,.app-shell[data-view="terrain"] .intro-panel { top:76px; width:auto; }
@@ -1342,11 +1296,10 @@ canvas:focus-visible {
 .detail-heading { grid-column:2; }
 .detail-close { grid-column:3; }
 @media (max-width:767px) {
- .node-details,.app-shell[data-view="terrain"] .node-details { height:40svh; min-height:330px; }
- .node-details .detail-definition { max-height:94px; overflow:auto; flex-shrink:0; }
+ .node-details,.app-shell[data-view="terrain"] .node-details { height: min(56svh, 520px); min-height: min(320px, calc(100svh - 80px)); }
  .detail-head { padding:10px 14px; }
  .detail-heading h2 { font-size:22px; }
- .relation-summary { display:none; }
+ .relation-summary span { padding-block: 9px; }
  .detail-tabs { flex-shrink:0; }
  .graph-instructions { bottom:62px; font-size:10px;justify-content:flex-start; }
  .reset-view { bottom:14px; }
