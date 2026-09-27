@@ -1250,7 +1250,7 @@ canvas:focus-visible {
 .detail-definition,.detail-section ul,.level-list p,.life-links > div { font-size: 14px; }
 .relation-node span { font-size: 14px; }
 .relation-summary span,.relation-node small { font-size: 11px; }
-.app-shell { --details-width: clamp(330px, 30vw, 430px); }
+.app-shell { --details-width: clamp(320px, 24vw, 360px); }
 .node-details { top: 66px; right: 0; bottom: 0; width: var(--details-width); border-radius: 0; box-shadow: none; border-width: 0 0 0 1px; }
 .has-details .graph-stage { right: var(--details-width); }
 .app-shell[data-view="terrain"] { --surface: #efeee9; }
@@ -1316,4 +1316,15 @@ canvas:focus-visible {
  .app-shell[data-view="terrain"] .terrain-wordmark { font-size:62px; margin:10px 0; }
  .app-shell[data-view="terrain"] .intro-copy { display:none; }
  .app-shell[data-view="terrain"] .domain-filters button { min-height:42px; padding:6px 12px; }
+}
+
+/* Scene typography follows each reference's material and light. */
+.app-shell[data-view="star"] .brand { font-family: inherit; font-size: 26px; font-weight: 650; letter-spacing: -.035em; }
+.app-shell[data-view="star"] .node-label { background: transparent; color: #c5ced0; font-size: 12px; text-shadow: 0 2px 5px #090d10; }
+.app-shell[data-view="star"] .domain-label { font-weight: 500; letter-spacing: .025em; }
+.app-shell[data-view="terrain"] .node-label { background: #24291fe6; border-radius: 3px; padding: 4px 7px; font-size: 12px; }
+.app-shell[data-view="terrain"] .terrain-wordmark { letter-spacing: -.04em; }
+@media (min-width: 768px) {
+  .has-details .intro-panel h1 { font-size: clamp(27px, 2.5vw, 40px); }
+  .app-shell[data-view="terrain"].has-details .intro-panel h1 { font-size: 28px; }
 }

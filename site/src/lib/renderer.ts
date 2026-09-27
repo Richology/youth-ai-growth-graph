@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { heightAt, landscapeGeometry, populateLandscape, buildBridge, rockMaterial, makePavilion } from "./landscape";
+import { heightAt, landscapeGeometry, populateLandscape, buildBridge, rockMaterial, makePavilion, terrainSite, buildFootpath } from "./landscape";
 import type { DomainScreenPosition, GraphData, GraphDomain, GraphEdge, GraphNode, ViewMode } from "./types";
 
 interface RendererCallbacks {
@@ -23,10 +23,11 @@ interface EdgeVisual {
   line: THREE.Line;
   source: NodeVisual;
   target: NodeVisual;
+  terrainPoints: THREE.Vector3[];
 }
 
 const STAR_CENTERS: Record<string, [number, number, number]> = {
-  AI: [-3.0, 2.15, 0], BIZ: [3.0, 2.15, 0], PRO: [-3.0, -2.15, 0], SOC: [3.0, -2.15, 0],
+  AI: [-2.65, 1.9, .15], BIZ: [2.75, 1.65, -.35], PRO: [-2.9, -1.8, .35], SOC: [2.8, -2.05, .05],
 };
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
@@ -39,14 +40,22 @@ function seeded(index: number): number {
 function starPosition(node: GraphNode, index: number, domainIndex: number): THREE.Vector3 {
   const center = STAR_CENTERS[node.domain_id];
   const localIndex = index % 15;
-  const phi = Math.acos(1 - 2 * ((localIndex + 0.6) / 15));
-  const theta = localIndex * 2.399963 + domainIndex * 0.72;
-  const radius = 2.0 + seeded(index * 7 + 3) * 0.8;
+  // Uneven rings with a shared middle ground, rather than four isolated spheres.
+  const theta = localIndex * 2.399963 + domainIndex * .65;
+  const radius = Math.sqrt((localIndex + 1.8) / 16) * 2.75;
   return new THREE.Vector3(
-    (center[0] + Math.sin(phi) * Math.cos(theta) * radius) * 1.15,
-    center[1] + Math.cos(phi) * radius * 1.05,
-    center[2] + Math.sin(phi) * Math.sin(theta) * radius * 0.65,
+    (center[0] + Math.cos(theta) * radius) * 1.16,
+    center[1] + Math.sin(theta) * radius * .83,
+    center[2] + (seeded(index * 9 + 2) - .5) * 3.8,
   );
+}
+
+function radianceTexture() {
+  const canvas=document.createElement('canvas');canvas.width=128;canvas.height=128;
+  const ctx=canvas.getContext('2d')!,gradient=ctx.createRadialGradient(64,64,0,64,64,64);
+  gradient.addColorStop(0,'rgba(255,255,255,.65)');gradient.addColorStop(.16,'rgba(255,255,255,.23)');
+  gradient.addColorStop(.42,'rgba(255,255,255,.065)');gradient.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=gradient;ctx.fillRect(0,0,128,128);return new THREE.CanvasTexture(canvas);
 }
 
 function ellipse(radiusX: number, radiusY: number, rotation: [number, number, number], opacity: number) {
@@ -116,12 +125,12 @@ export class GraphRenderer {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.camera.position.set(0, 0.7, this.targetZoom);
     this.scene.add(this.world);
-    const ambient = new THREE.HemisphereLight("#f6ffff", "#96988a", 2.8);
-    const key = new THREE.DirectionalLight("#fff8e8", 2.5);
+    const ambient = new THREE.HemisphereLight("#eff4f4", "#6a6557", 1.7);
+    const key = new THREE.DirectionalLight("#fff3d9", 3.1);
     key.position.set(-8, 16, 5);
     key.castShadow = true; key.shadow.mapSize.set(2048,2048);
     Object.assign(key.shadow.camera,{left:-15,right:15,top:15,bottom:-15,near:1,far:50});
-    key.shadow.intensity = .55; key.shadow.radius = 3; key.shadow.bias = -.001; key.shadow.normalBias = .035;
+    key.shadow.intensity = .7; key.shadow.radius = 3; key.shadow.bias = -.001; key.shadow.normalBias = .035;
     const rim = new THREE.DirectionalLight("#c6d5dd", 0.4);
     rim.position.set(10, 4, -9);
     this.scene.add(ambient, key, rim);
@@ -133,6 +142,11 @@ export class GraphRenderer {
       landscapeGeometry(),
       rockMaterial(() => this.invalidate()),
     );
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(27, 22), new THREE.ShadowMaterial({ opacity: .11, depthWrite: false }));
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -1.42;
+    ground.receiveShadow = true;
+    this.terrainDecor.add(ground);
     this.terrain.visible = false;
     this.terrain.receiveShadow = true; this.terrain.castShadow = true;
     this.world.add(this.terrain, this.terrainDecor);
@@ -152,12 +166,15 @@ export class GraphRenderer {
   }
 
   private createStarDecor() {
-    this.starDecor.add(ellipse(7.5, 4.85, [0.5, 0.18, -0.23], 0.14), ellipse(7.1, 4.4, [-0.38, 0.55, 0.2], 0.1), ellipse(5.7, 5.7, [0.08, 1.18, 0.08], 0.075));
+    const glowMap=radianceTexture();
+    this.starDecor.add(ellipse(7.4, 4.9, [.12, .18, -.10], .055), ellipse(7.8, 5.25, [-.16, .2, .08], .035));
     for (const domain of this.data.domains) {
       const domainGroup=new THREE.Group(); domainGroup.userData.domainId=domain.id; this.starDecor.add(domainGroup);
       const members=this.data.nodes.filter(n=>n.domain_id===domain.id);
       const domainCenter=new THREE.Vector3(...STAR_CENTERS[domain.id]);domainCenter.x*=1.15;
-      const hub=new THREE.Mesh(new THREE.SphereGeometry(.19,20,16),new THREE.MeshBasicMaterial({color:domain.color}));hub.position.copy(domainCenter);domainGroup.add(hub);
+      const hub=new THREE.Mesh(new THREE.SphereGeometry(.20,20,16),new THREE.MeshBasicMaterial({color:domain.color}));hub.position.copy(domainCenter);domainGroup.add(hub);
+      const aura=new THREE.Sprite(new THREE.SpriteMaterial({map:glowMap,color:domain.color,transparent:true,opacity:.55,depthWrite:false,blending:THREE.AdditiveBlending}));
+      aura.scale.set(2.4,2.4,1);hub.add(aura);
       const groups=[...new Set(members.map(n=>n.subdomain_name))];
       groups.forEach(group=>{
         const children=members.filter(n=>n.subdomain_name===group);
@@ -166,7 +183,7 @@ export class GraphRenderer {
         center.z-=.7;
         const groupHub=new THREE.Mesh(new THREE.SphereGeometry(.07,12,8),new THREE.MeshBasicMaterial({color:domain.color,transparent:true,opacity:.5}));groupHub.position.copy(center);domainGroup.add(groupHub);
         for(const point of [...points,domainCenter]) {
-          const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints([center,point]),new THREE.LineBasicMaterial({color:domain.color,transparent:true,opacity:.12,depthWrite:false}));domainGroup.add(line);
+          const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints([center,point]),new THREE.LineBasicMaterial({color:domain.color,transparent:true,opacity:.20,depthWrite:false}));domainGroup.add(line);
         }
       });
     }
@@ -175,34 +192,32 @@ export class GraphRenderer {
   private createNodes() {
     const geometry = new THREE.SphereGeometry(0.105, 16, 12);
     const haloGeometry = new THREE.RingGeometry(0.13, 0.145, 32);
-    const glowCanvas=document.createElement('canvas');glowCanvas.width=64;glowCanvas.height=64;
-    const ctx=glowCanvas.getContext('2d')!;const gradient=ctx.createRadialGradient(32,32,0,32,32,32);
-    gradient.addColorStop(0,'rgba(255,255,255,.6)');gradient.addColorStop(.22,'rgba(255,255,255,.15)');gradient.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=gradient;ctx.fillRect(0,0,64,64);
-    const glowTexture=new THREE.CanvasTexture(glowCanvas);
+    const glowTexture=radianceTexture();
     this.data.nodes.forEach((node, index) => {
       const domain = this.domainById.get(node.domain_id)!;
-      const material = new THREE.MeshStandardMaterial({ toneMapped: false, color: domain.color, emissive: domain.color, emissiveIntensity: 1.0, roughness: 1, metalness: 0, transparent: true, opacity: 0.98 });
+      const material = new THREE.MeshBasicMaterial({ color: domain.color, transparent: true, opacity: .92 });
       const mesh = new THREE.Mesh(geometry, material);
       const halo = new THREE.Mesh(haloGeometry, new THREE.MeshBasicMaterial({ color: domain.color, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false }));
       halo.position.z = -0.02;
       mesh.add(halo);
-      const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTexture,color:domain.color,transparent:true,opacity:.5,depthWrite:false,blending:THREE.AdditiveBlending}));glow.scale.set(.85,.85,1);mesh.add(glow);
-      const baseScale = 0.62 + Math.min(node.metrics.total_incident, 10) * 0.12;
+      const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTexture,color:domain.color,transparent:true,opacity:.5,depthWrite:false,blending:THREE.AdditiveBlending}));glow.scale.set(1.25,1.25,1);mesh.add(glow);
+      const baseScale = 0.64 + Math.min(node.metrics.total_incident, 10) * 0.10;
       const star = starPosition(node, index, this.data.domains.findIndex((item) => item.id === node.domain_id));
-      const x = node.terrain_position[0];
-      const z = node.terrain_position[2];
-      const terrain = new THREE.Vector3(x, heightAt(x, z) + 0.28, z);
+      const ordinal = this.data.nodes.filter(n => n.domain_id === node.domain_id).indexOf(node);
+      const site = terrainSite(node.domain_id, ordinal, node.terrain_position);
+      const { x, z } = site;
+      const terrain = site.clone().add(new THREE.Vector3(0, .18, 0));
       mesh.scale.setScalar(baseScale);
       mesh.position.copy(star);
       mesh.userData.nodeId = node.id;
       this.world.add(mesh);
       const platform = new THREE.Group();
-      const base = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.28, 0.12, 32), new THREE.MeshStandardMaterial({ color: "#a6a796", roughness: 0.8, metalness: 0.12 }));
-      const platformRim = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.025, 8, 32), new THREE.MeshBasicMaterial({ color: domain.color, transparent: true, opacity: 0.78 }));
+      const base = new THREE.Mesh(new THREE.CylinderGeometry(0.20, 0.24, 0.07, 32), new THREE.MeshStandardMaterial({ color: "#a6a796", roughness: 0.8, metalness: 0.12 }));
+      const platformRim = new THREE.Mesh(new THREE.TorusGeometry(0.195, 0.012, 8, 32), new THREE.MeshBasicMaterial({ color: domain.color, transparent: true, opacity: 0.78 }));
       platformRim.rotation.x = Math.PI / 2;
-      platformRim.position.y = 0.12;
+      platformRim.position.y = 0.045;
       platform.add(base, platformRim);
-      platform.position.set(x, terrain.y - 0.16, z);
+      platform.position.set(x, terrain.y - 0.12, z);
       platform.visible = false;
       this.terrainDecor.add(platform);
       this.nodes.set(node.id, { node, mesh, halo, platform, star, terrain, baseScale });
@@ -214,26 +229,37 @@ export class GraphRenderer {
       const source = this.nodes.get(edge.source);
       const target = this.nodes.get(edge.target);
       if (!source || !target) continue;
-      const geometry = new THREE.BufferGeometry().setFromPoints(Array.from({ length: 13 }, () => new THREE.Vector3()));
+      const geometry = new THREE.BufferGeometry().setFromPoints(Array.from({ length: 25 }, () => new THREE.Vector3()));
       const material = edge.type === "requires"
         ? new THREE.LineBasicMaterial({ color: "#d8e3e4", transparent: true, opacity: 0.22 })
-        : new THREE.LineDashedMaterial({ color: "#aeb5b6", dashSize: edge.type === "supports" ? 0.16 : 0.04, gapSize: edge.type === "supports" ? 0.11 : 0.1, transparent: true, opacity: 0.14 });
+        : new THREE.LineDashedMaterial({ color: "#aeb5b6", dashSize: edge.type === "supports" ? 0.09 : 0.025, gapSize: edge.type === "supports" ? 0.075 : 0.085, transparent: true, opacity: 0.14 });
       const line = new THREE.Line(geometry, material);
       line.renderOrder = -1;
       this.world.add(line);
-      this.edges.push({ edge, line, source, target });
+      const terrainPoints = Array.from({length:25}, (_, i) => {
+        const t=i/24, point=source.terrain.clone().lerp(target.terrain,t);
+        // Keep relationships above the surface, with a subtle lift over the valley.
+        point.y=Math.max(point.y, heightAt(point.x,point.z)+.20)+Math.sin(t*Math.PI)*.18;
+        return point;
+      });
+      this.edges.push({ edge, line, source, target, terrainPoints });
     }
   }
 
   private createTerrainDecor() {
     populateLandscape(this.terrainDecor, [...this.nodes.values()].map(v => v.terrain));
-    const bridges = [[[-2.6,-1.7],[2.3,-1.6]],[[-2.7,4.5],[2.5,2.6]]];
+    const bridges = [[[-2.5,-2.7],[2.4,-2.1]],[[-2.2,4],[2.3,5.3]]];
+    for (const domain of this.data.domains) {
+      const members=[...this.nodes.values()].filter(v=>v.node.domain_id===domain.id);
+      const subdomains=[...new Set(members.map(v=>v.node.subdomain_id))];
+      for(const id of subdomains) this.terrainDecor.add(buildFootpath(members.filter(v=>v.node.subdomain_id===id).map(v=>v.terrain)));
+    }
     for (const [a,b] of bridges) {
       const start = new THREE.Vector3(a[0],heightAt(a[0],a[1])+.15,a[1]);
       const end = new THREE.Vector3(b[0],heightAt(b[0],b[1])+.15,b[1]);
       this.terrainDecor.add(buildBridge(start,end));
     }
-    for(const [x,z] of [[-3.9,-3.3],[4.2,-2.8],[-4.0,3.1],[4.6,3.8]]) this.terrainDecor.add(makePavilion(x,z));
+    for(const [x,z] of [[-5.5,-3.0],[5.5,2.0]]) this.terrainDecor.add(makePavilion(x,z));
     this.terrainDecor.visible = false;
   }
 
@@ -331,7 +357,9 @@ export class GraphRenderer {
       if (this.view === "star") middle.z += visual.source.node.domain_id === visual.target.node.domain_id ? 0 : .35;
       else middle.y += 0.24 + start.distanceTo(end) * 0.025;
       const positions = visual.line.geometry.getAttribute("position") as THREE.BufferAttribute;
-      new THREE.QuadraticBezierCurve3(start, middle, end).getPoints(12).forEach((point, index) => positions.setXYZ(index, point.x, point.y, point.z));
+      const points = this.view === "terrain" && this.transitionProgress >= 1
+        ? visual.terrainPoints : new THREE.QuadraticBezierCurve3(start, middle, end).getPoints(24);
+      points.forEach((point, index) => positions.setXYZ(index, point.x, point.y, point.z));
       positions.needsUpdate = true;
       visual.line.computeLineDistances();
     }
@@ -349,16 +377,17 @@ export class GraphRenderer {
       visual.mesh.visible = visible;
       visual.platform.visible = visible && this.view === "terrain";
       if (!visible) continue;
-      const material = visual.mesh.material as THREE.MeshStandardMaterial;
+      const material = visual.mesh.material as THREE.MeshBasicMaterial;
       const active = !this.selectedId || neighborIds.has(visual.node.id);
-      material.opacity += ((active ? 0.98 : 0.14) - material.opacity) * 0.12;
+      const depth = this.view === "star" ? THREE.MathUtils.mapLinear(visual.star.z, -2.3, 2.3, .66, 1.0) : .98;
+      material.opacity += ((active ? depth : depth * .78) - material.opacity) * 0.12;
       const selectedScale = visual.node.id === this.selectedId ? 1.65 : visual.node.id === this.hoveredId ? 1.3 : 1;
       const targetScale = visual.baseScale * selectedScale * (this.view === "terrain" ? 0.86 : 1);
       visual.mesh.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.14);
       const glow=visual.mesh.children.find(c=>c instanceof THREE.Sprite) as THREE.Sprite;
-      (glow.material as THREE.SpriteMaterial).opacity=active ? .5 : .06;
-      material.emissiveIntensity = visual.node.id === this.selectedId ? 1.8 : visual.node.id === this.hoveredId ? 1.2 : 0.72;
-      (visual.halo.material as THREE.MeshBasicMaterial).opacity = active ? (visual.node.id === this.selectedId ? 0.72 : 0.2) : 0.04;
+      (glow.material as THREE.SpriteMaterial).opacity=(active ? .32 : .16) * depth;
+
+      (visual.halo.material as THREE.MeshBasicMaterial).opacity = visual.node.id === this.selectedId ? .65 : visual.node.id === this.hoveredId ? .35 : 0;
     }
     for (const visual of this.edges) {
       const visible = this.enabledDomains.has(visual.source.node.domain_id) && this.enabledDomains.has(visual.target.node.domain_id);
@@ -366,8 +395,9 @@ export class GraphRenderer {
       if (!visible) continue;
       const connected = this.selectedId && (visual.edge.source === this.selectedId || visual.edge.target === this.selectedId);
       const material = visual.line.material as THREE.LineBasicMaterial;
-      const base = this.view === "terrain" ? 0.38 : visual.edge.type === "related_to" ? 0.24 : visual.edge.type === "requires" ? 0.44 : 0.3;
-      material.opacity += ((this.selectedId ? (connected ? 0.9 : 0.018) : base) - material.opacity) * 0.14;
+      const sameDomain = visual.source.node.domain_id === visual.target.node.domain_id;
+      const base = this.view === "terrain" ? (sameDomain ? .36 : .15) : (sameDomain ? .32 : .15);
+      material.opacity += ((this.selectedId ? (connected ? .78 : base * .70) : base) - material.opacity) * 0.14;
       material.color.set(visual.source.node.domain_id === visual.target.node.domain_id || connected ? this.domainById.get(visual.source.node.domain_id)!.color : this.view === "terrain" ? "#b8c2a5" : "#b2c1c1");
     }
   }
@@ -388,7 +418,7 @@ export class GraphRenderer {
     const positions: DomainScreenPosition[] = this.data.domains.map((domain) => {
       const members = [...this.nodes.values()].filter((visual) => visual.node.domain_id === domain.id && visual.mesh.visible);
       const center = members.reduce((total, visual) => total.add(visual.mesh.position), new THREE.Vector3()).multiplyScalar(1 / Math.max(members.length, 1));
-      center.y += this.view === "terrain" ? .8 : -.45;
+      center.y += this.view === "terrain" ? .55 : -.45;
       center.applyMatrix4(this.world.matrixWorld).project(this.camera);
       return { id: domain.id, kind: "domain", x: (center.x * 0.5 + 0.5) * rect.width, y: (-center.y * 0.5 + 0.5) * rect.height, visible: members.length > 0 && center.z > -1 && center.z < 1 };
     });
@@ -396,7 +426,8 @@ export class GraphRenderer {
     if(this.selectedId) {
       keyIds.add(this.selectedId);
       for(const {edge} of this.edges) { if(edge.source===this.selectedId) keyIds.add(edge.target); if(edge.target===this.selectedId) keyIds.add(edge.source); }
-    } else {
+    }
+    if (!this.selectedId || window.innerWidth >= 768) {
       for(const domain of this.data.domains) [...this.nodes.values()].filter(v=>v.node.domain_id===domain.id).sort((a,b)=>b.node.metrics.total_incident-a.node.metrics.total_incident).slice(0,window.innerWidth<768?1:3).forEach(v=>keyIds.add(v.node.id));
     }
     for(const visual of this.nodes.values()) {
@@ -413,9 +444,9 @@ export class GraphRenderer {
     this.camera.aspect = rect.width / rect.height;
     this.camera.updateProjectionMatrix();
     const desktop = window.innerWidth >= 768;
-    this.world.position.x = desktop ? (this.view === 'terrain' ? 2.7 : 1.5) : 0;
+    this.world.position.x = desktop ? (this.view === 'terrain' ? 2.7 : 1.9) : 0;
     this.world.position.y = this.view === 'terrain' ? 1.15 : .35;
-    this.world.scale.setScalar(desktop ? Math.min(1,Math.max(.64,(rect.width-230)/950)) : 1);
+    this.world.scale.setScalar(desktop ? Math.min(1,Math.max(.60,(rect.width-260)/1000)) : 1);
     this.focusFrames=this.selectedId?70:0;
     // Narrow viewports need a wider field of view to retain the whole landscape.
     this.camera.fov = desktop ? 40 : 62;

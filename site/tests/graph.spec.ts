@@ -104,9 +104,17 @@ test('each view restores its camera and touch pinch changes zoom', async ({ page
   await expect.poll(async()=>Math.abs((await label.boundingBox())!.x-before.x)).toBeLessThan(3);
   const client=await page.context().newCDPSession(page);
   const x=Math.round(box.x+box.width*.6),y=Math.round(box.y+box.height*.5);
-  const stable=(await label.boundingBox())!;
+  // Zoom changes the separation of landmarks. A single landmark can lie on the
+  // camera axis and keep the same x coordinate even when the zoom works.
+  const otherLabel=page.locator('[data-node-label="BIZ-NED-001"]');
+  const landmarkDistance=async()=>{
+    const [a,b]=await Promise.all([label.boundingBox(),otherLabel.boundingBox()]);
+    expect(a).not.toBeNull(); expect(b).not.toBeNull();
+    return Math.hypot(a!.x-b!.x,a!.y-b!.y);
+  };
+  const stableDistance=await landmarkDistance();
   await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:x-40,y,id:0},{x:x+40,y,id:1}]});
   await client.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x-75,y,id:0},{x:x+75,y,id:1}]});
   await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
-  await expect.poll(async()=>Math.abs((await label.boundingBox())!.x-stable.x)).toBeGreaterThan(8);
+  await expect.poll(async()=>(await landmarkDistance())/stableDistance).toBeGreaterThan(1.15);
 });
