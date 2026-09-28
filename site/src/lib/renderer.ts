@@ -17,6 +17,7 @@ interface NodeVisual {
   star: THREE.Vector3;
   terrain: THREE.Vector3;
   baseScale: number;
+  landmark: boolean;
 }
 
 interface EdgeVisual {
@@ -26,6 +27,8 @@ interface EdgeVisual {
   target: NodeVisual;
   terrainPoints: THREE.Vector3[];
 }
+
+const EDGE_SEGMENTS = 64;
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
@@ -111,15 +114,15 @@ export class GraphRenderer {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.camera.position.set(0, 0.7, this.targetZoom);
     this.scene.add(this.world);
-    const ambient = new THREE.HemisphereLight("#f4f6ed", "#899184", 1.9);
-    const key = new THREE.DirectionalLight("#fff3d9", 3.1);
-    key.position.set(-6, 13, 10);
+    const ambient = new THREE.HemisphereLight("#e4edf4", "#645e4d", 1.45);
+    const key = new THREE.DirectionalLight("#fff1d6", 3.4);
+    key.position.set(-8, 11, 7);
     key.castShadow = true; key.shadow.mapSize.set(2048,2048);
     Object.assign(key.shadow.camera,{left:-15,right:15,top:15,bottom:-15,near:1,far:50});
-    key.shadow.intensity = .48; key.shadow.radius = 3; key.shadow.bias = -.001; key.shadow.normalBias = .035;
-    const rim = new THREE.DirectionalLight("#daeaf4", .65);
+    key.shadow.intensity = .62; key.shadow.radius = 3; key.shadow.bias = -.001; key.shadow.normalBias = .025;
+    const rim = new THREE.DirectionalLight("#dce9f4", .8);
     rim.position.set(10, 4, -9);
-    const fill = new THREE.DirectionalLight("#edf3f5", .45);
+    const fill = new THREE.DirectionalLight("#edf3f5", .3);
     fill.position.set(1, 3, 12);
     this.scene.add(ambient, key, rim, fill);
     this.starField = this.createStarField();
@@ -136,6 +139,7 @@ export class GraphRenderer {
     ground.receiveShadow = true;
     this.terrainDecor.add(ground);
     this.terrain.visible = false;
+    this.terrain.renderOrder = -2;
     this.terrain.receiveShadow = true; this.terrain.castShadow = true;
     this.world.add(this.terrain, this.terrainDecor);
     this.createNodes();
@@ -169,9 +173,11 @@ export class GraphRenderer {
         const points=children.map(n=>this.starPositions.get(n.id)!.clone());
         const center=points.reduce((a,b)=>a.add(b),new THREE.Vector3()).multiplyScalar(1/points.length);
         center.z-=.7;
-        const groupHub=new THREE.Mesh(new THREE.SphereGeometry(.07,12,8),new THREE.MeshBasicMaterial({color:domain.color,transparent:true,opacity:.5}));groupHub.position.copy(center);domainGroup.add(groupHub);
+        const groupHub=new THREE.Mesh(new THREE.SphereGeometry(.045,12,8),new THREE.MeshBasicMaterial({color:domain.color,transparent:true,opacity:.5}));groupHub.position.copy(center);domainGroup.add(groupHub);
         for(const point of [...points,domainCenter]) {
-          const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints([center,point]),new THREE.LineBasicMaterial({color:domain.color,transparent:true,opacity:.20,depthWrite:false}));domainGroup.add(line);
+          const middle=center.clone().lerp(point,.5);middle.z-=.25;
+          const curve=new THREE.QuadraticBezierCurve3(center,middle,point);
+          const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(curve.getPoints(12)),new THREE.LineBasicMaterial({color:domain.color,transparent:true,opacity:point===domainCenter?.055:.11,depthWrite:false}));domainGroup.add(line);
         }
       });
     }
@@ -181,6 +187,11 @@ export class GraphRenderer {
     const geometry = new THREE.SphereGeometry(0.105, 16, 12);
     const haloGeometry = new THREE.RingGeometry(0.13, 0.145, 32);
     const glowTexture=radianceTexture();
+    const landmarkIds=new Set<string>();
+    for(const id of new Set(this.data.nodes.map(n=>n.subdomain_id))) {
+      const members=this.data.nodes.filter(n=>n.subdomain_id===id).sort((a,b)=>b.metrics.total_incident-a.metrics.total_incident||a.id.localeCompare(b.id));
+      if(members[0]) landmarkIds.add(members[0].id);
+    }
     this.data.nodes.forEach((node) => {
       const domain = this.domainById.get(node.domain_id)!;
       const material = new THREE.MeshBasicMaterial({ color: domain.color, toneMapped:false, transparent: true, opacity: .92 });
@@ -199,16 +210,26 @@ export class GraphRenderer {
       mesh.position.copy(star);
       mesh.userData.nodeId = node.id;
       this.world.add(mesh);
+      const landmark=landmarkIds.has(node.id);
       const platform = new THREE.Group();
-      const base = new THREE.Mesh(new THREE.CylinderGeometry(0.20, 0.24, 0.07, 32), new THREE.MeshStandardMaterial({ color: "#a6a796", roughness: 0.8, metalness: 0.12 }));
-      const platformRim = new THREE.Mesh(new THREE.TorusGeometry(0.195, 0.012, 8, 32), new THREE.MeshBasicMaterial({ color: domain.color, transparent: true, opacity: 0.78 }));
+      const radius=landmark?.21:.12;
+      const baseGeometry=new THREE.CylinderGeometry(radius,radius*1.2,landmark?.055:.025,landmark?12:8);
+      const vertices=baseGeometry.getAttribute('position');
+      for(let i=0;i<vertices.count;i++) {
+        const x=vertices.getX(i),z=vertices.getZ(i),angle=Math.atan2(z,x),factor=1+Math.sin(angle*3+ordinal)*.075;
+        vertices.setXYZ(i,x*factor,vertices.getY(i),z*factor);
+      }
+      baseGeometry.computeVertexNormals();
+      const base = new THREE.Mesh(baseGeometry, new THREE.MeshStandardMaterial({ color: landmark?"#999782":"#777767", roughness: .98 }));
+      base.receiveShadow=true;
+      const platformRim = new THREE.Mesh(new THREE.TorusGeometry(radius*.9, 0.009, 8, 32), new THREE.MeshBasicMaterial({ color: domain.color, transparent: true, opacity: 0.78 }));
       platformRim.rotation.x = Math.PI / 2;
-      platformRim.position.y = 0.045;
+      platformRim.position.y = landmark?.032:.018;
       platform.add(base, platformRim);
-      platform.position.set(x, terrain.y - 0.12, z);
+      platform.position.set(x, site.y + (landmark?.032:.014), z);
       platform.visible = false;
       this.terrainDecor.add(platform);
-      this.nodes.set(node.id, { node, mesh, halo, platform, star, terrain, baseScale });
+      this.nodes.set(node.id, { node, mesh, halo, platform, star, terrain, baseScale, landmark });
     });
   }
 
@@ -217,15 +238,15 @@ export class GraphRenderer {
       const source = this.nodes.get(edge.source);
       const target = this.nodes.get(edge.target);
       if (!source || !target) continue;
-      const geometry = new THREE.BufferGeometry().setFromPoints(Array.from({ length: 25 }, () => new THREE.Vector3()));
+      const geometry = new THREE.BufferGeometry().setFromPoints(Array.from({ length: EDGE_SEGMENTS + 1 }, () => new THREE.Vector3()));
       const material = edge.type === "requires"
         ? new THREE.LineBasicMaterial({ color: "#d8e3e4", transparent: true, opacity: 0.22 })
         : new THREE.LineDashedMaterial({ color: "#aeb5b6", dashSize: edge.type === "supports" ? 0.09 : 0.025, gapSize: edge.type === "supports" ? 0.075 : 0.085, transparent: true, opacity: 0.14 });
       const line = new THREE.Line(geometry, material);
-      line.renderOrder = -1;
+      line.renderOrder = 0;
       this.world.add(line);
-      const terrainPoints = Array.from({length:25}, (_, i) => {
-        const t=i/24, point=source.terrain.clone().lerp(target.terrain,t);
+      const terrainPoints = Array.from({length:EDGE_SEGMENTS + 1}, (_, i) => {
+        const t=i/EDGE_SEGMENTS, point=source.terrain.clone().lerp(target.terrain,t);
         // Keep relationships above the surface, with a subtle lift over the valley.
         point.y=Math.max(point.y, heightAt(point.x,point.z)+.20)+Math.sin(t*Math.PI)*.18;
         return point;
@@ -243,8 +264,8 @@ export class GraphRenderer {
       for(const id of subdomains) this.terrainDecor.add(buildFootpath(members.filter(v=>v.node.subdomain_id===id).map(v=>v.terrain)));
     }
     for (const [a,b] of bridges) {
-      const start = new THREE.Vector3(a[0],heightAt(a[0],a[1])+.15,a[1]);
-      const end = new THREE.Vector3(b[0],heightAt(b[0],b[1])+.15,b[1]);
+      const start = new THREE.Vector3(a[0],heightAt(a[0],a[1])+.065,a[1]);
+      const end = new THREE.Vector3(b[0],heightAt(b[0],b[1])+.065,b[1]);
       this.terrainDecor.add(buildBridge(start,end));
     }
     for(const [x,z] of [[-5.5,-3.0],[5.5,2.0]]) this.terrainDecor.add(makePavilion(x,z));
@@ -346,7 +367,7 @@ export class GraphRenderer {
       else middle.y += 0.24 + start.distanceTo(end) * 0.025;
       const positions = visual.line.geometry.getAttribute("position") as THREE.BufferAttribute;
       const points = this.view === "terrain" && this.transitionProgress >= 1
-        ? visual.terrainPoints : new THREE.QuadraticBezierCurve3(start, middle, end).getPoints(24);
+        ? visual.terrainPoints : new THREE.QuadraticBezierCurve3(start, middle, end).getPoints(EDGE_SEGMENTS);
       points.forEach((point, index) => positions.setXYZ(index, point.x, point.y, point.z));
       positions.needsUpdate = true;
       visual.line.computeLineDistances();
@@ -364,6 +385,10 @@ export class GraphRenderer {
       const visible = this.enabledDomains.has(visual.node.domain_id);
       visual.mesh.visible = visible;
       visual.platform.visible = visible && this.view === "terrain";
+      const rim=visual.platform.children[1] as THREE.Mesh<THREE.TorusGeometry,THREE.MeshBasicMaterial>;
+      const emphasized=visual.node.id===this.selectedId||visual.node.id===this.hoveredId;
+      rim.visible=visual.landmark||emphasized;
+      rim.material.opacity=emphasized?.9:.45;
       if (!visible) continue;
       const material = visual.mesh.material as THREE.MeshBasicMaterial;
       const active = !this.selectedId || neighborIds.has(visual.node.id);
@@ -385,8 +410,8 @@ export class GraphRenderer {
       const connected = this.selectedId && (visual.edge.source === this.selectedId || visual.edge.target === this.selectedId);
       const material = visual.line.material as THREE.LineBasicMaterial;
       const sameDomain = visual.source.node.domain_id === visual.target.node.domain_id;
-      const base = this.view === "terrain" ? (sameDomain ? .34 : .10) : (sameDomain ? .34 : .16);
-      material.opacity += ((this.selectedId ? (connected ? .78 : base * .70) : base) - material.opacity) * 0.14;
+      const base = this.view === "terrain" ? (sameDomain ? .22 : .065) : (sameDomain ? .34 : .16);
+      material.opacity += ((this.selectedId ? (connected ? .78 : base * .40) : base) - material.opacity) * 0.14;
       material.color.set(visual.source.node.domain_id === visual.target.node.domain_id || connected ? this.domainById.get(visual.source.node.domain_id)!.color : this.view === "terrain" ? "#b8c2a5" : "#b2c1c1");
     }
   }
@@ -417,11 +442,21 @@ export class GraphRenderer {
       for(const {edge} of this.edges) { if(edge.source===this.selectedId) keyIds.add(edge.target); if(edge.target===this.selectedId) keyIds.add(edge.source); }
     }
     if (!this.selectedId || window.innerWidth >= 768) {
-      for(const domain of this.data.domains) [...this.nodes.values()].filter(v=>v.node.domain_id===domain.id).sort((a,b)=>b.node.metrics.total_incident-a.node.metrics.total_incident).slice(0,window.innerWidth<768?1:3).forEach(v=>keyIds.add(v.node.id));
+      for(const domain of this.data.domains) [...this.nodes.values()].filter(v=>v.node.domain_id===domain.id).sort((a,b)=>b.node.metrics.total_incident-a.node.metrics.total_incident).slice(0,window.innerWidth<768?1:2).forEach(v=>keyIds.add(v.node.id));
     }
+    const localCamera=this.world.worldToLocal(this.camera.position.clone());
     for(const visual of this.nodes.values()) {
       const point=visual.mesh.position.clone().applyMatrix4(this.world.matrixWorld).project(this.camera);
-      positions.push({id:`node:${visual.node.id}`,kind:'node',x:(point.x*.5+.5)*rect.width,y:(-point.y*.5+.5)*rect.height,visible:keyIds.has(visual.node.id)&&visual.mesh.visible&&point.z>-1&&point.z<1});
+      let occluded=false;
+      if(this.view==='terrain' && keyIds.has(visual.node.id) && visual.node.id!==this.selectedId) {
+        const target=visual.mesh.position;
+        const length=localCamera.distanceTo(target), steps=Math.ceil(length/.25);
+        for(let i=1;i<steps-1;i++) {
+          const sample=localCamera.clone().lerp(target,i/steps);
+          if(Math.abs(sample.x)<10.4 && Math.abs(sample.z)<8.5 && sample.y<heightAt(sample.x,sample.z)-.04) {occluded=true;break;}
+        }
+      }
+      positions.push({id:`node:${visual.node.id}`,kind:'node',x:(point.x*.5+.5)*rect.width,y:(-point.y*.5+.5)*rect.height,visible:!occluded&&keyIds.has(visual.node.id)&&visual.mesh.visible&&point.z>-1&&point.z<1});
     }
     this.callbacks.onLabels(positions);
   }
@@ -434,8 +469,15 @@ export class GraphRenderer {
     this.camera.updateProjectionMatrix();
     const desktop = window.innerWidth >= 768;
     this.world.position.x = desktop ? (this.view === 'terrain' ? 2.7 : 1.9) : 0;
-    this.world.position.y = this.view === 'terrain' ? 1.15 : .35;
-    this.world.scale.setScalar(desktop ? Math.min(1,Math.max(.60,(rect.width-260)/1000)) : 1);
+    this.world.position.y = this.view === 'terrain' ? (desktop ? 1.15 : 3.1) : .35;
+    this.world.scale.setScalar(desktop ? Math.min(1,Math.max(.60,(rect.width-260)/1000)) : (this.view === 'star' ? .92 : 1));
+    if(desktop && this.view==='terrain') {
+      const intro=document.querySelector('.intro-panel')!.getBoundingClientRect();
+      const left=Math.min(intro.right-rect.left+24,rect.width*.4);
+      const unit=2*Math.tan(THREE.MathUtils.degToRad(20))*this.targetZoom/rect.height;
+      this.world.scale.setScalar(Math.min(1,Math.max(.35,(rect.width-left-24)*unit/22)));
+      this.world.position.x=(left-24)*.5*unit;
+    }
     this.focusFrames=this.selectedId?70:0;
     // Narrow viewports need a wider field of view to retain the whole landscape.
     this.camera.fov = desktop ? 40 : 62;

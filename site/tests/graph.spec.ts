@@ -3,6 +3,11 @@ import { expect, test } from "@playwright/test";
 test("switches views and preserves the selected competency", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#graph-loading")).toBeHidden();
+  await expect(page.locator('#app-shell')).toHaveAttribute('data-view', 'terrain');
+  await page.getByRole('button', { name: '星图', exact: true }).click();
+  await page.reload();
+  await expect(page.locator('#graph-loading')).toBeHidden();
+  await expect(page.locator('#app-shell')).toHaveAttribute('data-view', 'star');
   await expect(page.locator("#node-index-list button")).toHaveCount(60);
 
   await page.getByText("使用文本方式浏览能力", { exact: true }).click();
@@ -89,7 +94,7 @@ test('mobile selected competency stays visible above the details sheet', async (
 });
 
 test('each view restores its camera and touch pinch changes zoom', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?view=star');
   await expect(page.locator('#graph-loading')).toBeHidden();
   const label=page.locator('[data-node-label="AI-BND-001"]');
   const canvas=page.locator('#graph-canvas');

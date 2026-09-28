@@ -18,7 +18,7 @@ const terrainNote = $("#terrain-note")!;
 let data: GraphData;
 let graphRenderer: GraphRenderer | CanvasFallbackRenderer;
 let compatibilityMode = false;
-let activeView: ViewMode = "star";
+let activeView: ViewMode = "terrain";
 let selectedNode: GraphNode | null = null;
 let nodeHistory: string[] = [];
 let enabledDomains = new Set<string>();
@@ -36,8 +36,7 @@ function replaceList(target: HTMLElement | null, values: string[]) {
 
 function setUrlState() {
   const url = new URL(window.location.href);
-  if (activeView === "star") url.searchParams.delete("view");
-  else url.searchParams.set("view", activeView);
+  url.searchParams.set("view", activeView);
   if (selectedNode) url.searchParams.set("node", selectedNode.id);
   else url.searchParams.delete("node");
   window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
@@ -388,7 +387,7 @@ async function initialize() {
     }
     bindControls();
     const url = new URL(window.location.href);
-    const requestedView = !compatibilityMode && url.searchParams.get("view") === "terrain" ? "terrain" : "star";
+    const requestedView = compatibilityMode || url.searchParams.get("view") === "star" ? "star" : "terrain";
     setView(requestedView, true);
     const requestedNode = url.searchParams.get("node");
     if (requestedNode && nodeById().has(requestedNode)) selectNode(requestedNode);

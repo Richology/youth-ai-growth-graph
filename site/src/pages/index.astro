@@ -10,7 +10,7 @@ const counts = graph.meta.counts;
 const description = "从真实任务出发，看见能力之间的关系与成长路径。Richology 青少年 AI 时代成长图谱公开浏览器。";
 ---
 <BaseLayout title="Richology 青少年 AI 时代成长图谱" description={description}>
-  <main class="app-shell" id="app-shell">
+  <main class="app-shell" id="app-shell" data-view="terrain">
     <header class="site-header">
       <a class="brand" href="/" aria-label="Richology 青少年 AI 时代成长图谱首页">Richology</a>
       <nav aria-label="辅助链接">
@@ -32,8 +32,8 @@ const description = "从真实任务出发，看见能力之间的关系与成�
       <div class="view-control" aria-label="图谱视图">
         <span>视图</span>
         <div role="group" aria-label="选择图谱视图">
-          <button type="button" data-view-button="star" aria-pressed="true">星图</button>
-          <button type="button" data-view-button="terrain" aria-pressed="false">地形</button>
+          <button type="button" data-view-button="star" aria-pressed="false">星图</button>
+          <button type="button" data-view-button="terrain" aria-pressed="true">地形</button>
         </div>
       </div>
 

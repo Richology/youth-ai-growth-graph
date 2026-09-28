@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import type { GraphData } from './types';
 
 export const STAR_CENTERS: Record<string, [number, number, number]> = {
-  AI: [-2.8, 2.0, .2], BIZ: [2.75, 1.9, -.3],
-  PRO: [-3.0, -1.85, .35], SOC: [2.85, -2.1, 0],
+  AI: [-2.45, 1.85, .2], BIZ: [2.5, 1.65, -.3],
+  PRO: [-2.85, -1.85, .35], SOC: [2.35, -2.05, 0],
 };
 const seeded = (n:number) => { const x=Math.sin(n*12.9898+78.233)*43758.5453;return x-Math.floor(x); };
 
@@ -12,17 +12,41 @@ const seeded = (n:number) => { const x=Math.sin(n*12.9898+78.233)*43758.5453;ret
 export function starLayout(data:GraphData):Map<string,THREE.Vector3> {
   const nodes=[...data.nodes].sort((a,b)=>a.id.localeCompare(b.id));
   const positions=new Map<string,THREE.Vector3>();
+  const nodeById=new Map(nodes.map(node=>[node.id,node]));
+  const edges=[...data.edges].sort((a,b)=>a.id.localeCompare(b.id));
   for(const domain of data.domains) {
     const members=nodes.filter(n=>n.domain_id===domain.id);
     const center=new THREE.Vector3(...STAR_CENTERS[domain.id]);
-    members.forEach((node,i)=>{
-      const angle=i*2.399963+seeded(domain.id.charCodeAt(0))*.9;
-      const radius=Math.sqrt((i+1.8)/(members.length+1))*2.45;
-      positions.set(node.id,new THREE.Vector3(center.x+Math.cos(angle)*radius,center.y+Math.sin(angle)*radius*.95,center.z+(seeded(i*9+domain.id.charCodeAt(0))-.5)*3.8));
+    const subdomains=[...new Set(members.map(n=>n.subdomain_id))].sort();
+    const turn=seeded(domain.id.charCodeAt(0))*1.4-.7;
+    members.forEach(node=>{
+      const group=subdomains.indexOf(node.subdomain_id);
+      const siblings=members.filter(n=>n.subdomain_id===node.subdomain_id);
+      const i=siblings.indexOf(node),angle=i*2.399963+group*.72+turn;
+      // Three local pockets make membership lines short. Their sizes and depth
+      // differ, so the domain does not read as another uniform radial fan.
+      const pocketAngle=group*2.094+turn;
+      const pocket=new THREE.Vector3(Math.cos(pocketAngle)*1.05,Math.sin(pocketAngle)*.95,0);
+      const radius=.70+Math.sqrt((i+.5)/siblings.length)*.90;
+      const position=new THREE.Vector3(center.x+pocket.x+Math.cos(angle)*radius,
+        center.y+pocket.y+Math.sin(angle)*radius*.85,
+        center.z+(seeded(i*9+group*31+domain.id.charCodeAt(0))-.5)*3.8);
+      const otherDomains=new Set<string>();
+      for(const edge of edges) {
+        const other=edge.source===node.id?nodeById.get(edge.target):edge.target===node.id?nodeById.get(edge.source):null;
+        if(other && other.domain_id!==domain.id) otherDomains.add(other.domain_id);
+      }
+      if(otherDomains.size) {
+        const bridgeCenter=new THREE.Vector3();
+        for(const id of [...otherDomains].sort()) bridgeCenter.add(new THREE.Vector3(...STAR_CENTERS[id]));
+        bridgeCenter.multiplyScalar(1/otherDomains.size);
+        const inward=bridgeCenter.sub(center);inward.z=0;inward.setLength(.75);
+        position.add(inward);
+      }
+      positions.set(node.id,position);
     });
   }
   const anchors=new Map([...positions].map(([id,p])=>[id,p.clone()]));
-  const edges=[...data.edges].sort((a,b)=>a.id.localeCompare(b.id));
   for(let iteration=0;iteration<110;iteration++) {
     const forces=new Map(nodes.map(n=>[n.id,new THREE.Vector3()]));
     for(let a=0;a<nodes.length;a++) for(let b=a+1;b<nodes.length;b++) {
