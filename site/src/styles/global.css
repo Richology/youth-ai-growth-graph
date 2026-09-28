@@ -1328,3 +1328,24 @@ canvas:focus-visible {
   .has-details .intro-panel h1 { font-size: clamp(27px, 2.5vw, 40px); }
   .app-shell[data-view="terrain"].has-details .intro-panel h1 { font-size: 28px; }
 }
+
+/* The landscape's field guide uses the real subdomains as its second line. */
+.domain-filter-copy { display:flex; flex-direction:column; align-items:flex-start; gap:4px; min-width:0; }
+.domain-filter-copy small { display:none; }
+@media (min-width:768px) and (min-height:821px) {
+  .app-shell[data-view="terrain"] .domain-filter-copy small { display:block; font-size:11px; line-height:1.4; color:var(--muted); font-weight:400; white-space:normal; }
+  .app-shell[data-view="terrain"] .domain-filters button { padding:7px 12px; }
+  .app-shell[data-view="terrain"] .relationship-legend { margin-top:14px; }
+}
+.app-shell[data-view="terrain"] .node-label[data-selected="true"] { color:#fff; background:#24291f; box-shadow:0 2px 6px #15191426; }
+@media (max-width:767px) {
+  .app-shell[data-view="terrain"] .node-label { font-size:11px; }
+}
+
+@media (min-width:768px) and (min-height:821px) {
+  .app-shell[data-view="terrain"] .terrain-wordmark { margin:10px 0 12px; }
+  .app-shell[data-view="terrain"] .intro-copy { max-width:none; margin-top:14px; font-size:13px; line-height:1.6; }
+  .app-shell[data-view="terrain"] .data-counts { margin-top:14px; }
+  .app-shell[data-view="terrain"] .view-control { padding-top:10px; }
+  .app-shell[data-view="terrain"] .domain-filters { gap:4px; margin-top:14px; }
+}

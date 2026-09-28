@@ -47,7 +47,8 @@ const description = "从真实任务出发，看见能力之间的关系与成�
             aria-pressed="true"
             style={`--domain-color:${domain.color}`}
           >
-            <i aria-hidden="true"></i>{domain.name}
+            <i aria-hidden="true"></i>
+            <span class="domain-filter-copy"><span>{domain.name}</span><small>{domain.subdomains.map(item => item.name).join(' · ')}</small></span>
           </button>
         ))}
       </fieldset>

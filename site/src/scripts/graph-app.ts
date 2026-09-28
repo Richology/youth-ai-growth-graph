@@ -340,12 +340,15 @@ function handleHover(node: GraphNode | null, point?: { x: number; y: number }) {
 function updateLabels(positions: Array<{ id: string; x: number; y: number; visible: boolean }>) {
   const occupied: Array<{x:number;y:number;w:number;h:number}> = [];
   const width=stage.clientWidth;
-  positions.forEach(position => {
+  const selectedId=selectedNode ? `node:${selectedNode.id}` : null;
+  const rank=(id:string)=>id===selectedId?0:id.startsWith('node:')?2:1;
+  [...positions].sort((a,b)=>rank(a.id)-rank(b.id)).forEach(position => {
     const nodeId=position.id.startsWith('node:')?position.id.slice(5):null;
     const label=$<HTMLElement>(nodeId?`[data-node-label="${nodeId}"]`:`[data-domain-label="${position.id}"]`);
     if(!label) return;
     const domainId=nodeId?nodeById().get(nodeId)?.domain_id:position.id;
     label.hidden=!position.visible||!domainId||!enabledDomains.has(domainId);
+    label.dataset.selected=String(nodeId===selectedNode?.id);
     if(label.hidden) return;
     const w=label.offsetWidth,h=label.offsetHeight;
     const x=Math.max(8,Math.min(width-w-8,position.x+(nodeId?12:-w/2)));

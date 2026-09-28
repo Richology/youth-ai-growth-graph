@@ -1,5 +1,14 @@
 import { expect, test } from "@playwright/test";
 
+test('terrain field guide leaves room for the accessible browser and footer', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  await expect(page.locator('#graph-loading')).toBeHidden();
+  const note=(await page.locator('#terrain-note').boundingBox())!;
+  const browser=(await page.getByText('使用文本方式浏览能力', { exact: true }).boundingBox())!;
+  expect(note.y+note.height).toBeLessThan(browser.y-8);
+});
+
 test("switches views and preserves the selected competency", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#graph-loading")).toBeHidden();

@@ -1,10 +1,16 @@
 import { expect, test } from '@playwright/test';
 import * as THREE from 'three';
 import { readFileSync } from 'node:fs';
-import { landscapeGeometry, terrainSite } from '../src/lib/landscape';
+import { landscapeGeometry, terrainSite, terrainOccludes } from '../src/lib/landscape';
 import type { GraphData } from '../src/lib/types';
 
 const graph: GraphData=JSON.parse(readFileSync(new URL('../public/data/graph.json',import.meta.url),'utf8'));
+
+test('terrain visibility keeps overhead nodes visible and blocks views through rock',()=>{
+  const target=terrainSite('AI',0,[0,0,0]).add(new THREE.Vector3(0,.18,0));
+  expect(terrainOccludes(target.clone().add(new THREE.Vector3(0,12,0)),target)).toBe(false);
+  expect(terrainOccludes(new THREE.Vector3(target.x,-3,target.z),target)).toBe(true);
+});
 
 test('every node landing agrees with the rendered terrain triangles',()=>{
   const geometry=landscapeGeometry();

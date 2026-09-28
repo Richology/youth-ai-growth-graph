@@ -22,7 +22,8 @@ const ridges = [
 ];
 export function coast(a:number) {
   return .91 / Math.pow(Math.pow(Math.abs(Math.cos(a)),4)+Math.pow(Math.abs(Math.sin(a)),4),.25)
-    + .055*Math.sin(3*a+.4)+.028*Math.cos(7*a)+.018*Math.sin(19*a)+.008*Math.sin(43*a);
+    + .055*Math.sin(3*a+.4)+.028*Math.cos(7*a)+.024*Math.sin(19*a)+.012*Math.sin(43*a)
+    - .045*Math.pow(Math.max(0,Math.cos(a*5+.7)),12);
 }
 function baseHeight(x:number,z:number):number {
   const r=Math.hypot(x/10.2,z/8.0), edge=coast(Math.atan2(z/8,x/10.2));
@@ -42,7 +43,9 @@ function baseHeight(x:number,z:number):number {
     const body=along*flank*saddle*h*(.84+noise(u*3+cx,cz)*.16);
     mass=Math.max(mass,body);
   }
-  const strata=(noise(x*2.7,z*2.7)-.5)*.20+(noise(x*8,z*8)-.5)*.075;
+  const strata=(noise(x*2.7,z*2.7)-.5)*.27+(noise(x*8,z*8)-.5)*.055;
+  const joint=Math.pow(1-Math.abs(noise(x*1.8+9,z*1.8)*2-1),14);
+  mass-=joint*.16*smooth(.5,2,mass);
   // Low shelves break up the coast without making another raised, flat platter.
   const shore=Math.pow(noise(x*.8+16,z*.8),4)*.5;
   return -.62 + (mass+strata*smooth(0,.7,mass)+shore)*(1-smooth(edge-.10,edge,r));
@@ -67,6 +70,17 @@ export function heightAt(x:number,z:number):number {
   }
   return h;
 }
+// A surface-only visibility check shared by labels and picking. Decorative
+// trees and bridges do not change the meaning or availability of a competency.
+export function terrainOccludes(eye:THREE.Vector3,target:THREE.Vector3):boolean {
+  const steps=Math.ceil(eye.distanceTo(target)/.25),sample=new THREE.Vector3();
+  for(let i=1;i<steps-1;i++) {
+    sample.copy(eye).lerp(target,i/steps);
+    if(Math.abs(sample.x)<10.4 && Math.abs(sample.z)<8.5 && sample.y<heightAt(sample.x,sample.z)-.04) return true;
+  }
+  return false;
+}
+
 export function landscapeGeometry() {
   const rings=160,segments=320;
   const positions:number[]=[],colors:number[]=[],indices:number[]=[];
@@ -113,14 +127,14 @@ function foliageTexture() {
   }
   const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;return texture;
 }
-export function populateLandscape(group:THREE.Group,anchors:THREE.Vector3[]) {
+export function populateLandscape(group:THREE.Group,anchors:THREE.Vector3[],surface:THREE.MeshStandardMaterial) {
   const rockGeo=new THREE.IcosahedronGeometry(1,1), attr=rockGeo.getAttribute('position');
   for(let i=0;i<attr.count;i++) {
     const x=attr.getX(i),y=attr.getY(i),z=attr.getZ(i),r=.85+noise(x*3,z*3)*.25;
     attr.setXYZ(i,x*r,y*.65+Math.sin(x*6+z)*.12,z*r);
   }
   rockGeo.computeVertexNormals();
-  const rocks=new THREE.InstancedMesh(rockGeo,new THREE.MeshStandardMaterial({color:'#878271',roughness:1,flatShading:true}),2800);
+  const rocks=new THREE.InstancedMesh(rockGeo,new THREE.MeshStandardMaterial({color:'#aaa596',roughness:.98}),2800);
   const leafMaterial=new THREE.MeshStandardMaterial({map:foliageTexture(),alphaTest:.28,alphaToCoverage:true,side:THREE.DoubleSide,roughness:.95});
   leafMaterial.onBeforeCompile=shader=>{
     // A small diffuse contribution approximates light passing through thin leaves.
@@ -153,9 +167,9 @@ export function populateLandscape(group:THREE.Group,anchors:THREE.Vector3[]) {
       c.set('#626d3d').multiplyScalar(.75+random(i+37)*.4);crowns.setColorAt(ci++,c);
     }
     if(y<.05 || slope>3.5 || noise(x*.95+3,z*.95)<.47 || ti>3400 || li>10900) continue;
-    const tall=random(i+94)>.73, h=(tall?.55:.24)+random(i+44)*(tall?.6:.42);
-    o.position.set(x,y+h*.5,z);o.rotation.set(0,random(i)*6,.12*(random(i)-.5));o.scale.set(1,h,1);o.updateMatrix();wood.setMatrixAt(ti++,o.matrix);
-    const autumn=x<-.8 && z>.7;
+    const tall=random(i+94)>.76, h=(tall?.72:.22)+random(i+44)*(tall?.7:.44);
+    o.position.set(x,y+h*.5,z);o.rotation.set(0,random(i)*6,.12*(random(i)-.5));o.scale.set(tall?1.3:.8,h,tall?1.3:.8);o.updateMatrix();wood.setMatrixAt(ti++,o.matrix);
+    const autumn=x<-.8 && z>.7 && noise(x*.6+8,z*.6)>.35;
     for(let branch=0;branch<7;branch++) {
       const angle=branch*2.4+random(i)*6,level=.38+branch*.085,spread=h*(tall?.23:.44)*Math.sin(level*Math.PI)*(.8+random(i+branch)*.4);
       const bx=x+Math.cos(angle)*spread,bz=z+Math.sin(angle)*spread,by=y+h*level;
@@ -175,11 +189,32 @@ export function populateLandscape(group:THREE.Group,anchors:THREE.Vector3[]) {
   rocks.count=ri;leaves.count=li;wood.count=ti;crowns.count=ci;crowns.castShadow=true;crowns.receiveShadow=true;
   rocks.castShadow=true;rocks.receiveShadow=true;leaves.castShadow=true;leaves.receiveShadow=true;wood.castShadow=true;
   group.add(rocks,crowns,leaves,wood);
-  addCliffLayers(group, anchors);
+  addCliffLayers(group, anchors, surface);
+  addVisitors(group,anchors.filter((_,i)=>i%5===0));
+}
+
+// Small neutral figures establish the scale of the miniature, not extra nodes.
+function addVisitors(group:THREE.Group,anchors:THREE.Vector3[]) {
+  const material=new THREE.MeshStandardMaterial({color:'#d9d8cb',roughness:.9});
+  const heads=new THREE.InstancedMesh(new THREE.SphereGeometry(.032,8,6),material,anchors.length);
+  const bodies=new THREE.InstancedMesh(new THREE.CapsuleGeometry(.028,.10,3,6),material,anchors.length);
+  const limbs=new THREE.InstancedMesh(new THREE.CylinderGeometry(.01,.013,.11,5),material,anchors.length*4);
+  const object=new THREE.Object3D();
+  anchors.forEach((anchor,i)=>{
+    const x=anchor.x+.24,z=anchor.z+.12,y=heightAt(x,z),angle=random(i+602)*Math.PI*2;
+    object.position.set(x,y+.23,z);object.rotation.set(0,angle,0);object.updateMatrix();heads.setMatrixAt(i,object.matrix);
+    object.position.y=y+.145;object.updateMatrix();bodies.setMatrixAt(i,object.matrix);
+    for(let j=0;j<4;j++) {
+      const arm=j>1,side=j%2?1:-1,offset=side*(arm?.046:.018);
+      object.position.set(x+Math.cos(angle)*offset,y+(arm?.13:.055),z-Math.sin(angle)*offset);
+      object.rotation.set(arm?.16:0,angle,side*(arm?.18:.06));object.updateMatrix();limbs.setMatrixAt(i*4+j,object.matrix);
+    }
+  });
+  for(const mesh of [heads,bodies,limbs]) {mesh.castShadow=mesh.receiveShadow=true;group.add(mesh);}
 }
 
 // Actual broken ledges interrupt smooth slopes at a scale larger than a texture.
-function addCliffLayers(group:THREE.Group,anchors:THREE.Vector3[]) {
+function addCliffLayers(group:THREE.Group,anchors:THREE.Vector3[],surface:THREE.MeshStandardMaterial) {
   // Embedded fractured blocks form faces, rather than a stack of identical disks.
   const geometry=new THREE.IcosahedronGeometry(1,1);
   const positions=geometry.getAttribute('position');
@@ -192,7 +227,7 @@ function addCliffLayers(group:THREE.Group,anchors:THREE.Vector3[]) {
     colors.push(color.r,color.g,color.b);
   }
   geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geometry.computeVertexNormals();
-  const cliffs=new THREE.InstancedMesh(geometry,new THREE.MeshStandardMaterial({vertexColors:true,roughness:1,flatShading:true}),150);
+  const cliffs=new THREE.InstancedMesh(geometry,surface,150);
   const object=new THREE.Object3D();let count=0;
   for(let i=0;i<2300 && count<150;i++) {
     const x=(random(i+8001)-.5)*18,z=(random(i+12001)-.5)*14,y=heightAt(x,z);
@@ -270,28 +305,45 @@ export function buildFootpath(points:THREE.Vector3[]) {
 }
 
 export function buildBridge(start:THREE.Vector3,end:THREE.Vector3) {
-  const group=new THREE.Group(), stone=new THREE.MeshStandardMaterial({color:'#b5ae98',roughness:.92});
-  const length=start.distanceTo(end), side=new THREE.Vector3(end.z-start.z,0,start.x-end.x).normalize();
-  const control=start.clone().lerp(end,.5);control.y+=.6;
+  const group=new THREE.Group(),stone=new THREE.MeshStandardMaterial({color:'#b6b09e',roughness:.96});
+  const side=new THREE.Vector3(end.z-start.z,0,start.x-end.x).normalize();
+  const control=start.clone().lerp(end,.5);control.y+=.7;
   const curve=new THREE.QuadraticBezierCurve3(start,control,end);
+  const deck=new THREE.InstancedMesh(new THREE.BoxGeometry(.34,.07,1),stone,40);
+  const posts=new THREE.InstancedMesh(new THREE.BoxGeometry(.025,.16,.025),stone,42);
+  const object=new THREE.Object3D(),color=new THREE.Color();let postCount=0;
   for(let i=0;i<40;i++) {
-    const p=curve.getPoint(i/40),q=curve.getPoint((i+1)/40),mid=p.clone().lerp(q,.5);
-    const deck=new THREE.Mesh(new THREE.BoxGeometry(.31,.085,p.distanceTo(q)+.015),stone);deck.position.copy(mid);deck.lookAt(q);deck.castShadow=true;deck.receiveShadow=true;group.add(deck);
+    const p=curve.getPoint(i/40),q=curve.getPoint((i+1)/40);
+    object.position.copy(p).lerp(q,.5);object.lookAt(q);object.scale.set(1,1,p.distanceTo(q)+.006);object.updateMatrix();deck.setMatrixAt(i,object.matrix);
+    color.setScalar(.82+random(i+501)*.18);deck.setColorAt(i,color);
     if(i%2===0) for(const sign of [-1,1]) {
-      const post=new THREE.Mesh(new THREE.BoxGeometry(.035,.17,.035),stone);post.position.copy(p).addScaledVector(side,sign*.145);post.position.y+=.1;group.add(post);
+      object.position.copy(p).addScaledVector(side,sign*.15);object.position.y+=.09;object.rotation.set(0,0,0);object.scale.set(1,1,1);object.updateMatrix();posts.setMatrixAt(postCount++,object.matrix);
     }
   }
+  posts.count=postCount;deck.castShadow=deck.receiveShadow=posts.castShadow=true;group.add(deck,posts);
   for(const sign of [-1,1]) {
-    const pts=curve.getPoints(40).map(p=>p.addScaledVector(side,sign*.145).add(new THREE.Vector3(0,.18,0)));
-    group.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),40,.023,5,false),stone));
+    const vertices:number[]=[],indices:number[]=[];
+    for(let i=0;i<=40;i++) {
+      const t=i/40,p=curve.getPoint(t);
+      const depth=.15+.72*Math.pow(Math.abs(t*2-1),1.8);
+      for(const edge of [-1,1]) for(const bottom of [false,true]) {
+        const q=p.clone().addScaledVector(side,sign*.12+edge*.024);q.y-=bottom?depth:.035;vertices.push(q.x,q.y,q.z);
+      }
+      if(i<40) {
+        const k=i*4;
+        for(const [a,b] of [[0,1],[2,0],[3,2],[1,3]]) indices.push(k+a,k+b,k+a+4,k+b,k+b+4,k+a+4);
+      }
+    }
+    const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));geometry.setIndex(indices);geometry.computeVertexNormals();
+    const arch=new THREE.Mesh(geometry,stone);arch.castShadow=arch.receiveShadow=true;group.add(arch);
+    const rail=curve.getPoints(40).map(p=>p.addScaledVector(side,sign*.15).add(new THREE.Vector3(0,.17,0)));
+    group.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(rail),40,.015,5,false),stone));
   }
-  for(const t of [.12,.88]) {const p=curve.getPoint(t),floor=heightAt(p.x,p.z);const h=Math.max(.1,p.y-floor);const pier=new THREE.Mesh(new THREE.BoxGeometry(.25,h,.3),stone);pier.position.copy(p);pier.position.y-=h/2;group.add(pier);}
   for(const point of [start,end]) {
     const landing=new THREE.Mesh(new THREE.CylinderGeometry(.26,.32,.07,10),stone);
-    landing.position.copy(point);landing.position.y-=.015;
-    landing.receiveShadow=true;landing.castShadow=true;group.add(landing);
+    landing.position.copy(point);landing.position.y-=.015;landing.receiveShadow=landing.castShadow=true;group.add(landing);
   }
-  group.userData.length=length;return group;
+  group.userData.length=start.distanceTo(end);return group;
 }
 
 export function rockMaterial(onLoad: () => void) {
@@ -299,6 +351,7 @@ export function rockMaterial(onLoad: () => void) {
   const placeholder = new THREE.DataTexture(new Uint8Array([255,255,255,255]),1,1);
   placeholder.needsUpdate = true;
   const rockTexture: {value: THREE.Texture} = {value: placeholder};
+  const heightTexture: {value: THREE.Texture}={value:placeholder},armTexture: {value: THREE.Texture}={value:placeholder},detailStrength={value:0};
   const material=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.94,metalness:0,transparent:true,opacity:0});
   let requested = false;
   material.userData.loadTexture = () => {
@@ -310,28 +363,50 @@ export function rockMaterial(onLoad: () => void) {
       texture.anisotropy = 4;
       rockTexture.value = texture;
       textureStrength.value = .65;
-      placeholder.dispose();
+
       onLoad();
     });
+    let detailsLoaded=0;
+    for(const [path,uniform] of [['/assets/rocky-terrain-height.jpg',heightTexture],['/assets/rocky-terrain-arm.jpg',armTexture]] as const) {
+      new THREE.TextureLoader().load(path,texture=>{
+        texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.anisotropy=4;uniform.value=texture;
+        if(++detailsLoaded===2) detailStrength.value=1;
+        onLoad();
+      });
+    }
   };
   material.onBeforeCompile=shader=>{
     shader.uniforms.rockTexture = rockTexture;
     shader.uniforms.rockTextureStrength = textureStrength;
+    shader.uniforms.rockHeight=heightTexture;shader.uniforms.rockArm=armTexture;shader.uniforms.rockDetailStrength=detailStrength;
     shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vRockPosition;');
-    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvRockPosition=position;');
+    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
+      vRockPosition=position;
+      #ifdef USE_INSTANCING
+        vRockPosition=(instanceMatrix*vec4(position,1.)).xyz;
+      #endif
+    `);
     shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>
       varying vec3 vRockPosition;
       uniform sampler2D rockTexture;
       uniform float rockTextureStrength;
+      uniform sampler2D rockHeight;
+      uniform sampler2D rockArm;
+      uniform float rockDetailStrength;
+      vec3 sampleRock(sampler2D tex,vec3 p,vec3 w) {
+        return texture2D(tex,p.yz*.32).rgb*w.x+texture2D(tex,p.xz*.32).rgb*w.y+texture2D(tex,p.xy*.32).rgb*w.z;
+      }
     `);
     shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
       vec3 weights=pow(abs(normalize(cross(dFdx(vRockPosition),dFdy(vRockPosition)))),vec3(4.));
       weights/=max(.001,weights.x+weights.y+weights.z);
-      vec3 rock=texture2D(rockTexture,vRockPosition.yz*.22).rgb*weights.x
-        +texture2D(rockTexture,vRockPosition.xz*.22).rgb*weights.y
-        +texture2D(rockTexture,vRockPosition.xy*.22).rgb*weights.z;
-      rock=mix(vec3(dot(rock,vec3(.2126,.7152,.0722))),rock,.22);
-      diffuseColor.rgb=mix(diffuseColor.rgb,rock*.98,rockTextureStrength*smoothstep(0.,.5,vRockPosition.y));
+      vec3 rock=sampleRock(rockTexture,vRockPosition,weights);
+      rock=mix(vec3(dot(rock,vec3(.2126,.7152,.0722))),rock,.35);
+      float surfaceMix=mix(.28,.72,smoothstep(-.5,1.,vRockPosition.y));
+      diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*(.55+rock*1.1),rockTextureStrength*.55);
+      diffuseColor.rgb=mix(diffuseColor.rgb,rock*.88,rockTextureStrength*surfaceMix*.5);
+      vec3 arm=sampleRock(rockArm,vRockPosition,weights);
+      diffuseColor.rgb*=mix(1.,mix(.64,1.,arm.r),rockDetailStrength*.7);
       float bandPosition=vRockPosition.y*15.+sin(vRockPosition.x*1.7)+sin(vRockPosition.z*1.3);
       float bandAA=1.-smoothstep(.3,1.6,fwidth(bandPosition));
       float strata=sin(bandPosition)*bandAA;
@@ -342,13 +417,18 @@ export function rockMaterial(onLoad: () => void) {
       diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(.82,.94,.68),lichen*.24);
 
     `);
+    shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
+      roughnessFactor=mix(roughnessFactor,clamp(arm.g,.72,1.),rockDetailStrength);
+    `);
     shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
-      // Screen-space surface gradient: bounded micro-relief from the rock albedo.
-      float relief=dot(rock,vec3(.2126,.7152,.0722))*.045*rockTextureStrength;
+      // Surface gradient uses the scanned height map; cap the slope on small faces.
+      float relief=mix(dot(rock,vec3(.2126,.7152,.0722))*.025,
+        sampleRock(rockHeight,vRockPosition,weights).r*.16,rockDetailStrength)*rockTextureStrength;
       vec3 surfaceDx=dFdx(-vViewPosition),surfaceDy=dFdy(-vViewPosition);
       vec3 tangentX=cross(surfaceDy,normal),tangentY=cross(normal,surfaceDx);
       float determinant=dot(surfaceDx,tangentX);
       vec3 reliefGradient=sign(determinant)*(dFdx(relief)*tangentX+dFdy(relief)*tangentY);
+      reliefGradient*=min(1.,abs(determinant)*.55/max(length(reliefGradient),.000001));
       normal=normalize(abs(determinant)*normal-reliefGradient);
     `);
   };

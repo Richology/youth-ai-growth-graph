@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { heightAt, landscapeGeometry, populateLandscape, buildBridge, rockMaterial, makePavilion, terrainSite, buildFootpath } from "./landscape";
+import { heightAt, landscapeGeometry, populateLandscape, buildBridge, rockMaterial, makePavilion, terrainSite, buildFootpath, terrainOccludes } from "./landscape";
 import { starLayout, STAR_CENTERS } from "./star-layout";
 import type { DomainScreenPosition, GraphData, GraphDomain, GraphEdge, GraphNode, ViewMode } from "./types";
 
@@ -166,7 +166,9 @@ export class GraphRenderer {
       const domainCenter=new THREE.Vector3(...STAR_CENTERS[domain.id]);domainCenter.x*=1.23;domainCenter.y*=1.16;
       const hub=new THREE.Mesh(new THREE.SphereGeometry(.20,20,16),new THREE.MeshBasicMaterial({color:domain.color,toneMapped:false}));hub.position.copy(domainCenter);domainGroup.add(hub);
       const aura=new THREE.Sprite(new THREE.SpriteMaterial({map:glowMap,color:domain.color,toneMapped:false,transparent:true,opacity:.55,depthWrite:false,blending:THREE.AdditiveBlending}));
-      aura.scale.set(2.4,2.4,1);hub.add(aura);
+      aura.scale.set(3.1,3.1,1);hub.add(aura);
+      const atmosphere=new THREE.Sprite(new THREE.SpriteMaterial({map:glowMap,color:domain.color,toneMapped:false,transparent:true,opacity:.10,depthWrite:false,blending:THREE.AdditiveBlending}));
+      atmosphere.position.copy(domainCenter);atmosphere.position.z-=2;atmosphere.scale.set(7,5,1);domainGroup.add(atmosphere);
       const groups=[...new Set(members.map(n=>n.subdomain_name))];
       groups.forEach(group=>{
         const children=members.filter(n=>n.subdomain_name===group);
@@ -256,7 +258,7 @@ export class GraphRenderer {
   }
 
   private createTerrainDecor() {
-    populateLandscape(this.terrainDecor, [...this.nodes.values()].map(v => v.terrain));
+    populateLandscape(this.terrainDecor, [...this.nodes.values()].map(v => v.terrain),this.terrain.material as THREE.MeshStandardMaterial);
     const bridges = [[[-2.5,-2.7],[2.4,-2.1]],[[-2.2,4],[2.3,5.3]]];
     for (const domain of this.data.domains) {
       const members=[...this.nodes.values()].filter(v=>v.node.domain_id===domain.id);
@@ -315,8 +317,13 @@ export class GraphRenderer {
   private pickNode(): NodeVisual | null {
     this.raycaster.setFromCamera(this.pointer, this.camera);
     const meshes = [...this.nodes.values()].filter((visual) => visual.mesh.visible).map((visual) => visual.mesh);
-    const hit = this.raycaster.intersectObjects(meshes, false)[0];
-    return hit ? this.nodes.get(hit.object.userData.nodeId) ?? null : null;
+    const hits = this.raycaster.intersectObjects(meshes, false);
+    const localCamera=this.world.worldToLocal(this.camera.position.clone());
+    for(const hit of hits) {
+      const visual=this.nodes.get(hit.object.userData.nodeId);
+      if(visual && (this.view!=='terrain' || !terrainOccludes(localCamera,visual.mesh.position))) return visual;
+    }
+    return null;
   }
 
   private animate = () => {
@@ -394,7 +401,7 @@ export class GraphRenderer {
       const active = !this.selectedId || neighborIds.has(visual.node.id);
       const worldDepth = visual.star.clone().applyMatrix4(this.world.matrixWorld).z;
       const depth = this.view === "star" ? clamp(THREE.MathUtils.mapLinear(worldDepth, -3, 3, .42, 1.0), .35, 1) : .98;
-      material.opacity += ((active ? depth : depth * .78) - material.opacity) * 0.12;
+      material.opacity += ((active ? depth : depth * .70) - material.opacity) * 0.12;
       const selectedScale = visual.node.id === this.selectedId ? 1.65 : visual.node.id === this.hoveredId ? 1.3 : 1;
       const targetScale = visual.baseScale * selectedScale * (this.view === "terrain" ? 0.86 : 1);
       visual.mesh.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.14);
@@ -410,8 +417,8 @@ export class GraphRenderer {
       const connected = this.selectedId && (visual.edge.source === this.selectedId || visual.edge.target === this.selectedId);
       const material = visual.line.material as THREE.LineBasicMaterial;
       const sameDomain = visual.source.node.domain_id === visual.target.node.domain_id;
-      const base = this.view === "terrain" ? (sameDomain ? .22 : .065) : (sameDomain ? .34 : .16);
-      material.opacity += ((this.selectedId ? (connected ? .78 : base * .40) : base) - material.opacity) * 0.14;
+      const base = this.view === "terrain" ? (sameDomain ? .22 : .065) : (sameDomain ? .30 : .21);
+      material.opacity += ((this.selectedId ? (connected ? .78 : base * (this.view==="star"?.65:.40)) : base) - material.opacity) * 0.14;
       material.color.set(visual.source.node.domain_id === visual.target.node.domain_id || connected ? this.domainById.get(visual.source.node.domain_id)!.color : this.view === "terrain" ? "#b8c2a5" : "#b2c1c1");
     }
   }
@@ -442,19 +449,14 @@ export class GraphRenderer {
       for(const {edge} of this.edges) { if(edge.source===this.selectedId) keyIds.add(edge.target); if(edge.target===this.selectedId) keyIds.add(edge.source); }
     }
     if (!this.selectedId || window.innerWidth >= 768) {
-      for(const domain of this.data.domains) [...this.nodes.values()].filter(v=>v.node.domain_id===domain.id).sort((a,b)=>b.node.metrics.total_incident-a.node.metrics.total_incident).slice(0,window.innerWidth<768?1:2).forEach(v=>keyIds.add(v.node.id));
+      for(const domain of this.data.domains) [...this.nodes.values()].filter(v=>v.node.domain_id===domain.id).sort((a,b)=>b.node.metrics.total_incident-a.node.metrics.total_incident).slice(0,window.innerWidth<768?1:this.view==='star'?3:2).forEach(v=>keyIds.add(v.node.id));
     }
     const localCamera=this.world.worldToLocal(this.camera.position.clone());
     for(const visual of this.nodes.values()) {
       const point=visual.mesh.position.clone().applyMatrix4(this.world.matrixWorld).project(this.camera);
       let occluded=false;
       if(this.view==='terrain' && keyIds.has(visual.node.id) && visual.node.id!==this.selectedId) {
-        const target=visual.mesh.position;
-        const length=localCamera.distanceTo(target), steps=Math.ceil(length/.25);
-        for(let i=1;i<steps-1;i++) {
-          const sample=localCamera.clone().lerp(target,i/steps);
-          if(Math.abs(sample.x)<10.4 && Math.abs(sample.z)<8.5 && sample.y<heightAt(sample.x,sample.z)-.04) {occluded=true;break;}
-        }
+        occluded=terrainOccludes(localCamera,visual.mesh.position);
       }
       positions.push({id:`node:${visual.node.id}`,kind:'node',x:(point.x*.5+.5)*rect.width,y:(-point.y*.5+.5)*rect.height,visible:!occluded&&keyIds.has(visual.node.id)&&visual.mesh.visible&&point.z>-1&&point.z<1});
     }
