@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { TerrainWater } from "./water";
 import { heightAt, landscapeGeometry, populateLandscape, buildBridge, rockMaterial, makePavilion, terrainSite, buildFootpath, terrainOccludes } from "./landscape";
 import { starLayout, STAR_CENTERS } from "./star-layout";
 import type { DomainScreenPosition, GraphData, GraphDomain, GraphEdge, GraphNode, ViewMode } from "./types";
@@ -76,6 +77,9 @@ export class GraphRenderer {
   private readonly starField: THREE.Points;
   private readonly starDecor = new THREE.Group();
   private readonly terrainDecor = new THREE.Group();
+  private readonly water = new TerrainWater(()=>this.invalidate());
+  private lastFrameTime=0;
+  private lastWaterFrame=0;
   private readonly terrain: THREE.Mesh;
   private frame = 0;
   private active = true;
@@ -91,7 +95,7 @@ export class GraphRenderer {
   private reducedMotion = false;
   private pointers = new Map<number, {x:number;y:number}>();
   private pinchDistance = 0;
-  private cameras = { star: { x:-.08,y:-.16,zoom:18.5 }, terrain: { x:.88,y:-.12,zoom:25 } };
+  private cameras = { star: { x:-.08,y:-.16,zoom:18.5 }, terrain: { x:.64,y:-.12,zoom:25 } };
   private dirtyFrames = 120;
   private focusFrames = 0;
   private invalidate() { this.dirtyFrames = 90; if (!this.frame && this.active) this.animate(); }
@@ -114,8 +118,8 @@ export class GraphRenderer {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.camera.position.set(0, 0.7, this.targetZoom);
     this.scene.add(this.world);
-    const ambient = new THREE.HemisphereLight("#e4edf4", "#645e4d", 1.45);
-    const key = new THREE.DirectionalLight("#fff1d6", 3.4);
+    const ambient = new THREE.HemisphereLight("#e4edf4", "#645e4d", 1.25);
+    const key = new THREE.DirectionalLight("#fff0d5", 3.7);
     key.position.set(-8, 11, 7);
     key.castShadow = true; key.shadow.mapSize.set(2048,2048);
     Object.assign(key.shadow.camera,{left:-15,right:15,top:15,bottom:-15,near:1,far:50});
@@ -131,17 +135,18 @@ export class GraphRenderer {
     this.world.add(this.starDecor);
     this.terrain = new THREE.Mesh(
       landscapeGeometry(),
-      rockMaterial(() => this.invalidate()),
+      rockMaterial(() => this.invalidate(),this.water.timeUniform,-.24,this.water.captureUniform),
     );
-    const ground = new THREE.Mesh(new THREE.PlaneGeometry(27, 22), new THREE.ShadowMaterial({ opacity: .11, depthWrite: false }));
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(27, 22), new THREE.ShadowMaterial({ opacity: .055, depthWrite: false }));
     ground.rotation.x = -Math.PI / 2;
-    ground.position.y = -1.42;
+    ground.position.y = -5.8;
     ground.receiveShadow = true;
     this.terrainDecor.add(ground);
     this.terrain.visible = false;
     this.terrain.renderOrder = -2;
     this.terrain.receiveShadow = true; this.terrain.castShadow = true;
-    this.world.add(this.terrain, this.terrainDecor);
+    this.water.group.visible=false;
+    this.world.add(this.terrain, this.terrainDecor,this.water.group);
     this.createNodes();
     this.createEdges();
     this.createTerrainDecor();
@@ -329,7 +334,15 @@ export class GraphRenderer {
   private animate = () => {
     if (!this.active) { this.frame = 0; return; }
     this.frame = 0;
-    if (this.dirtyFrames-- > 0) this.frame = window.requestAnimationFrame(this.animate);
+    const moving=this.dirtyFrames-- > 0;
+    const waterMoving=this.view==='terrain' && !this.reducedMotion;
+    if (moving || waterMoving) this.frame = window.requestAnimationFrame(this.animate);
+    const now=performance.now();
+    if(!moving && waterMoving && now-this.lastWaterFrame<33) return;
+    const delta=this.lastFrameTime ? (now-this.lastFrameTime)/1000 : 0;
+    this.lastFrameTime=now;this.lastWaterFrame=now;
+    if(waterMoving) this.water.advance(delta);
+    if(!moving) {this.water.render(this.renderer,this.scene,this.camera);return;}
     const ease = this.reducedMotion ? 1 : 0.085;
     this.world.rotation.x += (this.targetRotation.x - this.world.rotation.x) * ease;
     this.world.rotation.y += (this.targetRotation.y - this.world.rotation.y) * ease;
@@ -340,7 +353,7 @@ export class GraphRenderer {
     this.updateVisualState();
     this.updateEnvironment();
     if(this.focusFrames-- > 0 && this.selectedId) this.keepSelectionVisible();
-    this.renderer.render(this.scene, this.camera);
+    this.water.render(this.renderer, this.scene, this.camera);
     this.updateDomainLabels();
   };
 
@@ -401,10 +414,10 @@ export class GraphRenderer {
       const active = !this.selectedId || neighborIds.has(visual.node.id);
       const worldDepth = visual.star.clone().applyMatrix4(this.world.matrixWorld).z;
       const depth = this.view === "star" ? clamp(THREE.MathUtils.mapLinear(worldDepth, -3, 3, .42, 1.0), .35, 1) : .98;
-      material.opacity += ((active ? depth : depth * .70) - material.opacity) * 0.12;
+      material.opacity += ((active ? depth : depth * .70) - material.opacity) * (this.reducedMotion ? 1 : 0.12);
       const selectedScale = visual.node.id === this.selectedId ? 1.65 : visual.node.id === this.hoveredId ? 1.3 : 1;
       const targetScale = visual.baseScale * selectedScale * (this.view === "terrain" ? 0.86 : 1);
-      visual.mesh.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.14);
+      visual.mesh.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), this.reducedMotion ? 1 : 0.14);
       const glow=visual.mesh.children.find(c=>c instanceof THREE.Sprite) as THREE.Sprite;
       (glow.material as THREE.SpriteMaterial).opacity=(active ? .44 : .24) * depth;
 
@@ -418,7 +431,7 @@ export class GraphRenderer {
       const material = visual.line.material as THREE.LineBasicMaterial;
       const sameDomain = visual.source.node.domain_id === visual.target.node.domain_id;
       const base = this.view === "terrain" ? (sameDomain ? .22 : .065) : (sameDomain ? .30 : .21);
-      material.opacity += ((this.selectedId ? (connected ? .78 : base * (this.view==="star"?.65:.40)) : base) - material.opacity) * 0.14;
+      material.opacity += ((this.selectedId ? (connected ? .78 : base * (this.view==="star"?.65:.40)) : base) - material.opacity) * (this.reducedMotion ? 1 : 0.14);
       material.color.set(visual.source.node.domain_id === visual.target.node.domain_id || connected ? this.domainById.get(visual.source.node.domain_id)!.color : this.view === "terrain" ? "#b8c2a5" : "#b2c1c1");
     }
   }
@@ -427,10 +440,11 @@ export class GraphRenderer {
     const terrainMaterial = this.terrain.material as THREE.MeshStandardMaterial;
     const starMaterial = this.starField.material as THREE.PointsMaterial;
     if(this.view === "terrain") terrainMaterial.userData.loadTexture();
-    terrainMaterial.opacity = this.view === "terrain" ? Math.min(1, terrainMaterial.opacity + 0.12) : 0;
-    starMaterial.opacity += ((this.view === "star" ? 0.28 : 0.025) - starMaterial.opacity) * 0.1;
+    terrainMaterial.opacity = this.view === "terrain" ? Math.min(1, terrainMaterial.opacity + (this.reducedMotion ? 1 : 0.12)) : 0;
+    starMaterial.opacity += ((this.view === "star" ? 0.28 : 0.025) - starMaterial.opacity) * (this.reducedMotion ? 1 : 0.1);
     this.terrain.visible = this.view === "terrain";
     this.terrainDecor.visible = this.view === "terrain";
+    this.water.group.visible = this.view === "terrain";
     this.starDecor.visible = this.view === "star";
   }
 
@@ -472,12 +486,12 @@ export class GraphRenderer {
     const desktop = window.innerWidth >= 768;
     this.world.position.x = desktop ? (this.view === 'terrain' ? 2.7 : 1.9) : 0;
     this.world.position.y = this.view === 'terrain' ? (desktop ? 1.15 : 3.1) : .35;
-    this.world.scale.setScalar(desktop ? Math.min(1,Math.max(.60,(rect.width-260)/1000)) : (this.view === 'star' ? .92 : 1));
+    this.world.scale.setScalar(desktop ? Math.min(1,Math.max(.60,(rect.width-260)/1000)) : (this.view === 'star' ? .92 : .86));
     if(desktop && this.view==='terrain') {
       const intro=document.querySelector('.intro-panel')!.getBoundingClientRect();
       const left=Math.min(intro.right-rect.left+24,rect.width*.4);
       const unit=2*Math.tan(THREE.MathUtils.degToRad(20))*this.targetZoom/rect.height;
-      this.world.scale.setScalar(Math.min(1,Math.max(.35,(rect.width-left-24)*unit/22)));
+      this.world.scale.setScalar(Math.min(1,Math.max(.35,(rect.width-left-24)*unit/26)));
       this.world.position.x=(left-24)*.5*unit;
     }
     this.focusFrames=this.selectedId?70:0;

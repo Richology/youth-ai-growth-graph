@@ -14,3 +14,20 @@ Additional unaltered 1K JPG maps from the same Rocky Terrain asset, author and C
 - `rocky-terrain-arm.jpg`: https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rocky_terrain/rocky_terrain_arm_1k.jpg
 
 These provide surface relief, ambient occlusion and roughness. The maps are hosted locally; their MD5 checksums were verified against the official Poly Haven API at download.
+
+## Cliff faces (2026-10-19)
+
+- Asset: [Rock Face 03](https://polyhaven.com/a/rock_face_03)
+- Authors: Dario Barresi (photography), Rico Cilliers (processing)
+- License: [CC0](https://polyhaven.com/license)
+- Official metadata: https://api.polyhaven.com/files/rock_face_03
+
+Unaltered maps, verified against the official API's MD5 values:
+
+| Local file | Source | MD5 |
+| --- | --- | --- |
+| `cliff-face.jpg` | https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rock_face_03/rock_face_03_diff_2k.jpg | `657add9e8a8dffaeed19bdfc58078b59` |
+| `cliff-face-height.jpg` | https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_disp_1k.jpg | `9d51d6b2496de79f97b80d43ff1dd7fb` |
+| `cliff-face-arm.jpg` | https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face_03/rock_face_03_arm_1k.jpg | `351c58daba868568fb5a191194aa5302` |
+
+Cliff maps are projected onto steep faces and submerged rock columns. Upward-facing ground retains the Rocky Terrain maps. All maps are served locally; no external texture requests occur at runtime.

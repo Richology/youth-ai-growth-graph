@@ -7,12 +7,16 @@ page.on('pageerror',error=>errors.push(error.message));
 page.on('console',message=>{if(message.type()==='error' && !message.text().includes('404')) errors.push(message.text())});
 for(const [name,width,height,view,node] of [
  ['star-desktop',1440,900,'star',null],['terrain-desktop',1440,900,'terrain',null],
+ ['water-low-angle',1440,900,'terrain',null],['marine-closeup',1440,900,'terrain',null],
  ['star-selected',1440,900,'star','AI-BND-001'],['terrain-selected',1440,900,'terrain','AI-BND-001'],
  ['star-mobile',390,844,'star',null],['terrain-mobile',390,844,'terrain',null],
  ['terrain-mobile-selected',390,844,'terrain','AI-BND-001'],['terrain-tablet',1024,800,'terrain',null]
 ]) {
  await page.setViewportSize({width,height});
- await page.goto(`${process.env.PLAYWRIGHT_BASE_URL || "http://127.0.0.1:4321"}/?view=${view}${node?'&node='+node:''}`);await page.locator('#graph-loading').waitFor({state:'hidden'});await page.waitForTimeout(2200);await page.screenshot({path:`qa/${name}.png`});
+ await page.goto(`${process.env.PLAYWRIGHT_BASE_URL || "http://127.0.0.1:4321"}/?view=${view}${node?'&node='+node:''}`);await page.locator('#graph-loading').waitFor({state:'hidden'});await page.waitForTimeout(2200);
+ if(name==='water-low-angle' || name==='marine-closeup') {await page.mouse.move(900,600);await page.mouse.down();await page.mouse.move(900,430,{steps:12});await page.mouse.up();await page.waitForTimeout(1500);}
+ if(name==='marine-closeup'){await page.mouse.move(920,650);await page.mouse.wheel(0,-650);await page.waitForTimeout(1800);}
+ await page.screenshot({path:`qa/${name}.png`});
 }
 await browser.close();
 if(errors.length) { console.error(errors.join('\n'));process.exitCode=1; }

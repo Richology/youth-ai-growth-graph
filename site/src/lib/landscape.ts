@@ -27,7 +27,7 @@ export function coast(a:number) {
 }
 function baseHeight(x:number,z:number):number {
   const r=Math.hypot(x/10.2,z/8.0), edge=coast(Math.atan2(z/8,x/10.2));
-  if(r>edge) return -1.1;
+  if(r>edge) return -4.8;
   const warp=(noise(x*.85,z*.85)-.5)*.32;
   let mass=0;
   for(const [cx,cz,len,width,angle,h] of ridges) {
@@ -48,7 +48,12 @@ function baseHeight(x:number,z:number):number {
   mass-=joint*.16*smooth(.5,2,mass);
   // Low shelves break up the coast without making another raised, flat platter.
   const shore=Math.pow(noise(x*.8+16,z*.8),4)*.5;
-  return -.62 + (mass+strata*smooth(0,.7,mass)+shore)*(1-smooth(edge-.10,edge,r));
+  const elevation=-.62 + (mass+strata*smooth(0,.7,mass)+shore)*(1-smooth(edge-.10,edge,r));
+  // Eroded channels sit beneath the water instead of forming a flat raised shelf.
+  const trench=2.8+(noise(x*.65+3,z*.65)-.5)*1.2;
+  const submerged=1-smooth(-.62,-.08,elevation);
+  const fractured=(noise(x*2.1+2,z*2.1)-.5)*.48;
+  return elevation-(trench+fractured)*submerged-1.4*smooth(edge-.2,edge,r);
 }
 
 const sites:Record<string,number[][]> = {
@@ -90,20 +95,18 @@ export function landscapeGeometry() {
     const x=Math.cos(a)*10.2*t*radius,z=Math.sin(a)*8*t*radius,y=heightAt(x,z);
     positions.push(x,y,z);
     const slope=Math.hypot(heightAt(x+.07,z)-y,heightAt(x,z+.07)-y)/.07;
-    color.set('#898677').lerp(new THREE.Color('#343832'),1-smooth(-.55,.25,y));
+    color.set('#898677').lerp(new THREE.Color('#687461'),1-smooth(-.55,.25,y));
     if(y>-.5 && y<.65) color.lerp(new THREE.Color('#77715b'),(1-smooth(.3,1.8,slope))*.48);
     color.multiplyScalar(.83+noise(x*9,z*9)*.24);
     if(y>-.35 && slope<2.2) color.lerp(moss,(.22+noise(x*1.3,z*1.3)*.28)*smooth(-.4,.3,y));
     colors.push(color.r,color.g,color.b);
     if(ring<rings) {const i=ring*segments+s,j=ring*segments+(s+1)%segments;indices.push(i,j,i+segments,j,j+segments,i+segments);}
   }
-  for(let layer=1;layer<=9;layer++) for(let s=0;s<segments;s++) {
-    const a=s/segments*Math.PI*2,radius=coast(a)+(noise(s*.3,layer*.6)-.5)*.018;
-    positions.push(Math.cos(a)*10.2*radius,-.62-layer*.075-random(s)*.045,Math.sin(a)*8*radius);
-    color.set(layer%3===0?'#777162':'#4b4d43').multiplyScalar(.72+random(s*13+layer)*.3);colors.push(color.r,color.g,color.b);
-    const i=(rings+layer-1)*segments+s,j=(rings+layer-1)*segments+(s+1)%segments;indices.push(i,j,i+segments,j,j+segments,i+segments);
-  }
-  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));g.setIndex(indices);g.computeVertexNormals();return g;
+  // The separate shoreline meshes now own the submerged cliffs. Do not draw
+  // or cast shadows from the obsolete underwater heightfield.
+  const surfaceIndices:number[]=[];
+  for(let i=0;i<indices.length;i+=3) if(Math.max(positions[indices[i]*3+1],positions[indices[i+1]*3+1],positions[indices[i+2]*3+1])>=-.24) surfaceIndices.push(indices[i],indices[i+1],indices[i+2]);
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));g.setIndex(surfaceIndices);g.computeVertexNormals();return g;
 }
 
 function foliageTexture() {
@@ -163,8 +166,8 @@ export function populateLandscape(group:THREE.Group,anchors:THREE.Vector3[],surf
     }
     // Low vegetation follows moist, sheltered shelves, with open gravel between patches.
     if(y>-.35 && slope<1.6 && noise(x*1.2,z*1.2)>.52 && ci<4400) {
-      o.position.set(x,y+.025,z);o.rotation.set(0,random(i)*6,0);o.scale.set(.13+random(i+34)*.16,.04+random(i+35)*.06,.12+random(i+36)*.15);o.updateMatrix();crowns.setMatrixAt(ci,o.matrix);
-      c.set('#626d3d').multiplyScalar(.75+random(i+37)*.4);crowns.setColorAt(ci++,c);
+      o.position.set(x,y+.025,z);o.rotation.set(0,random(i)*6,0);o.scale.set(.065+random(i+34)*.09,.05+random(i+35)*.09,.07+random(i+36)*.08);o.updateMatrix();crowns.setMatrixAt(ci,o.matrix);
+      c.set('#596a40').multiplyScalar(.75+random(i+37)*.4);crowns.setColorAt(ci++,c);
     }
     if(y<.05 || slope>3.5 || noise(x*.95+3,z*.95)<.47 || ti>3400 || li>10900) continue;
     const tall=random(i+94)>.76, h=(tall?.72:.22)+random(i+44)*(tall?.7:.44);
@@ -290,14 +293,19 @@ export function buildFootpath(points:THREE.Vector3[]) {
         const k=offset+i*2;indices.push(k,k+1,k+2,k+1,k+3,k+2);
         const q=route[i+1],rise=q.y-p.y,run=Math.hypot(q.x-p.x,q.z-p.z);
         // Quiet earth on gentle sections, a real tread only where a step is needed.
-        if(Math.abs(rise)/Math.max(.01,run)>.5 && i%2===0) {
+        if(p.y>-.12 && q.y>-.12 && Math.abs(rise)/Math.max(.01,run)>.5 && i%2===0) {
           object.position.copy(p);object.position.y+=.025;
           object.rotation.set(0,Math.atan2(q.x-p.x,q.z-p.z),0);object.updateMatrix();matrices.push(object.matrix.clone());
         }
       }
     });
   }
-  const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));geometry.setIndex(indices);geometry.computeVertexNormals();
+  // Trails end at the shoreline instead of stretching down the submerged cliff.
+  const dryIndices:number[]=[];
+  for(let i=0;i<indices.length;i+=3) {
+    if(indices.slice(i,i+3).every(index=>vertices[index*3+1]>-.12)) dryIndices.push(indices[i],indices[i+1],indices[i+2]);
+  }
+  const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));geometry.setIndex(dryIndices);geometry.computeVertexNormals();
   const trail=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color:'#8f8872',roughness:1,side:THREE.DoubleSide}));
   trail.receiveShadow=true;group.add(trail);
   const steps=new THREE.InstancedMesh(new THREE.BoxGeometry(.135,.025,.075),new THREE.MeshStandardMaterial({color:'#aaa48f',roughness:1}),matrices.length);
@@ -346,12 +354,13 @@ export function buildBridge(start:THREE.Vector3,end:THREE.Vector3) {
   group.userData.length=start.distanceTo(end);return group;
 }
 
-export function rockMaterial(onLoad: () => void) {
+export function rockMaterial(onLoad: () => void, waterTime?: {value:number}, clipBelow=-100, waterCapture?:{value:number}) {
   const textureStrength = { value: 0 };
   const placeholder = new THREE.DataTexture(new Uint8Array([255,255,255,255]),1,1);
   placeholder.needsUpdate = true;
   const rockTexture: {value: THREE.Texture} = {value: placeholder};
   const heightTexture: {value: THREE.Texture}={value:placeholder},armTexture: {value: THREE.Texture}={value:placeholder},detailStrength={value:0};
+  const cliffTexture={value:placeholder as THREE.Texture},cliffHeight={value:placeholder as THREE.Texture},cliffArm={value:placeholder as THREE.Texture},cliffStrength={value:0};
   const material=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.94,metalness:0,transparent:true,opacity:0});
   let requested = false;
   material.userData.loadTexture = () => {
@@ -366,6 +375,15 @@ export function rockMaterial(onLoad: () => void) {
 
       onLoad();
     });
+    let cliffLoaded=0;
+    for(const [path,uniform,isColor] of [['/assets/cliff-face.jpg',cliffTexture,true],['/assets/cliff-face-height.jpg',cliffHeight,false],['/assets/cliff-face-arm.jpg',cliffArm,false]] as const) {
+      new THREE.TextureLoader().load(path,texture=>{
+        if(isColor) texture.colorSpace=THREE.SRGBColorSpace;
+        texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.anisotropy=4;uniform.value=texture;
+        if(++cliffLoaded===3) cliffStrength.value=1;
+        onLoad();
+      });
+    }
     let detailsLoaded=0;
     for(const [path,uniform] of [['/assets/rocky-terrain-height.jpg',heightTexture],['/assets/rocky-terrain-arm.jpg',armTexture]] as const) {
       new THREE.TextureLoader().load(path,texture=>{
@@ -376,11 +394,16 @@ export function rockMaterial(onLoad: () => void) {
     }
   };
   material.onBeforeCompile=shader=>{
+    shader.uniforms.cliffTexture=cliffTexture;shader.uniforms.cliffHeight=cliffHeight;shader.uniforms.cliffArm=cliffArm;shader.uniforms.cliffStrength=cliffStrength;
     shader.uniforms.rockTexture = rockTexture;
+    shader.uniforms.waterTime=waterTime ?? {value:0};
+    shader.uniforms.rockClipBelow={value:clipBelow};
+    shader.uniforms.waterCapture=waterCapture ?? {value:0};
     shader.uniforms.rockTextureStrength = textureStrength;
     shader.uniforms.rockHeight=heightTexture;shader.uniforms.rockArm=armTexture;shader.uniforms.rockDetailStrength=detailStrength;
-    shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vRockPosition;');
+    shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vRockPosition;\nvarying vec3 vWaterUpView;');
     shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
+      vWaterUpView=normalize(mat3(viewMatrix*modelMatrix)*vec3(0.,1.,0.));
       vRockPosition=position;
       #ifdef USE_INSTANCING
         vRockPosition=(instanceMatrix*vec4(position,1.)).xyz;
@@ -388,7 +411,22 @@ export function rockMaterial(onLoad: () => void) {
     `);
     shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>
       varying vec3 vRockPosition;
-      uniform sampler2D rockTexture;
+      varying vec3 vWaterUpView;
+      uniform sampler2D rockTexture,cliffTexture,cliffHeight,cliffArm;
+      uniform float cliffStrength;
+      uniform float waterTime,rockClipBelow,waterCapture;
+      float waterCaustic(vec2 p) {
+        vec2 cell=floor(p),f=fract(p);float first=10.,second=10.;
+        for(int y=-1;y<=1;y++) for(int x=-1;x<=1;x++) {
+          vec2 n=vec2(float(x),float(y));
+          vec2 h=fract(sin(vec2(dot(cell+n,vec2(127.1,311.7)),dot(cell+n,vec2(269.5,183.3))))*43758.5453);
+          vec2 point=n+.5+.32*sin(waterTime*.45+6.2831*h)-f;
+          float d=dot(point,point);
+          if(d<first){second=first;first=d;}else{second=min(second,d);}
+        }
+        float edge=second-first;
+        return 1.-smoothstep(.015,.07+fwidth(edge),edge);
+      }
       uniform float rockTextureStrength;
       uniform sampler2D rockHeight;
       uniform sampler2D rockArm;
@@ -398,14 +436,16 @@ export function rockMaterial(onLoad: () => void) {
       }
     `);
     shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
+      if(vRockPosition.y<rockClipBelow) discard;
       vec3 weights=pow(abs(normalize(cross(dFdx(vRockPosition),dFdy(vRockPosition)))),vec3(4.));
       weights/=max(.001,weights.x+weights.y+weights.z);
-      vec3 rock=sampleRock(rockTexture,vRockPosition,weights);
+      float cliffMix=(1.-smoothstep(.25,.8,weights.y))*cliffStrength;
+      vec3 rock=mix(sampleRock(rockTexture,vRockPosition,weights),sampleRock(cliffTexture,vRockPosition*.7,weights),cliffMix);
       rock=mix(vec3(dot(rock,vec3(.2126,.7152,.0722))),rock,.35);
-      float surfaceMix=mix(.28,.72,smoothstep(-.5,1.,vRockPosition.y));
+      float surfaceMix=mix(.55,.85,smoothstep(-.5,1.,vRockPosition.y));
       diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*(.55+rock*1.1),rockTextureStrength*.55);
-      diffuseColor.rgb=mix(diffuseColor.rgb,rock*.88,rockTextureStrength*surfaceMix*.5);
-      vec3 arm=sampleRock(rockArm,vRockPosition,weights);
+      diffuseColor.rgb=mix(diffuseColor.rgb,rock*.88,mix(rockTextureStrength*surfaceMix*.65,.72,cliffMix));
+      vec3 arm=mix(sampleRock(rockArm,vRockPosition,weights),sampleRock(cliffArm,vRockPosition*.7,weights),cliffMix);
       diffuseColor.rgb*=mix(1.,mix(.64,1.,arm.r),rockDetailStrength*.7);
       float bandPosition=vRockPosition.y*15.+sin(vRockPosition.x*1.7)+sin(vRockPosition.z*1.3);
       float bandAA=1.-smoothstep(.3,1.6,fwidth(bandPosition));
@@ -415,7 +455,25 @@ export function rockMaterial(onLoad: () => void) {
       // Mineral variation stays broad enough to survive the overview camera.
       float lichen=smoothstep(.45,.82,sin(vRockPosition.x*2.1+sin(vRockPosition.z*2.8))*.5+.5)*weights.y;
       diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(.82,.94,.68),lichen*.24);
+      float submerged=1.-smoothstep(-.7,-.12,vRockPosition.y);
+      diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(.48,.92,.88),submerged*.16);
+      float waterDepth=max(0.,-.16-vRockPosition.y);
+      vec2 causticPlane=weights.y>max(weights.x,weights.z)?vRockPosition.xz:(weights.x>weights.z?vRockPosition.zy:vRockPosition.xy);
+      float caustic=waterCaustic(causticPlane*3.2+vec2(sin(vRockPosition.y*1.7),cos(vRockPosition.x*1.4))*.14);
+      diffuseColor.rgb+=vec3(.07,.12,.08)*caustic*submerged*exp(-waterDepth*.28)*mix(.25,1.,weights.y);
+      // Water absorbs warm wavelengths along the submerged cliff face.
 
+
+
+    `);
+    shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>', `
+      outgoingLight+=vec3(.09,.12,.065)*caustic*submerged*exp(-waterDepth*.24)*mix(.35,1.1,weights.y);
+      if(waterDepth>0. && waterCapture<.5) {
+        float rayDepth=waterDepth/max(.28,abs(dot(normalize(vViewPosition),vWaterUpView)));
+        vec3 transmittance=exp(-vec3(.14,.065,.045)*rayDepth);
+        outgoingLight=outgoingLight*transmittance+vec3(.009,.07,.085)*(1.-transmittance);
+      }
+      #include <opaque_fragment>
     `);
     shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
       roughnessFactor=mix(roughnessFactor,clamp(arm.g,.72,1.),rockDetailStrength);
@@ -423,7 +481,7 @@ export function rockMaterial(onLoad: () => void) {
     shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
       // Surface gradient uses the scanned height map; cap the slope on small faces.
       float relief=mix(dot(rock,vec3(.2126,.7152,.0722))*.025,
-        sampleRock(rockHeight,vRockPosition,weights).r*.16,rockDetailStrength)*rockTextureStrength;
+        mix(sampleRock(rockHeight,vRockPosition,weights).r,sampleRock(cliffHeight,vRockPosition*.7,weights).r,cliffMix)*.22,rockDetailStrength)*rockTextureStrength;
       vec3 surfaceDx=dFdx(-vViewPosition),surfaceDy=dFdy(-vViewPosition);
       vec3 tangentX=cross(surfaceDy,normal),tangentY=cross(normal,surfaceDx);
       float determinant=dot(surfaceDx,tangentX);
