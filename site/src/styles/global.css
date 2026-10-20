@@ -1349,3 +1349,11 @@ canvas:focus-visible {
   .app-shell[data-view="terrain"] .view-control { padding-top:10px; }
   .app-shell[data-view="terrain"] .domain-filters { gap:4px; margin-top:14px; }
 }
+
+/* Deep-space contrast belongs to the star view; the terrain keeps its palette. */
+.app-shell[data-view="star"] { --surface: #080c12; }
+.app-shell[data-view="star"] .graph-stage {
+  background: radial-gradient(ellipse at 66% 48%, #0c1625 0%, #080c12 70%);
+}
+.app-shell[data-view="star"] .domain-label { font-weight: 600; text-shadow: 0 2px 12px #03060b; }
+.app-shell[data-view="star"] .node-label { color: #d4e2ed; text-shadow: 0 1px 4px #03060b, 0 0 8px #03060b; }
