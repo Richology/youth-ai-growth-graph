@@ -13,3 +13,5 @@ __pycache__/
 .env.*
 !.env.example
 site/qa/*.png
+site/qa/underwater-review/*.png
+site/qa/underwater-review/served-build.json

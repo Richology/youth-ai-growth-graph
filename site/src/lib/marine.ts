@@ -1,3 +1,4 @@
+import { underwaterPathGLSL } from './water-optics';
 import * as THREE from 'three';
 import { heightAt, random } from './landscape';
 import { FishMotion } from './fish-motion';
@@ -7,16 +8,20 @@ import { fishGeometry, starfishGeometry, shellGeometry as createShell, seagrassG
 export class MarineLife {
   readonly group=new THREE.Group();
   private fish:THREE.Group[]=[];
+  private fishBatches:{body:THREE.InstancedMesh;tail:THREE.InstancedMesh;members:THREE.Group[]}[]=[];
   private motion=new FishMotion();
   private previousTime=0;
   constructor(private time:{value:number},capture:{value:number},ground:THREE.Object3D[]) {
-    const material=(color:string,vegetation=false)=>{
-      const mat=new THREE.MeshStandardMaterial({color,roughness:vegetation?.7:.48,vertexColors:true,transparent:true,side:vegetation?THREE.DoubleSide:THREE.FrontSide});
+    const material=(color:string,vegetation=false,swimming=false)=>{
+      const mat=new THREE.MeshStandardMaterial({color,roughness:vegetation?.7:swimming?.28:.48,metalness:swimming?.22:0,vertexColors:true,transparent:true,side:vegetation?THREE.DoubleSide:THREE.FrontSide});
       mat.onBeforeCompile=shader=>{
         shader.uniforms.lifeTime=time;shader.uniforms.waterCapture=capture;
         shader.vertexShader=shader.vertexShader.replace('#include <common>',`#include <common>
-          uniform float lifeTime;uniform vec3 waterUp;varying vec2 lifeXZ;varying float lifeDepth;varying vec3 lifeUp;`)
+          ${swimming?'attribute float swimBeat;attribute float swimSpeed;':''}
+          uniform float lifeTime;uniform vec3 waterUp;varying vec2 lifeXZ;varying float lifeDepth;varying vec3 lifeViewLocal;`)
           .replace('#include <begin_vertex>',`#include <begin_vertex>
+            ${swimming?`float rear=1.-smoothstep(-.17,.12,position.x);
+              transformed.z+=sin(swimBeat-position.x*12.)*rear*rear*(.006+swimSpeed*.025);`:''}
             ${vegetation?`float phase=modelMatrix[3].x*.7+modelMatrix[3].z*.5;
               #ifdef USE_INSTANCING
               phase+=instanceMatrix[3].x*.7+instanceMatrix[3].z*.5;
@@ -29,34 +34,35 @@ export class MarineLife {
               lifePosition=instanceMatrix*lifePosition;
             #endif
             lifeDepth=max(0.,-.16-lifePosition.y);
-            lifeUp=normalize(mat3(viewMatrix)*waterUp);
+            lifeViewLocal=mat3(waterWorldInverse)*(cameraPosition-(modelMatrix*lifePosition).xyz);
           `);
         shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>
-          uniform float waterCapture;varying vec2 lifeXZ;varying float lifeDepth;varying vec3 lifeUp;`)
+          ${underwaterPathGLSL}
+          uniform float waterCapture;varying vec2 lifeXZ;varying float lifeDepth;varying vec3 lifeViewLocal;`)
           .replace('#include <opaque_fragment>',`if(waterCapture<.5){
-            vec3 transmission=exp(-vec3(.14,.065,.045)*lifeDepth/max(.28,abs(dot(normalize(vViewPosition),lifeUp))));
-            outgoingLight=outgoingLight*transmission+vec3(.009,.07,.085)*(1.-transmission);
+            vec3 transmission=exp(-vec3(.18,.055,.025)*underwaterPath(lifeXZ,lifeDepth,lifeViewLocal));
+            outgoingLight=outgoingLight*transmission+vec3(.006,.16,.23)*(1.-transmission);
           }
-          diffuseColor.a*=1.-smoothstep(.70,.96,pow(pow(abs(lifeXZ.x)/12.6,2.8)+pow(abs(lifeXZ.y)/10.4,2.8),1./2.8));
+          diffuseColor.a*=1.-smoothstep(.85,1.03,pow(pow(abs(lifeXZ.x)/12.6,2.8)+pow(abs(lifeXZ.y)/11.5,2.8),1./2.8));
           #include <opaque_fragment>`);
       };
-      mat.customProgramCacheKey=()=>`marine-${vegetation}`;
+      mat.customProgramCacheKey=()=>`marine-${vegetation}-${swimming}`;
       return mat;
     };
     const grassMat=material('#ffffff',true),algaeMat=material('#ffffff',true);
     const ray=new THREE.Raycaster(),down=new THREE.Vector3(0,-1,0);
     ground.forEach(mesh=>mesh.updateMatrixWorld(true));
     const patches:THREE.Vector3[]=[];
-    for(let i=0;i<500 && patches.length<68;i++) {
-      const beds=[[-5.7,7.6],[-2.1,7.9],[1.2,7.6],[5.5,7.7],[0,1.8],[0,-1.9]];
+    for(let i=0;i<1100 && patches.length<135;i++) {
+      const beds=[[-6.2,8.3],[-3.6,8.9],[-1.9,7.7],[1.8,8.8],[5.5,8.2],[7.7,5.2],[-8.,4.8],[0,2.7],[0,-1.9]];
       const bed=beds[i%beds.length],angle=random(i+771)*Math.PI*2,r=Math.sqrt(random(i+901));
-      const x=bed[0]+Math.cos(angle)*r*1.3,z=bed[1]+Math.sin(angle)*r*.7;
+      const x=bed[0]+Math.cos(angle)*r*1.45,z=bed[1]+Math.sin(angle)*r*1.05;
       if([[0,0],[.4,0],[-.4,0],[0,.4],[0,-.4]].some(([dx,dz])=>heightAt(x+dx,z+dz)>-.5)) continue;
-      if(Math.pow(Math.abs(x)/12.6,2.8)+Math.pow(Math.abs(z)/10.4,2.8)>.65) continue;
+      if(Math.pow(Math.abs(x)/12.6,2.8)+Math.pow(Math.abs(z)/10.4,2.8)>.90) continue;
       ray.set(new THREE.Vector3(x,-.4,z),down);
       const hit=ray.intersectObjects(ground,false)[0];
       if(!hit || hit.point.y>-.9 || hit.point.y< -5.8 || (hit.face && hit.face.normal.y<.45)) continue;
-      if(patches.some(p=>p.distanceTo(hit.point)<.23)) continue;
+      if(patches.some(p=>p.distanceTo(hit.point)<.32)) continue;
       patches.push(hit.point.clone());
     }
     // Overlapping, irregular colonies share six draws instead of one draw per tuft.
@@ -66,9 +72,9 @@ export class MarineLife {
       const mesh=new THREE.InstancedMesh(seagrassGeometry(variant,variant===0),variant===0?algaeMat:grassMat,entries.length);
       entries.forEach((position,i)=>{
         transform.position.copy(position);transform.rotation.y=(random(i+variant*31)-.5)*.8;
-        const scale=.48+random(i+variant*31+19)*.8;
+        const scale=.42+random(i+variant*31+19)*.65;
         transform.scale.set(scale,scale*(.8+random(i+5)*.4),scale);transform.updateMatrix();mesh.setMatrixAt(i,transform.matrix);
-        mesh.setColorAt(i,new THREE.Color('#ffffff').multiplyScalar(.72+random(i+71)*.28));
+        mesh.setColorAt(i,new THREE.Color('#ffffff').multiplyScalar(.85+random(i+71)*.20));
       });mesh.receiveShadow=true;this.group.add(mesh);
     }
     const starMat=material('#ffffff'),shellMat=material('#ffffff');
@@ -76,7 +82,7 @@ export class MarineLife {
     // Find exposed rock shelves independently of the grass, then conform to their normals.
     let stars=0;
     for(let i=0;i<100 && stars<6;i++) {
-      const x=(random(i+1601)-.5)*15,z=5.9+random(i+1701)*2;
+      const x=(random(i+1601)-.5)*15,z=6.1+random(i+1701)*3.2;
       ray.set(new THREE.Vector3(x,-.5,z),down);
       const hit=ray.intersectObjects(ground.slice(0,-1),false)[0];
       if(!hit || hit.point.y< -5 || !hit.face || hit.face.normal.y<.35)continue;
@@ -101,19 +107,28 @@ export class MarineLife {
       originals.forEach((mesh,i)=>{mesh.updateMatrix();instances.setMatrixAt(i,mesh.matrix);this.group.remove(mesh);});
       instances.receiveShadow=true;this.group.add(instances);
     }
-    const fishMat=material('#ffffff'),goldMat=material('#ffffff');
+    const fishMat=material('#ffffff',false,true),goldMat=material('#ffffff',false,true);
     const geometries=[fishGeometry(),fishGeometry(true)];
-    for(let school=0;school<2;school++) {
-      const group=new THREE.Group();
-      for(let i=0;i<12;i++) {
-        const fish=new THREE.Group(),mat=school?goldMat:fishMat;
-        const body=new THREE.Mesh(geometries[school].body,mat);
-        const tail=new THREE.Mesh(geometries[school].tail,mat);tail.position.x=-.175;fish.add(body,tail);
-        fish.scale.setScalar(.72+random(i+school*20+73)*.38);
+    for(let school=0;school<3;school++) {
+      const members:THREE.Group[]=[];
+      for(let i=0;i<(school===2?12:18);i++) {
+        const fish=new THREE.Group(),mat=school===2?goldMat:fishMat;
+        const body=new THREE.Mesh(geometries[school===2?1:0].body,mat);
+        const tail=new THREE.Mesh(geometries[school===2?1:0].tail,mat);tail.position.x=-.175;fish.add(body,tail);
+        fish.scale.setScalar((school===2?1.05:.9)+random(i+school*20+73)*.35);
         fish.position.set((random(i+school*40)-.5)*1.9,(random(i+94)-.5)*.45,(random(i+19)-.5)*.7);
-        fish.rotation.y=(random(i+401)-.5)*.15;group.add(fish);this.fish.push(fish);
+        fish.rotation.y=(random(i+401)-.5)*.15;members.push(fish);this.fish.push(fish);
       }
-      this.group.add(group);
+      const shape=geometries[school===2?1:0],mat=school===2?goldMat:fishMat;
+      const bodyShape=shape.body.clone(),tailShape=shape.tail.clone();
+      for(const geometry of [bodyShape,tailShape]) {
+        geometry.setAttribute('swimBeat',new THREE.InstancedBufferAttribute(new Float32Array(members.length),1).setUsage(THREE.DynamicDrawUsage));
+        geometry.setAttribute('swimSpeed',new THREE.InstancedBufferAttribute(new Float32Array(members.length),1).setUsage(THREE.DynamicDrawUsage));
+      }
+      const body=new THREE.InstancedMesh(bodyShape,mat,members.length),tail=new THREE.InstancedMesh(tailShape,mat,members.length);
+      body.instanceMatrix.setUsage(THREE.DynamicDrawUsage);tail.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+      body.frustumCulled=tail.frustumCulled=false;
+      this.fishBatches.push({body,tail,members});this.group.add(body,tail);
     }
     // Convert local depth to the water group's space for attached plants and moving fish.
     this.group.traverse(object=>{
@@ -140,9 +155,25 @@ export class MarineLife {
       fish.position.copy(this.motion.positions[i]);
       rotation.setFromUnitVectors(forward,this.motion.velocities[i].clone().normalize());
       fish.quaternion.slerp(rotation,delta?1-Math.exp(-delta*5):1);
-      fish.children[0].rotation.y=Math.sin(this.motion.beats[i]-.5)*.035;
+      fish.userData.beat=this.motion.beats[i];fish.userData.speed=this.motion.velocities[i].length();
       fish.children[1].rotation.y=Math.sin(this.motion.beats[i])*(.16+this.motion.velocities[i].length()*.45);
     });
+    for(const batch of this.fishBatches) {
+      batch.members.forEach((fish,i)=>{
+        fish.updateMatrixWorld(true);
+        batch.body.setMatrixAt(i,fish.children[0].matrixWorld);
+        batch.tail.setMatrixAt(i,fish.children[1].matrixWorld);
+        for(const mesh of [batch.body,batch.tail]) {
+          mesh.geometry.getAttribute('swimBeat').setX(i,fish.userData.beat);
+          mesh.geometry.getAttribute('swimSpeed').setX(i,fish.userData.speed);
+        }
+      });
+      batch.body.instanceMatrix.needsUpdate=batch.tail.instanceMatrix.needsUpdate=true;
+      for(const mesh of [batch.body,batch.tail]) {
+        (mesh.geometry.getAttribute('swimBeat') as THREE.InstancedBufferAttribute).needsUpdate=true;
+        (mesh.geometry.getAttribute('swimSpeed') as THREE.InstancedBufferAttribute).needsUpdate=true;
+      }
+    }
   }
 
   updateWaterTransform() {

@@ -77,20 +77,20 @@ export function shellGeometry() {
 /** Curved ribbons with a raised midrib, tapered tips and irregular rooted rosettes. */
 export function seagrassGeometry(seed:number,algae=false) {
   const vertices:number[]=[],colors:number[]=[],indices:number[]=[],color=new THREE.Color();
-  const blades=algae?16:16+Math.floor(random(seed+18)*9),steps=16;
+  const blades=algae?12:11+Math.floor(random(seed+18)*9),steps=20;
   for(let blade=0;blade<blades;blade++) {
-    const n=seed*71+blade,a=random(n+201)*Math.PI*2,height=.38+random(n+301)*.75;
+    const n=seed*71+blade,a=random(n+201)*Math.PI*2,height=.55+random(n+301)*1.05;
     const baseX=(random(n+401)-.5)*.32,baseZ=(random(n+501)-.5)*.32,start=vertices.length/3;
     for(let k=0;k<=steps;k++) {
       const t=k/steps,lean=(.18+random(n+99)*.38)*t*t;
-      const tip=t*(1-.24*t*t),width=(algae?.055:.025)*Math.pow(Math.sin(Math.PI*t),.6)+.002;
+      const tip=t*(1-.13*t*t),width=(algae?.028:.014)*Math.pow(Math.sin(Math.PI*t),.6)+.0008;
       const turn=a+Math.sin(t*4+n)*.25;
       for(let edge=0;edge<3;edge++) {
         const side=edge-1;
         const flutter=algae?1+.25*Math.sin(t*24+n):1;
         vertices.push(baseX+(Math.cos(a)*.25+.75)*lean+Math.sin(turn)*width*side*flutter,
           height*tip+(edge===1?.009:0)*Math.sin(t*Math.PI),baseZ+(Math.sin(a)*.25+.3)*lean-Math.cos(turn)*width*side*flutter);
-        color.set(algae?'#727943':'#6c8a43').lerp(new THREE.Color('#9caa65'),t*.35).multiplyScalar((edge===1?1.14:.85)*(.8+random(n+202)*.3));colors.push(color.r,color.g,color.b);
+        color.set(algae?'#727943':'#819e47').lerp(new THREE.Color('#b5bf68'),t*.35).multiplyScalar((edge===1?1.14:.85)*(.8+random(n+202)*.3));colors.push(color.r,color.g,color.b);
       }
       if(k<steps)for(let edge=0;edge<2;edge++){const q=start+k*3+edge;indices.push(q,q+1,q+3,q+1,q+4,q+3);}
     }

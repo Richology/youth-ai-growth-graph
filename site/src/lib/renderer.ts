@@ -95,7 +95,7 @@ export class GraphRenderer {
   private reducedMotion = false;
   private pointers = new Map<number, {x:number;y:number}>();
   private pinchDistance = 0;
-  private cameras = { star: { x:-.08,y:-.16,zoom:18.5 }, terrain: { x:.64,y:-.12,zoom:25 } };
+  private cameras = { star: { x:-.08,y:-.16,zoom:18.5 }, terrain: { x:.43,y:-.12,zoom:25 } };
   private dirtyFrames = 120;
   private focusFrames = 0;
   private invalidate() { this.dirtyFrames = 90; if (!this.frame && this.active) this.animate(); }
@@ -485,13 +485,13 @@ export class GraphRenderer {
     this.camera.updateProjectionMatrix();
     const desktop = window.innerWidth >= 768;
     this.world.position.x = desktop ? (this.view === 'terrain' ? 2.7 : 1.9) : 0;
-    this.world.position.y = this.view === 'terrain' ? (desktop ? 1.15 : 3.1) : .35;
+    this.world.position.y = this.view === 'terrain' ? 2.5 : .35;
     this.world.scale.setScalar(desktop ? Math.min(1,Math.max(.60,(rect.width-260)/1000)) : (this.view === 'star' ? .92 : .86));
     if(desktop && this.view==='terrain') {
       const intro=document.querySelector('.intro-panel')!.getBoundingClientRect();
       const left=Math.min(intro.right-rect.left+24,rect.width*.4);
       const unit=2*Math.tan(THREE.MathUtils.degToRad(20))*this.targetZoom/rect.height;
-      this.world.scale.setScalar(Math.min(1,Math.max(.35,(rect.width-left-24)*unit/26)));
+      this.world.scale.setScalar(Math.min(1,Math.max(.35,Math.min((rect.width-left-24)*unit/27,(rect.height-110)*unit/18))));
       this.world.position.x=(left-24)*.5*unit;
     }
     this.focusFrames=this.selectedId?70:0;
@@ -522,7 +522,7 @@ export class GraphRenderer {
 
   resetView() {
     this.invalidate();
-    this.targetRotation = this.view === "star" ? { x: -0.08, y: -0.16 } : { x: 0.88, y: -0.12 };
+    this.targetRotation = this.view === "star" ? { x: -0.08, y: -0.16 } : { x: .43, y: -.12 };
     this.targetZoom = this.view === "star" ? 18.5 : 25;
   }
 }

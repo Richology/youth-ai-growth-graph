@@ -1,3 +1,4 @@
+import { underwaterPathGLSL } from './water-optics';
 import * as THREE from 'three';
 
 // Deterministic art direction: heights are scenery, never competency scores.
@@ -401,21 +402,24 @@ export function rockMaterial(onLoad: () => void, waterTime?: {value:number}, cli
     shader.uniforms.waterCapture=waterCapture ?? {value:0};
     shader.uniforms.rockTextureStrength = textureStrength;
     shader.uniforms.rockHeight=heightTexture;shader.uniforms.rockArm=armTexture;shader.uniforms.rockDetailStrength=detailStrength;
-    shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vRockPosition;\nvarying vec3 vWaterUpView;');
+    shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vRockPosition;\nvarying vec3 vWaterViewLocal;');
     shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
-      vWaterUpView=normalize(mat3(viewMatrix*modelMatrix)*vec3(0.,1.,0.));
       vRockPosition=position;
       #ifdef USE_INSTANCING
         vRockPosition=(instanceMatrix*vec4(position,1.)).xyz;
       #endif
+      vec3 towardEye=cameraPosition-(modelMatrix*vec4(vRockPosition,1.)).xyz;
+      vWaterViewLocal=vec3(dot(towardEye,normalize(modelMatrix[0].xyz)),dot(towardEye,normalize(modelMatrix[1].xyz)),dot(towardEye,normalize(modelMatrix[2].xyz)));
     `);
     shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>
       varying vec3 vRockPosition;
-      varying vec3 vWaterUpView;
+      varying vec3 vWaterViewLocal;
+      ${underwaterPathGLSL}
       uniform sampler2D rockTexture,cliffTexture,cliffHeight,cliffArm;
       uniform float cliffStrength;
       uniform float waterTime,rockClipBelow,waterCapture;
       float waterCaustic(vec2 p) {
+        p+=vec2(sin(p.y*2.3+waterTime*.27),cos(p.x*1.7-waterTime*.24))*.28;
         vec2 cell=floor(p),f=fract(p);float first=10.,second=10.;
         for(int y=-1;y<=1;y++) for(int x=-1;x<=1;x++) {
           vec2 n=vec2(float(x),float(y));
@@ -425,7 +429,8 @@ export function rockMaterial(onLoad: () => void, waterTime?: {value:number}, cli
           if(d<first){second=first;first=d;}else{second=min(second,d);}
         }
         float edge=second-first;
-        return 1.-smoothstep(.015,.07+fwidth(edge),edge);
+        float focus=1.-smoothstep(.008,.035+fwidth(edge),edge);
+        return focus*(.45+.55*sin(p.x*1.7+p.y*.8+waterTime*.32)*sin(p.x*1.7+p.y*.8+waterTime*.32));
       }
       uniform float rockTextureStrength;
       uniform sampler2D rockHeight;
@@ -459,19 +464,19 @@ export function rockMaterial(onLoad: () => void, waterTime?: {value:number}, cli
       diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(.48,.92,.88),submerged*.16);
       float waterDepth=max(0.,-.16-vRockPosition.y);
       vec2 causticPlane=weights.y>max(weights.x,weights.z)?vRockPosition.xz:(weights.x>weights.z?vRockPosition.zy:vRockPosition.xy);
-      float caustic=waterCaustic(causticPlane*3.2+vec2(sin(vRockPosition.y*1.7),cos(vRockPosition.x*1.4))*.14);
-      diffuseColor.rgb+=vec3(.07,.12,.08)*caustic*submerged*exp(-waterDepth*.28)*mix(.25,1.,weights.y);
+      float caustic=waterCaustic(causticPlane*3.7+vec2(sin(vRockPosition.y*1.7),cos(vRockPosition.x*1.4))*.14);
+      diffuseColor.rgb+=vec3(.10,.14,.09)*caustic*submerged*exp(-waterDepth*.28)*mix(.25,1.,weights.y);
       // Water absorbs warm wavelengths along the submerged cliff face.
 
 
 
     `);
     shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>', `
-      outgoingLight+=vec3(.09,.12,.065)*caustic*submerged*exp(-waterDepth*.24)*mix(.35,1.1,weights.y);
+      outgoingLight+=vec3(.16,.21,.13)*caustic*submerged*exp(-waterDepth*.17)*mix(.35,1.1,weights.y);
       if(waterDepth>0. && waterCapture<.5) {
-        float rayDepth=waterDepth/max(.28,abs(dot(normalize(vViewPosition),vWaterUpView)));
-        vec3 transmittance=exp(-vec3(.14,.065,.045)*rayDepth);
-        outgoingLight=outgoingLight*transmittance+vec3(.009,.07,.085)*(1.-transmittance);
+        float rayDepth=underwaterPath(vRockPosition.xz,waterDepth,vWaterViewLocal);
+        vec3 transmittance=exp(-vec3(.18,.055,.025)*rayDepth);
+        outgoingLight=outgoingLight*transmittance+vec3(.006,.16,.23)*(1.-transmittance);
       }
       #include <opaque_fragment>
     `);

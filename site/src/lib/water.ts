@@ -1,8 +1,9 @@
 import * as THREE from 'three';
-import { ConvexGeometry } from 'three/addons/geometries/ConvexGeometry.js';
+import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { coast, heightAt, random, rockMaterial } from './landscape';
 import { MarineLife } from './marine';
-import { seabedHeight } from './seabed';
+import { REEF_SPURS, seabedHeight } from './seabed';
+import { WATER_RADIUS_X, WATER_RADIUS_Z } from './water-optics';
 
 export const WATER_LEVEL=-.16;
 export const MAX_WAVE_HEIGHT=.13;
@@ -35,6 +36,7 @@ export class TerrainWater {
   readonly captureUniform={value:0};
   private readonly cliffAnchors:THREE.Vector3[]=[];
   private readonly life:MarineLife;
+  private readonly depthVolume:THREE.Mesh;
 
   constructor(private readonly onLoad:()=>void=()=>{}) {
     this.target.depthTexture=new THREE.DepthTexture(1,1,THREE.UnsignedIntType);
@@ -46,7 +48,7 @@ export class TerrainWater {
     const material=new THREE.ShaderMaterial({
       transparent:true,depthWrite:false,side:THREE.DoubleSide,
       uniforms:{uTime:this.timeUniform,uDepth:{value:this.target.depthTexture},uNearFar:{value:new THREE.Vector2(.1,1000)},uMirror:{value:this.reflection.texture},uMirrorMatrix:{value:this.mirrorMatrix},uScene:{value:this.target.texture},uResolution:{value:new THREE.Vector2(1,1)},
-        uShallow:{value:new THREE.Color('#3a8c89')},uDeep:{value:new THREE.Color('#064b60')}},
+        uShallow:{value:new THREE.Color('#248f9a')},uDeep:{value:new THREE.Color('#07516b')}},
       vertexShader:`
         attribute float floorHeight;
         uniform float uTime;
@@ -112,7 +114,7 @@ export class TerrainWater {
           if(edge<.005 || vDepth<-.025) discard;
           vec2 detail=vec2(ripples(vLocal+vec2(.025,0.))-ripples(vLocal-vec2(.025,0.)),
             ripples(vLocal+vec2(0.,.025))-ripples(vLocal-vec2(0.,.025)))*5.;
-          vec3 n=normalize(vWaterNormal+vTangentX*detail.x*.12+vTangentZ*detail.y*.09);
+          vec3 n=normalize(vWaterNormal+vTangentX*detail.x*.21+vTangentZ*detail.y*.16);
           vec3 viewDir=normalize(cameraPosition-vWorld);
           float fresnel=.025+.975*pow(1.-abs(dot(viewDir,n)),5.);
           vec2 uv=gl_FragCoord.xy/uResolution;
@@ -137,7 +139,7 @@ export class TerrainWater {
           }
           refracted=scattered/samples;
           vec3 under=refracted.rgb+uDeep*(1.-refracted.a);
-          vec3 transmission=exp(-vec3(.48,.15,.11)*thickness);
+          vec3 transmission=exp(-vec3(.32,.105,.065)*thickness);
           vec3 tint=mix(uShallow,uDeep,1.-exp(-thickness*.15));
           vec3 color=under*transmission+tint*(1.-transmission);
           vec2 mirrorUV=vMirror.xy/vMirror.w+bend*.018;
@@ -145,13 +147,13 @@ export class TerrainWater {
           vec3 reflectionColor=reflected.rgb+mix(vec3(.20,.36,.43),vec3(.48,.65,.70),smoothstep(-.22,.40,n.x+n.z))*(1.-reflected.a);
           color=mix(color,reflectionColor,fresnel);
           vec3 halfVector=normalize(viewDir+normalize(vec3(-.4,.8,.3)));
-          float glint=pow(max(dot(n,halfVector),0.),110.);
-          color+=vec3(1.,.94,.78)*glint*.18;
+          float glint=pow(max(dot(n,halfVector),0.),160.);
+          color+=vec3(1.,.94,.78)*glint*.55;
           // Small foam fragments are tied to the actual depth texture, including reefs.
           float wash=noise(vLocal*12.+vec2(uTime*.22,-uTime*.13));
           float shore=(1.-smoothstep(.02,.22,thickness))*smoothstep(.52,.78,wash);
           float crest=smoothstep(.69,.87,ripples(vLocal))*smoothstep(.4,1.,thickness);
-          color=mix(color,vec3(.85,.94,.90),shore*.58+crest*.025);
+          color=mix(color,vec3(.85,.94,.90),shore*.58+crest*.09);
           gl_FragColor=vec4(color,edge*.94);
           #include <tonemapping_fragment>
           #include <colorspace_fragment>
@@ -163,11 +165,46 @@ export class TerrainWater {
     this.addSubmergedRocks();
     this.life=new MarineLife(this.timeUniform,this.captureUniform,this.group.children.filter(child=>child!==this.surface));
     this.group.add(this.life.group);
+    this.depthVolume=this.makeDepthVolume();this.group.add(this.depthVolume);
+  }
+
+  /** A soft open-water boundary supplies optical depth in gaps between the reefs.
+   * Its visibility follows the scene/depth capture; solid reef pixels keep their own fog. */
+  private makeDepthVolume() {
+    const geometry=new THREE.CylinderGeometry(1,1,7,128,12,true);
+    geometry.scale(WATER_RADIUS_X,1,WATER_RADIUS_Z);geometry.translate(0,WATER_LEVEL-3.5,0);
+    const material=new THREE.ShaderMaterial({transparent:true,depthWrite:false,depthTest:false,
+      uniforms:{uScene:this.surface.material.uniforms.uScene,uDepth:this.surface.material.uniforms.uDepth,
+        uResolution:this.surface.material.uniforms.uResolution,uNearFar:this.surface.material.uniforms.uNearFar},
+      vertexShader:`varying vec3 waterWorld,waterNormal;varying float waterDepth;
+        void main(){vec4 world=modelMatrix*vec4(position,1.);waterWorld=world.xyz;
+          waterNormal=normalize(mat3(modelMatrix)*normal);waterDepth=${WATER_LEVEL}-position.y;
+          gl_Position=projectionMatrix*viewMatrix*world;}`,
+      fragmentShader:`uniform sampler2D uScene,uDepth;uniform vec2 uResolution,uNearFar;
+        varying vec3 waterWorld,waterNormal;varying float waterDepth;
+        float viewZ(float d){return uNearFar.x*uNearFar.y/((uNearFar.y-uNearFar.x)*d-uNearFar.y);}
+        void main(){
+          vec2 uv=gl_FragCoord.xy/uResolution;vec4 scene=texture2D(uScene,uv);
+          float entry=(viewMatrix*vec4(waterWorld,1.)).z;
+          float behind=viewZ(texture2D(uDepth,uv).r);
+          if(behind>entry)discard;
+          // Opaque reef pixels already receive depth fog in their own material.
+          // Only fill uncovered water, so the boundary cannot recolour a shelf
+          // abruptly where it intersects the volume's curved front surface.
+          if(scene.a>.995)discard;
+          vec3 color=mix(vec3(.014,.23,.28),vec3(.005,.065,.11),smoothstep(0.,7.,waterDepth));
+          float facing=max(0.,dot(normalize(cameraPosition-waterWorld),normalize(waterNormal)));
+          float edge=smoothstep(.25,.85,facing)*smoothstep(.02,.8,waterDepth)*(1.-smoothstep(3.5,7.,waterDepth));
+          gl_FragColor=vec4(color,edge*.75*(1.-scene.a));
+          #include <tonemapping_fragment>
+          #include <colorspace_fragment>
+        }`});
+    const mesh=new THREE.Mesh(geometry,material);mesh.renderOrder=9;return mesh;
   }
 
   private addFoundations(material:THREE.MeshStandardMaterial) {
     const centers=[[-5.,-3.5],[4.7,-2.8],[-4.5,3.6],[4.7,4.]];
-    const segments=256,layers=56,top=-.24;
+    const segments=192,layers=44,top=-.24;
     for(let island=0;island<centers.length;island++) {
       const [cx,cz]=centers[island],shore:number[]=[];
       // Trace each island's actual shoreline, independent of the outer terrain tile.
@@ -183,7 +220,7 @@ export class TerrainWater {
       const positions:number[]=[],colors:number[]=[],indices:number[]=[],color=new THREE.Color();
       for(let layer=0;layer<=layers;layer++) for(let j=0;j<segments;j++) {
         const angle=j/segments*Math.PI*2,t=layer/layers;
-        const bottom=5.05+.22*erosion(Math.cos(angle)*3,island,Math.sin(angle)*3);
+        const bottom=5.2+.35*erosion(Math.cos(angle)*3,island,Math.sin(angle)*3);
         const depth=t*bottom;
         const warp=Math.sin(t*Math.PI);
         const theta=angle+.035*erosion(Math.cos(angle)*3,depth,Math.sin(angle)*3)*warp;
@@ -196,22 +233,24 @@ export class TerrainWater {
         const jointB=Math.abs(erosion(px*.72,depth*1.1+px*.18,pz*.72+7));
         const joints=(1-THREE.MathUtils.smoothstep(jointA,.015,.12))*.24
           +(1-THREE.MathUtils.smoothstep(jointB,.01,.08))*.12;
-        const buttress=Math.sin(t*Math.PI)*(.55+.5*erosion(px*.5,0,pz*.5))
-          +THREE.MathUtils.smoothstep(t,.32+.12*macro,.74+.1*macro)*(.25+.3*erosion(px*.9,0,pz*.9));
+        const buttress=Math.sin(t*Math.PI)*(.20+.3*erosion(px*.5,0,pz*.5));
         let ravine=0;
         for(let cut=0;cut<6;cut++) {
           const direction=(cut+random(island*19+cut+150)) /6*Math.PI*2;
           const distance=Math.atan2(Math.sin(theta-direction),Math.cos(theta-direction));
-          const width=.065+random(cut+island*23+300)*.08;
-          ravine+=Math.exp(-distance*distance/(width*width))*(.55+random(cut+201)*.75);
+          const width=.10+random(cut+island*23+300)*.14;
+          ravine+=Math.exp(-distance*distance/(width*width))*(.8+random(cut+201)*1.1);
         }
-        const radius=shore[j]+t*.12+buttress+Math.min(1,t*7)*(macro*.7+fracture*.12-crevice-joints)
-          -ravine*THREE.MathUtils.smoothstep(t,.08,.48);
+        // Recess the lower mass instead of extruding the whole shoreline to the bed.
+        // The intact lip meets the dry mesh; deep clefts separate its supporting ribs.
+        const recession=THREE.MathUtils.smoothstep(t,.02,.88)*(1.1+.35*Math.sin(angle*3+island));
+        const radius=Math.max(.65,shore[j]-recession+buttress+Math.min(1,t*9)*(Math.tanh(macro*3)*.45+fracture*.32-crevice-joints)
+          -ravine*THREE.MathUtils.smoothstep(t,.04,.42));
         const y=top-depth+.18*erosion(px*1.3,depth*.5,pz*1.3)*warp;
         const x=cx+Math.cos(theta)*radius,z=cz+Math.sin(theta)*radius;
         positions.push(x,y,z);
         if(layer>2 && layer<layers-2 && j%6===0) this.cliffAnchors.push(new THREE.Vector3(x,y,z));
-        color.set('#aaa18b').multiplyScalar(.90+macro*.12+fracture*.05-joints*.55);colors.push(color.r,color.g,color.b);
+        color.set('#b8aa87').multiplyScalar(.90+macro*.12+fracture*.05-joints*.55);colors.push(color.r,color.g,color.b);
         if(layer<layers) {const a=layer*segments+j,b=layer*segments+(j+1)%segments;indices.push(a,b,a+segments,b,b+segments,a+segments);}
       }
       const geometry=new THREE.BufferGeometry();
@@ -226,28 +265,26 @@ export class TerrainWater {
 
   private addReefSpurs(material:THREE.MeshStandardMaterial) {
     // Offset fractured buttresses break up the cliff wall without forming a regular ring.
-    const sites=[[-6.8,6.8,.65,1.8],[-5.1,7.1,.58,2.1],[-3.7,7.5,.48,1.5],
-      [-1.6,6.9,.72,1.3],[.4,7.4,.5,1.6],[2.7,7.0,.7,2.2],[4.6,7.3,.55,1.6],
-      [6.5,6.6,.7,1.9],[-8.1,1.8,.6,1.4],[8.0,2.9,.55,1.5],[0,1.1,.48,1.0]];
-    sites.forEach(([cx,cz,width,rise],seed)=>{
-      const bottom=seabedHeight(cx,cz)-.18,top=Math.min(-2.85,bottom+rise);
+    REEF_SPURS.forEach(([cx,cz,width,rise],seed)=>{
+      const bottom=seabedHeight(cx,cz)-.18,top=Math.min(-1.65,bottom+rise);
       const vertices:number[]=[],colors:number[]=[],indices:number[]=[],color=new THREE.Color();
-      const sides=16,layers=12;
+      const sides=36,layers=22;
       for(let layer=0;layer<=layers;layer++)for(let j=0;j<sides;j++) {
         const t=layer/layers,a=j/sides*Math.PI*2;
         const ledge=THREE.MathUtils.smoothstep(t,.35+random(seed+91)*.12,.52+random(seed+91)*.12);
-        const profile=(1.12-.25*t-.18*ledge)*(1+.16*Math.sin(a*3+seed)+.09*Math.sin(a*7+seed*2));
-        const fracture=erosion(Math.cos(a)*3, t*4+seed,Math.sin(a)*3)*.07;
+        const split=Math.pow(Math.max(0,Math.cos(a*3+seed+t*.35)),12)*.28;
+        const profile=(1.13-.26*t-.24*ledge)*(1+.18*Math.sin(a*3+seed)+.11*Math.sin(a*7+seed*2))-split;
+        const fracture=erosion(Math.cos(a)*3, t*5+seed,Math.sin(a)*3)*.15;
         const bx=Math.sign(Math.cos(a))*Math.pow(Math.abs(Math.cos(a)),.6)*width*(profile+fracture)*1.2;
         const bz=Math.sign(Math.sin(a))*Math.pow(Math.abs(Math.sin(a)),.65)*width*(profile+fracture)*(.7+random(seed+18)*.3);
         const turn=seed*1.73;
         vertices.push(cx+bx*Math.cos(turn)-bz*Math.sin(turn)+t*t*.18*Math.sin(seed),
-          bottom+(top-bottom)*t+Math.sin(t*Math.PI)*fracture+t*(.10*Math.sin(a*3+seed)+.08*Math.cos(a+seed)),
+          bottom+(top-bottom)*t+Math.sin(t*Math.PI)*fracture+t*(.22*Math.sin(a*3+seed)+.15*Math.cos(a+seed)),
           cz+bx*Math.sin(turn)+bz*Math.cos(turn));
-        color.set('#aaa28d').multiplyScalar(.87+fracture+random(j+seed*19)*.12);colors.push(color.r,color.g,color.b);
+        color.set('#b9ad8e').multiplyScalar(.87+fracture+random(j+seed*19)*.12);colors.push(color.r,color.g,color.b);
         if(layer<layers){const k=layer*sides+j,n=layer*sides+(j+1)%sides;indices.push(k,k+sides,n,n,k+sides,n+sides);}
       }
-      const center=vertices.length/3;vertices.push(cx+.12*Math.sin(seed),top+.025,cz);color.set('#b5ac93');colors.push(color.r,color.g,color.b);
+      const center=vertices.length/3;vertices.push(cx+.12*Math.sin(seed),top-.08,cz);color.set('#b5ac93');colors.push(color.r,color.g,color.b);
       for(let j=0;j<sides;j++)indices.push(center,layers*sides+(j+1)%sides,layers*sides+j);
       const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));
       geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geometry.setIndex(indices);geometry.computeVertexNormals();
@@ -258,18 +295,24 @@ export class TerrainWater {
 
   private addSubmergedRocks() {
     const material=rockMaterial(this.onLoad,this.timeUniform,-100,this.captureUniform);
-    material.opacity=1;material.transparent=false;material.flatShading=true;material.userData.loadTexture();
+    material.opacity=1;material.transparent=false;material.flatShading=false;material.userData.loadTexture();
     this.addFoundations(material);
     this.addReefSpurs(material);
     const variants:THREE.InstancedMesh[]=[];
     for(let variant=0;variant<6;variant++) {
-      const points:THREE.Vector3[]=[];
-      for(let j=0;j<42;j++) {
-        const y=1-2*(j+.5)/42,angle=j*2.399963,r=Math.sqrt(1-y*y);
-        const scale=.72+random(variant*101+j+430)*.36;
-        points.push(new THREE.Vector3(Math.cos(angle)*r*scale,Math.max(-.8,y*scale),Math.sin(angle)*r*scale));
+      // Weathered block faces retain rounded edges and small concave fractures,
+      // rather than exposing the triangles of a low-resolution convex hull.
+      const block=new THREE.IcosahedronGeometry(1,3);
+      const points=block.getAttribute('position');
+      for(let j=0;j<points.count;j++) {
+        const x=points.getX(j),y=points.getY(j),z=points.getZ(j);
+        const wear=erosion(x*2.3+variant*7,y*2.0,z*2.3)*.23;
+        const split=Math.exp(-Math.pow((y+x*.32+Math.sin(z*2+variant)*.12-.18)/.12,2))*.10;
+        const shape=(.87+wear-split)/Math.pow(Math.abs(x)**2.7+Math.abs(y)**2.7+Math.abs(z)**2.7,1/2.7);
+        points.setXYZ(j,x*shape+.13*y*Math.sin(variant+z),y*shape*(.9+wear*.6),z*shape+.1*x*y);
       }
-      const geometry=new ConvexGeometry(points);geometry.computeBoundingBox();
+      block.deleteAttribute('normal');block.deleteAttribute('uv');
+      const geometry=mergeVertices(block,1e-4);geometry.computeBoundingBox();
       const bounds=geometry.boundingBox!,height=bounds.max.y-bounds.min.y;
       const pos=geometry.getAttribute('position');
       for(let j=0;j<pos.count;j++) pos.setY(j,(pos.getY(j)-(bounds.max.y+bounds.min.y)*.5)*2/height);
@@ -285,11 +328,11 @@ export class TerrainWater {
       if(foundation) {
         const anchor=this.cliffAnchors[Math.floor(random(seed)*this.cliffAnchors.length)];
         object.position.copy(anchor);
-        h=Math.min(.65+random(seed+8)*.85,Math.max(.12,(-.2-anchor.y)*.55));
-        width=.28+random(seed+2)*.35;
+        h=Math.min(.35+random(seed+8)*.8,Math.max(.12,(-.2-anchor.y)*.55));
+        width=.45+random(seed+2)*.6;
         const center=islands.reduce((a,b)=>Math.hypot(anchor.x-a[0],anchor.z-a[1])<Math.hypot(anchor.x-b[0],anchor.z-b[1])?a:b);
         const outward=new THREE.Vector3(anchor.x-center[0],0,anchor.z-center[1]).normalize();
-        object.position.addScaledVector(outward,-.12);
+        object.position.addScaledVector(outward,-.20);
         object.rotation.set((random(seed+4)-.5)*.2,Math.atan2(outward.x,outward.z),(random(seed+6)-.5)*.3);
       } else {
         const island=islands[i%4],angle=random(seed)*Math.PI*2,ring=.9+random(seed+1)*.75;
@@ -303,18 +346,18 @@ export class TerrainWater {
         object.position.set(x,(emerged?floor:bedHeight)+h*.75,z);
         object.rotation.set((random(seed+4)-.5)*.35,random(seed+5)*6,(random(seed+6)-.5)*.4);
       }
-      object.scale.set(width,h,foundation?.18+random(seed+3)*.12:width*(.65+random(seed+3)*.55));object.updateMatrix();
+      object.scale.set(width,h,foundation?.32+random(seed+3)*.25:width*(.65+random(seed+3)*.55));object.updateMatrix();
       mesh.setMatrixAt(mesh.count,object.matrix);
       color.set('#a29a83').multiplyScalar(.75+random(seed+12)*.36);mesh.setColorAt(mesh.count++,color);
     }
     // A submerged shelf outside the original island makes the water transparent
     // over actual geometry instead of revealing an empty ivory background.
-    const bed=new THREE.PlaneGeometry(26,22,256,224);bed.rotateX(-Math.PI/2);
+    const bed=new THREE.PlaneGeometry(26,24,160,144);bed.rotateX(-Math.PI/2);
     const p=bed.getAttribute('position'),colors=[];
     for(let i=0;i<p.count;i++) {
       const x=p.getX(i),z=p.getZ(i);
       p.setY(i,seabedHeight(x,z));
-      color.set('#b4af96').multiplyScalar(.93+random(i+919)*.08);colors.push(color.r,color.g,color.b);
+      color.set('#ded2af').multiplyScalar(.94+random(i+919)*.06);colors.push(color.r,color.g,color.b);
     }
     bed.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));bed.computeVertexNormals();
     const bedMaterial=rockMaterial(this.onLoad,this.timeUniform,-100,this.captureUniform);
@@ -322,8 +365,21 @@ export class TerrainWater {
     const prepareBed=bedMaterial.onBeforeCompile;
     bedMaterial.onBeforeCompile=(shader,renderer)=>{
       prepareBed(shader,renderer);
+      shader.fragmentShader=shader.fragmentShader.replace('float relief=mix(', 'float relief=0.*mix(');
+      shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>', `
+        // Sand channels retain fine grains rather than the cliff's large relief map.
+        float grain=fract(sin(dot(floor(vRockPosition.xz*95.),vec2(127.1,311.7)))*43758.5453);
+        normal=normalize(normal+vec3(dFdx(grain),dFdy(grain),0.)*.025);
+      `);
+      shader.fragmentShader=shader.fragmentShader.replace('// Water absorbs warm wavelengths along the submerged cliff face.', `
+        float grains=fract(sin(dot(floor(vRockPosition.xz*95.),vec2(127.1,311.7)))*43758.5453);
+        diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.53,.48,.35)*(.93+grains*.12),weights.y*.88);
+      `);
       shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>', `
-        diffuseColor.a*=1.-smoothstep(.70,.96,pow(pow(abs(vRockPosition.x)/12.6,2.8)+pow(abs(vRockPosition.z)/10.4,2.8),1./2.8));
+        // Fine sand fills the channels between the separately modelled rock shelves.
+        float sand=weights.y*smoothstep(.18,.7,weights.y);
+        outgoingLight=mix(outgoingLight,outgoingLight*vec3(1.10,1.06,1.),sand*.5);
+        diffuseColor.a*=1.-smoothstep(.85,1.03,pow(pow(abs(vRockPosition.x)/12.6,2.8)+pow(abs(vRockPosition.z)/11.5,2.8),1./2.8));
         #include <opaque_fragment>
       `);
     };
@@ -373,14 +429,14 @@ export class TerrainWater {
     this.surface.material.uniforms.uNearFar.value.set(perspective.near,perspective.far);
     const previous=renderer.getRenderTarget();
     const autoShadow=renderer.shadowMap.autoUpdate;
-    this.surface.visible=false;this.captureUniform.value=1;
+    this.surface.visible=false;this.depthVolume.visible=false;this.captureUniform.value=1;
     try {
       renderer.setRenderTarget(this.target);renderer.render(scene,camera);
       renderer.shadowMap.autoUpdate=false;
       renderer.setRenderTarget(this.reflection);renderer.render(scene,this.mirrorCamera);
-      this.surface.visible=true;this.captureUniform.value=0;renderer.setRenderTarget(previous);renderer.render(scene,camera);
+      this.surface.visible=true;this.depthVolume.visible=true;this.captureUniform.value=0;renderer.setRenderTarget(previous);renderer.render(scene,camera);
     } finally {
-      this.surface.visible=true;this.captureUniform.value=0;renderer.setRenderTarget(previous);renderer.shadowMap.autoUpdate=autoShadow;
+      this.surface.visible=true;this.depthVolume.visible=true;this.captureUniform.value=0;renderer.setRenderTarget(previous);renderer.shadowMap.autoUpdate=autoShadow;
     }
   }
 }
