@@ -114,7 +114,7 @@ export class TerrainWater {
           if(edge<.005 || vDepth<-.025) discard;
           vec2 detail=vec2(ripples(vLocal+vec2(.025,0.))-ripples(vLocal-vec2(.025,0.)),
             ripples(vLocal+vec2(0.,.025))-ripples(vLocal-vec2(0.,.025)))*5.;
-          vec3 n=normalize(vWaterNormal+vTangentX*detail.x*.21+vTangentZ*detail.y*.16);
+          vec3 n=normalize(vWaterNormal+vTangentX*detail.x*.14+vTangentZ*detail.y*.11);
           vec3 viewDir=normalize(cameraPosition-vWorld);
           float fresnel=.025+.975*pow(1.-abs(dot(viewDir,n)),5.);
           vec2 uv=gl_FragCoord.xy/uResolution;
@@ -153,7 +153,7 @@ export class TerrainWater {
           float wash=noise(vLocal*12.+vec2(uTime*.22,-uTime*.13));
           float shore=(1.-smoothstep(.02,.22,thickness))*smoothstep(.52,.78,wash);
           float crest=smoothstep(.69,.87,ripples(vLocal))*smoothstep(.4,1.,thickness);
-          color=mix(color,vec3(.85,.94,.90),shore*.58+crest*.09);
+          color=mix(color,vec3(.85,.94,.90),shore*.70+crest*.055);
           gl_FragColor=vec4(color,edge*.94);
           #include <tonemapping_fragment>
           #include <colorspace_fragment>

@@ -1,5 +1,7 @@
 import * as THREE from "three";
 import { nebulaCloud } from "./nebula";
+import { coastalDetails } from "./coastal-details";
+import { buildWaterfall } from "./waterfall";
 import { TerrainWater } from "./water";
 import { heightAt, landscapeGeometry, populateLandscape, buildBridge, rockMaterial, makePavilion, terrainSite, buildFootpath, terrainOccludes } from "./landscape";
 import { starLayout, STAR_CENTERS } from "./star-layout";
@@ -101,7 +103,7 @@ export class GraphRenderer {
   private reducedMotion = false;
   private pointers = new Map<number, {x:number;y:number}>();
   private pinchDistance = 0;
-  private cameras = { star: { x:-.08,y:-.16,zoom:18.5 }, terrain: { x:.43,y:-.12,zoom:25 } };
+  private cameras = { star: { x:-.08,y:-.16,zoom:18.5 }, terrain: { x:.55,y:-.12,zoom:25 } };
   private dirtyFrames = 120;
   private focusFrames = 0;
   private invalidate() { this.dirtyFrames = 90; if (!this.frame && this.active) this.animate(); }
@@ -124,13 +126,13 @@ export class GraphRenderer {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.camera.position.set(0, 0.7, this.targetZoom);
     this.scene.add(this.world);
-    const ambient = new THREE.HemisphereLight("#e4edf4", "#645e4d", 1.25);
-    const key = new THREE.DirectionalLight("#fff0d5", 3.7);
-    key.position.set(-8, 11, 7);
+    const ambient = new THREE.HemisphereLight("#e4edf4", "#605e50", .92);
+    const key = new THREE.DirectionalLight("#ffe3b6", 3.7);
+    key.position.set(-11, 8, 5);
     key.castShadow = true; key.shadow.mapSize.set(2048,2048);
     Object.assign(key.shadow.camera,{left:-15,right:15,top:15,bottom:-15,near:1,far:50});
-    key.shadow.intensity = .62; key.shadow.radius = 3; key.shadow.bias = -.001; key.shadow.normalBias = .025;
-    const rim = new THREE.DirectionalLight("#dce9f4", .8);
+    key.shadow.intensity = .76; key.shadow.radius = 3; key.shadow.bias = -.001; key.shadow.normalBias = .025;
+    const rim = new THREE.DirectionalLight("#dce9f4", .95);
     rim.position.set(10, 4, -9);
     const fill = new THREE.DirectionalLight("#edf3f5", .3);
     fill.position.set(1, 3, 12);
@@ -211,7 +213,7 @@ export class GraphRenderer {
       this.world.add(mesh);
       const landmark=landmarkIds.has(node.id);
       const platform = new THREE.Group();
-      const radius=landmark?.21:.12;
+      const radius=landmark?.27:.12;
       const baseGeometry=new THREE.CylinderGeometry(radius,radius*1.2,landmark?.055:.025,landmark?12:8);
       const vertices=baseGeometry.getAttribute('position');
       for(let i=0;i<vertices.count;i++) {
@@ -225,6 +227,10 @@ export class GraphRenderer {
       platformRim.rotation.x = Math.PI / 2;
       platformRim.position.y = landmark?.032:.018;
       platform.add(base, platformRim);
+      if(landmark) {
+        const lower=new THREE.Mesh(new THREE.CylinderGeometry(radius*1.18,radius*1.24,.025,14),new THREE.MeshStandardMaterial({color:'#c0b69c',roughness:.94}));
+        lower.position.y=-.03;lower.receiveShadow=true;platform.add(lower);
+      }
       platform.position.set(x, site.y + (landmark?.032:.014), z);
       platform.visible = false;
       this.terrainDecor.add(platform);
@@ -256,6 +262,8 @@ export class GraphRenderer {
 
   private createTerrainDecor() {
     populateLandscape(this.terrainDecor, [...this.nodes.values()].map(v => v.terrain),this.terrain.material as THREE.MeshStandardMaterial);
+    this.terrainDecor.add(buildWaterfall(this.water.timeUniform));
+    this.terrainDecor.add(coastalDetails(this.water.timeUniform,[...this.nodes.values()].map(v=>v.terrain),()=>this.invalidate(),this.water.captureUniform));
     const bridges = [[[-2.5,-2.7],[2.4,-2.1]],[[-2.2,4],[2.3,5.3]]];
     for (const domain of this.data.domains) {
       const members=[...this.nodes.values()].filter(v=>v.node.domain_id===domain.id);
@@ -532,7 +540,7 @@ export class GraphRenderer {
 
   resetView() {
     this.invalidate();
-    this.targetRotation = this.view === "star" ? { x: -0.08, y: -0.16 } : { x: .43, y: -.12 };
+    this.targetRotation = this.view === "star" ? { x: -0.08, y: -0.16 } : { x: .55, y: -.12 };
     this.targetZoom = this.view === "star" ? 18.5 : 25;
   }
 }

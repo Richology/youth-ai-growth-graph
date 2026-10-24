@@ -1,5 +1,6 @@
 import { underwaterPathGLSL } from './water-optics';
 import * as THREE from 'three';
+import { pineSprayGeometry } from './pine';
 
 // Deterministic art direction: heights are scenery, never competency scores.
 export const random = (n: number) => { const v = Math.sin(n * 127.1 + 311.7) * 43758.5453123; return v - Math.floor(v); };
@@ -16,8 +17,8 @@ const smooth = (a:number,b:number,x:number) => THREE.MathUtils.smoothstep(x,a,b)
 const ridges = [
   [-5.2,-4.5,3.4,1.35,-.55,5.7],[-5.7,-1.8,3.0,1.8,.55,3.3],[-2.9,-2.8,2.3,1.2,-.7,2.9],
   [3.6,-3.9,3.2,1.5,.75,4.8],[6.0,-2.5,2.5,1.65,-.5,3.3],[3.0,-.7,1.9,1.35,.2,2.5],
-  [-5.2,3.5,3.8,2.0,.6,3.5],[-2.6,3.0,2.3,1.15,-.4,2.7],[-6.5,1.5,1.9,1.1,.1,2.8],
-  [4.1,3.6,3.8,1.8,-.65,3.7],[6.6,3.7,2.2,1.4,.3,2.65],[2.2,5.3,2.5,1.3,.6,2.4],
+  [-5.2,3.5,3.8,2.0,.6,2.75],[-2.6,3.0,2.3,1.15,-.4,2.7],[-6.5,1.5,1.9,1.1,.1,2.8],
+  [4.1,3.6,3.8,1.8,-.65,2.95],[6.6,3.7,2.2,1.4,.3,2.65],[2.2,5.3,2.5,1.3,.6,2.4],
   [-.7,-4.9,1.0,.7,.3,1.6],[.5,-1.0,.9,.6,-.6,1.5],[-.4,2.0,.65,.5,0,1.2],
   [-8.6,-.2,.8,.55,.5,1.1],[8.5,-4.5,.8,.5,-.2,1.2],[8.3,1.2,.9,.5,1,1.2],[-1.1,6.6,.7,.5,0,1.0],
 ];
@@ -97,7 +98,7 @@ export function landscapeGeometry() {
     positions.push(x,y,z);
     const slope=Math.hypot(heightAt(x+.07,z)-y,heightAt(x,z+.07)-y)/.07;
     color.set('#898677').lerp(new THREE.Color('#687461'),1-smooth(-.55,.25,y));
-    if(y>-.5 && y<.65) color.lerp(new THREE.Color('#77715b'),(1-smooth(.3,1.8,slope))*.48);
+    if(y>-.12 && y<.42) color.lerp(new THREE.Color('#d7c69d'),(1-smooth(.25,1.1,slope))*.78);
     color.multiplyScalar(.83+noise(x*9,z*9)*.24);
     if(y>-.35 && slope<2.2) color.lerp(moss,(.22+noise(x*1.3,z*1.3)*.28)*smooth(-.4,.3,y));
     colors.push(color.r,color.g,color.b);
@@ -110,83 +111,72 @@ export function landscapeGeometry() {
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));g.setIndex(surfaceIndices);g.computeVertexNormals();return g;
 }
 
-function foliageTexture() {
-  const canvas=document.createElement('canvas');canvas.width=128;canvas.height=128;
-  const ctx=canvas.getContext('2d')!;
-  // Branchlets leave irregular gaps instead of forming a circular leaf card.
-  ctx.lineCap='round';
-  for(let branch=0;branch<9;branch++) {
-    const angle=branch*2.399, reach=28+random(branch+31)*29;
-    const endX=64+Math.cos(angle)*reach,endY=66+Math.sin(angle)*reach;
-    ctx.strokeStyle='#817d68';ctx.lineWidth=1.1;
-    ctx.beginPath();ctx.moveTo(64,68);ctx.quadraticCurveTo(64+Math.cos(angle+.3)*reach*.5,66+Math.sin(angle+.3)*reach*.5,endX,endY);ctx.stroke();
-    for(let leaf=0;leaf<11;leaf++) {
-      const t=.22+leaf*.068,side=leaf%2?1:-1;
-      const x=64+(endX-64)*t+Math.cos(angle+Math.PI/2)*side*6;
-      const y=66+(endY-66)*t+Math.sin(angle+Math.PI/2)*side*6;
-      const shade=165+Math.floor(random(branch*17+leaf)*85);
-      ctx.fillStyle=`rgb(${shade},${shade},${Math.floor(shade*.92)})`;
-      ctx.beginPath();ctx.ellipse(x,y,3+random(leaf+branch)*2.6,1.5+random(leaf+9)*1.3,angle+side*.65,0,Math.PI*2);ctx.fill();
-    }
-  }
-  const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;return texture;
+// Keep the watercourse and the near bank open, without altering node landings.
+function cascadeClearing(x:number,z:number):boolean {
+  const t=THREE.MathUtils.clamp((x+5.65)/2.7,0,1);
+  const channelZ=-4.67+t*.67;
+  return x> -5.85 && x< -2.75 && z>channelZ-.43 && z<channelZ+.58+t*.5;
 }
 export function populateLandscape(group:THREE.Group,anchors:THREE.Vector3[],surface:THREE.MeshStandardMaterial) {
-  const rockGeo=new THREE.IcosahedronGeometry(1,1), attr=rockGeo.getAttribute('position');
+  const rockGeo=new THREE.IcosahedronGeometry(1,2), attr=rockGeo.getAttribute('position');
   for(let i=0;i<attr.count;i++) {
     const x=attr.getX(i),y=attr.getY(i),z=attr.getZ(i),r=.85+noise(x*3,z*3)*.25;
     attr.setXYZ(i,x*r,y*.65+Math.sin(x*6+z)*.12,z*r);
   }
   rockGeo.computeVertexNormals();
-  const rocks=new THREE.InstancedMesh(rockGeo,new THREE.MeshStandardMaterial({color:'#aaa596',roughness:.98}),2800);
-  const leafMaterial=new THREE.MeshStandardMaterial({map:foliageTexture(),alphaTest:.28,alphaToCoverage:true,side:THREE.DoubleSide,roughness:.95});
-  leafMaterial.onBeforeCompile=shader=>{
-    // A small diffuse contribution approximates light passing through thin leaves.
-    // It retains each tree's instance color, including the autumn foliage.
-    shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>', 'outgoingLight += diffuseColor.rgb * .055;\n#include <opaque_fragment>');
-  };
-  const leaves=new THREE.InstancedMesh(new THREE.PlaneGeometry(1,1),leafMaterial,11000);
-  const crownGeometry=new THREE.IcosahedronGeometry(1,2), crownPositions=crownGeometry.getAttribute('position');
+  const rocks=new THREE.InstancedMesh(rockGeo,new THREE.MeshStandardMaterial({color:'#a69e85',roughness:.94}),2800);
+  const leafMaterial=new THREE.MeshStandardMaterial({vertexColors:true,side:THREE.DoubleSide,roughness:.88});
+  const leaves=new THREE.InstancedMesh(pineSprayGeometry(),leafMaterial,7000);
+  const crownGeometry=new THREE.IcosahedronGeometry(1,1), crownPositions=crownGeometry.getAttribute('position');
   for(let i=0;i<crownPositions.count;i++) {
     const x=crownPositions.getX(i),y=crownPositions.getY(i),z=crownPositions.getZ(i);
     const r=.78+noise(x*5+z*2,y*5)*.3;crownPositions.setXYZ(i,x*r,y*r,z*r);
   }
   crownGeometry.computeVertexNormals();
-  const crowns=new THREE.InstancedMesh(crownGeometry,new THREE.MeshStandardMaterial({roughness:1,color:'#d1d2b8'}),4500);
-  const wood=new THREE.InstancedMesh(new THREE.CylinderGeometry(.009,.018,1,5),new THREE.MeshStandardMaterial({color:'#8f8165',roughness:1}),3500);
+  const crowns=new THREE.InstancedMesh(crownGeometry,new THREE.MeshStandardMaterial({roughness:1,color:'#d1d2b8'}),12000);
+  const wood=new THREE.InstancedMesh(new THREE.CylinderGeometry(.009,.018,1,5),new THREE.MeshStandardMaterial({color:'#695c45',roughness:1}),3500);
   const o=new THREE.Object3D(),c=new THREE.Color();let ri=0,li=0,ti=0,ci=0;
+  const trees:THREE.Vector2[]=[];
   for(let i=0;i<3600;i++) {
     const x=(random(i*7)-.5)*20,z=(random(i*7+1)-.5)*15,y=heightAt(x,z);
-    if(y<-.42 || anchors.some(a=>Math.hypot(a.x-x,a.z-z)<.46)) continue;
+    if(cascadeClearing(x,z) || y<-.42 || anchors.some(a=>Math.hypot(a.x-x,a.z-z)<.46)) continue;
     const slope=Math.hypot(heightAt(x+.08,z)-y,heightAt(x,z+.08)-y)/.08;
     const scale=.035+Math.pow(random(i*7+2),2)*.21;
-    if(ri<2800) {
+    if(ri<2800 && (slope<1.6 || random(i+201)>.72)) {
       o.position.set(x,y-.04,z);o.rotation.set(random(i)*.5,random(i+2)*6,random(i+3)*.4);
       o.scale.set(scale*(1+random(i+5)),scale*(.5+random(i+9)),scale);o.updateMatrix();rocks.setMatrixAt(ri,o.matrix);
       c.set('#aaa596').multiplyScalar(.64+random(i+18)*.38);rocks.setColorAt(ri++,c);
     }
     // Low vegetation follows moist, sheltered shelves, with open gravel between patches.
-    if(y>-.35 && slope<1.6 && noise(x*1.2,z*1.2)>.52 && ci<4400) {
-      o.position.set(x,y+.025,z);o.rotation.set(0,random(i)*6,0);o.scale.set(.065+random(i+34)*.09,.05+random(i+35)*.09,.07+random(i+36)*.08);o.updateMatrix();crowns.setMatrixAt(ci,o.matrix);
+    if(y>-.35 && slope<1.6 && noise(x*1.2,z*1.2)>.44 && ci<4400) {
+      o.position.set(x,y+.025,z);o.rotation.set(0,random(i)*6,0);o.scale.set(.065+random(i+34)*.09,.035+random(i+35)*.13,.07+random(i+36)*.08);o.updateMatrix();crowns.setMatrixAt(ci,o.matrix);
       c.set('#596a40').multiplyScalar(.75+random(i+37)*.4);crowns.setColorAt(ci++,c);
     }
-    if(y<.05 || slope>3.5 || noise(x*.95+3,z*.95)<.47 || ti>3400 || li>10900) continue;
-    const tall=random(i+94)>.76, h=(tall?.72:.22)+random(i+44)*(tall?.7:.44);
-    o.position.set(x,y+h*.5,z);o.rotation.set(0,random(i)*6,.12*(random(i)-.5));o.scale.set(tall?1.3:.8,h,tall?1.3:.8);o.updateMatrix();wood.setMatrixAt(ti++,o.matrix);
+    if(y<.12 || slope>3.2 || noise(x*.95+3,z*.95)<.48 || ti>3300 || li>6900 || trees.some(p=>p.distanceTo(new THREE.Vector2(x,z))<.67)) continue;
+    trees.push(new THREE.Vector2(x,z));
+    const tall=random(i+94)>.28, h=(tall?.85:.42)+random(i+44)*(tall?.62:.35);
+    const leanX=(random(i+125)-.5)*h*.42,leanZ=(random(i+126)-.5)*h*.36;
+    const trunkAt=(t:number)=>new THREE.Vector3(x+leanX*t*t,y+h*t,z+leanZ*t*t);
+    for(let segment=0;segment<4;segment++) {
+      const start=trunkAt(segment/4),end=trunkAt((segment+1)/4);
+      o.position.copy(start).lerp(end,.5);o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),end.clone().sub(start).normalize());
+      const thickness=(tall?2.2:1.3)*(1-segment*.18);o.scale.set(thickness,start.distanceTo(end)*1.04,thickness);o.updateMatrix();wood.setMatrixAt(ti++,o.matrix);
+    }
     const autumn=x<-.8 && z>.7 && noise(x*.6+8,z*.6)>.35;
     for(let branch=0;branch<7;branch++) {
-      const angle=branch*2.4+random(i)*6,level=.38+branch*.085,spread=h*(tall?.23:.44)*Math.sin(level*Math.PI)*(.8+random(i+branch)*.4);
-      const bx=x+Math.cos(angle)*spread,bz=z+Math.sin(angle)*spread,by=y+h*level;
-      const from=new THREE.Vector3(x,y+h*(level-.15),z),to=new THREE.Vector3(bx,by,bz);
+      const angle=branch*2.4+random(i)*6,level=.30+Math.floor(branch/2)*.16+(random(i+branch+701)-.5)*.09,spread=h*(tall?.43:.46)*Math.sin(level*Math.PI)*(.8+random(i+branch)*.4);
+      const bx=x+leanX*level*level+Math.cos(angle)*spread,bz=z+leanZ*level*level+Math.sin(angle)*spread,by=y+h*level;
+      const from=trunkAt(level-.15),to=new THREE.Vector3(bx,by,bz);
       o.position.copy(from).lerp(to,.5);o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),to.clone().sub(from).normalize());o.scale.set(.5,from.distanceTo(to),.5);o.updateMatrix();wood.setMatrixAt(ti++,o.matrix);
-      if(ci<4500) {
-        o.position.set(bx,by,bz);o.rotation.set(.2,angle,.15);o.scale.set(h*(tall?.095:.12),h*.12,h*.11);o.updateMatrix();crowns.setMatrixAt(ci,o.matrix);
-        c.set(autumn?'#936b32':tall?'#405837':'#647640').multiplyScalar(.8+random(i+branch)*.35);crowns.setColorAt(ci++,c);
-      }
-      for(let cross=0;cross<3;cross++) {
-        o.position.set(bx,by+(random(i+branch+cross)-.5)*h*.12,bz);o.rotation.set(.45+cross*.8,angle+cross*1.05,random(i+branch)*.6);o.scale.set(h*(tall?.54:.80),h*(.38+random(i+branch)*.18),1);o.updateMatrix();leaves.setMatrixAt(li,o.matrix);
-        c.set(autumn?(random(i)>.5?'#c3934b':'#a88647'):(tall?'#466343':'#6c8548'));
-        c.offsetHSL((random(i+branch)-.5)*.045,0,(random(i*2+branch)-.5)*.12);leaves.setColorAt(li++,c);
+      // Several separated needle sprays follow a branch, not crossed picture planes.
+      for(let tuft=0;tuft<5;tuft++) {
+        const t=.42+tuft*.14, fan=(tuft%2?1:-1)*h*.075;
+        o.position.copy(from).lerp(to,t);o.position.add(new THREE.Vector3(-Math.sin(angle)*fan,h*.025*(tuft%3),Math.cos(angle)*fan));
+        o.rotation.set((random(i+tuft)-.5)*.25,-angle+(tuft%2?-.28:.28),.08);
+        const sprayScale=.78+random(i*13+branch*5+tuft)*.36;
+        o.scale.set(h*.34*sprayScale,h*.38*sprayScale,h*.38*sprayScale);o.updateMatrix();leaves.setMatrixAt(li,o.matrix);
+        c.set(autumn?'#e6ac50':'#d6dda7').multiplyScalar(.82+random(i+tuft)*.25);
+        leaves.setColorAt(li++,c);
       }
     }
   }
@@ -194,53 +184,37 @@ export function populateLandscape(group:THREE.Group,anchors:THREE.Vector3[],surf
   rocks.castShadow=true;rocks.receiveShadow=true;leaves.castShadow=true;leaves.receiveShadow=true;wood.castShadow=true;
   group.add(rocks,crowns,leaves,wood);
   addCliffLayers(group, anchors, surface);
-  addVisitors(group,anchors.filter((_,i)=>i%5===0));
-}
 
-// Small neutral figures establish the scale of the miniature, not extra nodes.
-function addVisitors(group:THREE.Group,anchors:THREE.Vector3[]) {
-  const material=new THREE.MeshStandardMaterial({color:'#d9d8cb',roughness:.9});
-  const heads=new THREE.InstancedMesh(new THREE.SphereGeometry(.032,8,6),material,anchors.length);
-  const bodies=new THREE.InstancedMesh(new THREE.CapsuleGeometry(.028,.10,3,6),material,anchors.length);
-  const limbs=new THREE.InstancedMesh(new THREE.CylinderGeometry(.01,.013,.11,5),material,anchors.length*4);
-  const object=new THREE.Object3D();
-  anchors.forEach((anchor,i)=>{
-    const x=anchor.x+.24,z=anchor.z+.12,y=heightAt(x,z),angle=random(i+602)*Math.PI*2;
-    object.position.set(x,y+.23,z);object.rotation.set(0,angle,0);object.updateMatrix();heads.setMatrixAt(i,object.matrix);
-    object.position.y=y+.145;object.updateMatrix();bodies.setMatrixAt(i,object.matrix);
-    for(let j=0;j<4;j++) {
-      const arm=j>1,side=j%2?1:-1,offset=side*(arm?.046:.018);
-      object.position.set(x+Math.cos(angle)*offset,y+(arm?.13:.055),z-Math.sin(angle)*offset);
-      object.rotation.set(arm?.16:0,angle,side*(arm?.18:.06));object.updateMatrix();limbs.setMatrixAt(i*4+j,object.matrix);
-    }
-  });
-  for(const mesh of [heads,bodies,limbs]) {mesh.castShadow=mesh.receiveShadow=true;group.add(mesh);}
 }
 
 // Actual broken ledges interrupt smooth slopes at a scale larger than a texture.
 function addCliffLayers(group:THREE.Group,anchors:THREE.Vector3[],surface:THREE.MeshStandardMaterial) {
   // Embedded fractured blocks form faces, rather than a stack of identical disks.
-  const geometry=new THREE.IcosahedronGeometry(1,1);
+  const geometry=new THREE.IcosahedronGeometry(1,2);
   const positions=geometry.getAttribute('position');
   const colors:number[]=[],color=new THREE.Color();
   for(let i=0;i<positions.count;i++) {
     const x=positions.getX(i),y=positions.getY(i),z=positions.getZ(i);
-    const fracture=.76+noise(x*3+z,y*2)*.3;
-    positions.setXYZ(i,x*fracture+y*.14,y*.78+Math.sin(x*4+z)*.10,z*fracture);
+    const fracture=.90+noise(x*3+z,y*2)*.12;
+    const sx=Math.sign(x)*Math.pow(Math.abs(x),.58),sz=Math.sign(z)*Math.pow(Math.abs(z),.58);
+    const seam=Math.sin(y*13+x*2)*.035;
+    const cleft=Math.exp(-Math.pow((x+.18+Math.sin(y*2.7)*.08)/.105,2.))*.13;
+    const shoulder=1-.20*smooth(.2,1,y)*smooth(-.4,.8,x);
+    positions.setXYZ(i,sx*fracture*shoulder+y*.12+seam,y*.93+Math.sin(x*4+z)*.045,sz*(fracture-cleft)+seam);
     color.set('#8f8c7b').multiplyScalar(.79+noise(x*3,z*3)*.24);
     colors.push(color.r,color.g,color.b);
   }
   geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geometry.computeVertexNormals();
-  const cliffs=new THREE.InstancedMesh(geometry,surface,150);
+  const cliffs=new THREE.InstancedMesh(geometry,surface,100);
   const object=new THREE.Object3D();let count=0;
-  for(let i=0;i<2300 && count<150;i++) {
+  for(let i=0;i<2300 && count<100;i++) {
     const x=(random(i+8001)-.5)*18,z=(random(i+12001)-.5)*14,y=heightAt(x,z);
-    if(y<.15 || anchors.some(a=>Math.hypot(a.x-x,a.z-z)<.62)) continue;
+    if(cascadeClearing(x,z) || y<.15 || anchors.some(a=>Math.hypot(a.x-x,a.z-z)<.62)) continue;
     const dx=(heightAt(x+.08,z)-heightAt(x-.08,z))/.16;
     const dz=(heightAt(x,z+.08)-heightAt(x,z-.08))/.16;
     const slope=Math.hypot(dx,dz);if(slope<1.45||slope>6) continue;
-    const h=.38+random(i+22)*.72,w=.25+random(i+23)*.45;
-    object.position.set(x,y-h*.48,z);
+    const h=.75+random(i+22)*1.05,w=.38+random(i+23)*.52;
+    object.position.set(x,y-h*.60,z);
     object.rotation.set(Math.atan(dz)*.22,Math.atan2(dx,dz)+.35, -Math.atan(dx)*.22);
     object.scale.set(w,h,w*(.45+random(i+29)*.3));object.updateMatrix();cliffs.setMatrixAt(count++,object.matrix);
   }
@@ -307,7 +281,7 @@ export function buildFootpath(points:THREE.Vector3[]) {
     if(indices.slice(i,i+3).every(index=>vertices[index*3+1]>-.12)) dryIndices.push(indices[i],indices[i+1],indices[i+2]);
   }
   const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));geometry.setIndex(dryIndices);geometry.computeVertexNormals();
-  const trail=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color:'#8f8872',roughness:1,side:THREE.DoubleSide}));
+  const trail=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color:'#b0a181',roughness:1,side:THREE.DoubleSide}));
   trail.receiveShadow=true;group.add(trail);
   const steps=new THREE.InstancedMesh(new THREE.BoxGeometry(.135,.025,.075),new THREE.MeshStandardMaterial({color:'#aaa48f',roughness:1}),matrices.length);
   matrices.forEach((matrix,i)=>steps.setMatrixAt(i,matrix));steps.receiveShadow=true;group.add(steps);return group;
@@ -456,10 +430,17 @@ export function rockMaterial(onLoad: () => void, waterTime?: {value:number}, cli
       float bandAA=1.-smoothstep(.3,1.6,fwidth(bandPosition));
       float strata=sin(bandPosition)*bandAA;
       float mineral=sin(vRockPosition.x*4.+sin(vRockPosition.z*3.));
-      diffuseColor.rgb*=.97+strata*.045+mineral*.035;
+      diffuseColor.rgb*=.97+strata*.065+mineral*.045;
+      float jointPhase=vRockPosition.x*4.3+vRockPosition.z*3.1+sin(vRockPosition.y*1.9)*.35;
+      float jointWidth=max(.035,fwidth(jointPhase));
+      float joint=1.-smoothstep(jointWidth,jointWidth*2.5,abs(sin(jointPhase)));
+      float brokenFace=smoothstep(.1,.7,sin(vRockPosition.y*2.6+vRockPosition.z)*.5+.5);
+      diffuseColor.rgb*=1.-joint*brokenFace*(1.-weights.y)*.17*smoothstep(.0,.4,vRockPosition.y);
       // Mineral variation stays broad enough to survive the overview camera.
       float lichen=smoothstep(.45,.82,sin(vRockPosition.x*2.1+sin(vRockPosition.z*2.8))*.5+.5)*weights.y;
       diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(.82,.94,.68),lichen*.24);
+      float wetShore=exp(-pow((vRockPosition.y+.08)/.18,2.));
+      diffuseColor.rgb*=1.-wetShore*.18;
       float submerged=1.-smoothstep(-.7,-.12,vRockPosition.y);
       diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(.48,.92,.88),submerged*.16);
       float waterDepth=max(0.,-.16-vRockPosition.y);
@@ -482,6 +463,7 @@ export function rockMaterial(onLoad: () => void, waterTime?: {value:number}, cli
     `);
     shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
       roughnessFactor=mix(roughnessFactor,clamp(arm.g,.72,1.),rockDetailStrength);
+      roughnessFactor=mix(roughnessFactor,.46,exp(-pow((vRockPosition.y+.08)/.18,2.)));
     `);
     shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
       // Surface gradient uses the scanned height map; cap the slope on small faces.
