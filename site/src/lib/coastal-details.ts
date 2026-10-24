@@ -24,6 +24,19 @@ export function coastalDetails(time:{value:number}, anchors:THREE.Vector3[], onL
     for(let j=0;j<7;j++){const angle=j*Math.PI*2/7;const rim=new THREE.Mesh(geometry,rock);rim.scale.set(.09,.045,.07);rim.position.set(x+Math.cos(angle)*.26,y+.035,z+Math.sin(angle)*.19);rim.rotation.y=j;rim.receiveShadow=true;group.add(rim);}
     pools++;
   }
+  // Small, irregular gravel clusters sit at the dry edge of the sandy coves.
+  const gravel=new THREE.InstancedMesh(geometry,new THREE.MeshStandardMaterial({color:'#b1a38b',roughness:.95}),240);
+  const placement=new THREE.Object3D(),tint=new THREE.Color();let gravelCount=0;
+  for(let i=0;i<900 && gravelCount<240;i++) {
+    const [cx,cz]=i%2===0?[-4.9,6.1]:[5.3,5.5];
+    const x=cx+(random(i+16001)-.5)*2,z=cz+(random(i+17001)-.5)*1.4,y=heightAt(x,z);
+    if(y<.04||y>.31||anchors.some(a=>Math.hypot(a.x-x,a.z-z)<.55)||random(i+18001)<.38)continue;
+    const slope=Math.hypot(heightAt(x+.08,z)-y,heightAt(x,z+.08)-y)/.08;if(slope>1.1)continue;
+    const size=.018+Math.pow(random(i+19001),2)*.045;
+    placement.position.set(x,y+size*.15,z);placement.rotation.set(random(i)*.4,random(i+1)*6,.1);placement.scale.set(size,size*.45,size*.75);placement.updateMatrix();gravel.setMatrixAt(gravelCount,placement.matrix);
+    tint.setHSL(.10+random(i+2)*.04,.12+random(i+3)*.16,.4+random(i+4)*.22);gravel.setColorAt(gravelCount++,tint);
+  }
+  gravel.count=gravelCount;gravel.receiveShadow=gravel.castShadow=true;group.add(gravel);
   // Bake mesh transforms so the shared triplanar rock shader samples scene
   // coordinates, with the same mineral palette as the mountain itself.
   group.traverse(object=>{

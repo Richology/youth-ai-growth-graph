@@ -71,6 +71,13 @@ export function terrainSite(domain:string,index:number,fallback:[number,number,n
 }
 export function heightAt(x:number,z:number):number {
   let h=baseHeight(x,z);
+  // Two sheltered coves grade continuously into the sea; terraces remain authoritative.
+  for(const [cx,cz] of [[-4.9,6.1],[5.3,5.5]]) {
+    const radius=Math.hypot((x-cx)/1.05,(z-cz)/.78);
+    const blend=(1-smooth(.38,1.15,radius))*.94;
+    const beach=.08-(z-cz)*.43+(noise(x*8,z*8)-.5)*.035;
+    h=THREE.MathUtils.lerp(h,beach,blend);
+  }
   for(const t of terraces) {
     const distance=Math.hypot(x-t.x,z-t.z);
     if(distance<t.radius+.4) h=THREE.MathUtils.lerp(h,t.y,1-smooth(t.radius*.65,t.radius+.4,distance));
@@ -117,6 +124,9 @@ function cascadeClearing(x:number,z:number):boolean {
   const channelZ=-4.67+t*.67;
   return x> -5.85 && x< -2.75 && z>channelZ-.43 && z<channelZ+.58+t*.5;
 }
+function sandyCove(x:number,z:number):boolean {
+  return [[-4.9,6.1],[5.3,5.5]].some(([cx,cz])=>Math.hypot((x-cx)/1.05,(z-cz)/.78)<.88);
+}
 export function populateLandscape(group:THREE.Group,anchors:THREE.Vector3[],surface:THREE.MeshStandardMaterial) {
   const rockGeo=new THREE.IcosahedronGeometry(1,2), attr=rockGeo.getAttribute('position');
   for(let i=0;i<attr.count;i++) {
@@ -139,7 +149,7 @@ export function populateLandscape(group:THREE.Group,anchors:THREE.Vector3[],surf
   const trees:THREE.Vector2[]=[];
   for(let i=0;i<3600;i++) {
     const x=(random(i*7)-.5)*20,z=(random(i*7+1)-.5)*15,y=heightAt(x,z);
-    if(cascadeClearing(x,z) || y<-.42 || anchors.some(a=>Math.hypot(a.x-x,a.z-z)<.46)) continue;
+    if(cascadeClearing(x,z) || (y<.5 && sandyCove(x,z)) || y<-.42 || anchors.some(a=>Math.hypot(a.x-x,a.z-z)<.46)) continue;
     const slope=Math.hypot(heightAt(x+.08,z)-y,heightAt(x,z+.08)-y)/.08;
     const scale=.035+Math.pow(random(i*7+2),2)*.21;
     if(ri<2800 && (slope<1.6 || random(i+201)>.72)) {
@@ -209,7 +219,7 @@ function addCliffLayers(group:THREE.Group,anchors:THREE.Vector3[],surface:THREE.
   const object=new THREE.Object3D();let count=0;
   for(let i=0;i<2300 && count<100;i++) {
     const x=(random(i+8001)-.5)*18,z=(random(i+12001)-.5)*14,y=heightAt(x,z);
-    if(cascadeClearing(x,z) || y<.15 || anchors.some(a=>Math.hypot(a.x-x,a.z-z)<.62)) continue;
+    if(cascadeClearing(x,z) || sandyCove(x,z) || y<.15 || anchors.some(a=>Math.hypot(a.x-x,a.z-z)<.62)) continue;
     const dx=(heightAt(x+.08,z)-heightAt(x-.08,z))/.16;
     const dz=(heightAt(x,z+.08)-heightAt(x,z-.08))/.16;
     const slope=Math.hypot(dx,dz);if(slope<1.45||slope>6) continue;
@@ -439,6 +449,12 @@ export function rockMaterial(onLoad: () => void, waterTime?: {value:number}, cli
       // Mineral variation stays broad enough to survive the overview camera.
       float lichen=smoothstep(.45,.82,sin(vRockPosition.x*2.1+sin(vRockPosition.z*2.8))*.5+.5)*weights.y;
       diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(.82,.94,.68),lichen*.24);
+      float coveA=length((vRockPosition.xz-vec2(-4.9,6.1))/vec2(1.05,.78));
+      float coveB=length((vRockPosition.xz-vec2(5.3,5.5))/vec2(1.05,.78));
+      float sandMask=(1.-smoothstep(.35,1.10,min(coveA,coveB)))*smoothstep(.45,.85,weights.y);
+      float drySand=smoothstep(-.05,.25,vRockPosition.y);
+      vec3 sandColor=mix(vec3(.29,.26,.18),vec3(.67,.59,.41),drySand);
+      diffuseColor.rgb=mix(diffuseColor.rgb,sandColor*(.94+mineral*.035+strata*.02),sandMask);
       float wetShore=exp(-pow((vRockPosition.y+.08)/.18,2.));
       diffuseColor.rgb*=1.-wetShore*.18;
       float submerged=1.-smoothstep(-.7,-.12,vRockPosition.y);

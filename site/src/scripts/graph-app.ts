@@ -252,10 +252,6 @@ function bindControls() {
       const domainId = button.dataset.domainFilter!;
       if (event.altKey || event.metaKey) enabledDomains = new Set([domainId]);
       else if (enabledDomains.has(domainId)) {
-        if (enabledDomains.size === 1) {
-          announcer.textContent = "至少需要保留一个能力领域";
-          return;
-        }
         enabledDomains.delete(domainId);
       } else enabledDomains.add(domainId);
       $$<HTMLButtonElement>("[data-domain-filter]").forEach((item) => item.setAttribute("aria-pressed", String(enabledDomains.has(item.dataset.domainFilter!))));
@@ -288,6 +284,7 @@ function bindControls() {
     if (!["ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp", "Enter"].includes(event.key)) return;
     event.preventDefault();
     const visibleNodes = data.nodes.filter((node) => enabledDomains.has(node.domain_id));
+    if (visibleNodes.length === 0) return;
     const currentIndex = selectedNode ? visibleNodes.findIndex((node) => node.id === selectedNode!.id) : -1;
     if (event.key === "Enter" && selectedNode) return;
     const direction = event.key === "ArrowLeft" || event.key === "ArrowUp" ? -1 : 1;

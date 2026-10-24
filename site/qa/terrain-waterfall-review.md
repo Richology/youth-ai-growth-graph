@@ -61,3 +61,7 @@ Reduced loose-rock scatter on steep slopes and replaced 150 smaller rounded clif
 ## Rock relief and branch attachment follow-up
 
 Added asymmetric shoulder erosion and a narrow cleft to cliff geometry, with restrained, anti-aliased discontinuous joint coloration on exposed vertical rock faces. Varied branch levels and needle spray scales; corrected spray positions to interpolate along the actual curved-trunk branch rather than the old straight trunk axis. Production build passes without Astro diagnostics. Existing Vite chunk advisory remains. This is a geometry/material refinement, not a claim of reference-level sculpted detail.
+
+## Sheltered cove pass
+
+Added two small graded beaches at the foreground shoreline. The beach profile is blended into the same height field used by terrain and water, before node terrace constraints. Sand shading transitions from darker wet sand to warmer dry sand; small irregular gravel clusters sit at the dry edge. Excluded generic vegetation and cliff inserts from the cove interiors so they do not obscure the sand. Terrain-node agreement and water-clearance tests pass (three tests), and production build passes. Viewport screenshots and browser error/resource checks are captured with terrain-review.mjs. No commit/push in this pass.

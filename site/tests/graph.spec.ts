@@ -36,16 +36,21 @@ test("switches views and preserves the selected competency", async ({ page }) =>
   await expect.poll(detailLayout).toEqual(starLayout);
 });
 
-test("filters domains while keeping one domain enabled", async ({ page }) => {
+test("allows all domains to be disabled and restored", async ({ page }) => {
+  const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
   await page.goto("/");
   await expect(page.locator("#graph-loading")).toBeHidden();
   const filters = page.locator("[data-domain-filter]");
   await expect(filters).toHaveCount(4);
-  for (let index = 0; index < 3; index += 1) await filters.nth(index).click();
-  await expect(filters.nth(3)).toHaveAttribute("aria-pressed", "true");
-  await filters.nth(3).click();
-  await expect(filters.nth(3)).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#graph-announcer")).toContainText("至少需要保留一个能力领域");
+  for (let index = 0; index < 4; index += 1) await filters.nth(index).click();
+  await expect(page.locator('[data-domain-filter][aria-pressed="true"]')).toHaveCount(0);
+  await expect(page.locator('.node-label:visible')).toHaveCount(0);
+  await page.locator('canvas').first().focus();
+  for(const key of ['ArrowRight','ArrowLeft','Enter'])await page.keyboard.press(key);
+  await filters.nth(0).click();
+  await expect(filters.nth(0)).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator('.node-label:visible').first()).toBeVisible();
+  expect(errors).toEqual([]);
 });
 
 test("adapts node details to a mobile bottom sheet", async ({ page }) => {
